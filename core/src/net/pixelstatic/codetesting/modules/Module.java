@@ -8,6 +8,7 @@ public abstract class Module{
 
 	public void init(){}
 	public abstract void update();
+	public void resize(int width, int height){};
 	
 	public <T extends Module> T getModule(Class<T> c) {
 		return tester.getModule(c);

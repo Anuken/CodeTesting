@@ -25,6 +25,12 @@ public class CodeTester extends ApplicationAdapter{
 			module.update();
 	}
 	
+	@Override
+	public void resize(int width, int height){
+		for(Module module : modules.values())
+			module.resize(width, height);
+	}
+	
 	public <T extends Module> T getModule(Class<T> c) {
 		return c.cast(modules.get(c));
 	}

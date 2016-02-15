@@ -11,7 +11,8 @@ public enum ModuleGroup{
 		Module[] modules(){
 			return new Module[]{
 				new WeaponPhysics(),
-				new WeaponWorld()
+				new WeaponWorld(),
+				new WeaponInput()
 			};
 		}
 	};
