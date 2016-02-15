@@ -1,27 +1,31 @@
 package net.pixelstatic.codetesting;
 
-import com.badlogic.gdx.ApplicationAdapter;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import java.util.HashMap;
 
-public class CodeTester extends ApplicationAdapter {
-	SpriteBatch batch;
-	Texture img;
-	
+import net.pixelstatic.codetesting.modules.*;
+
+import com.badlogic.gdx.ApplicationAdapter;
+
+public class CodeTester extends ApplicationAdapter{
+	ModuleGroup type = ModuleGroup.WEAPON_PHYSICS;
+	HashMap<Class<? extends Module>, Module> modules;
+
 	@Override
-	public void create () {
-		batch = new SpriteBatch();
-		img = new Texture("badlogic.jpg");
+	public void create(){
+		modules = type.getModules();
+		for(Module module : modules.values()){
+			module.tester = this;
+			module.init();
+		}
 	}
 
 	@Override
-	public void render () {
-		Gdx.gl.glClearColor(1, 0, 0, 1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		batch.begin();
-		batch.draw(img, 0, 0);
-		batch.end();
+	public void render(){
+		for(Module module : modules.values())
+			module.update();
+	}
+	
+	public <T extends Module> T getModule(Class<T> c) {
+		return c.cast(modules.get(c));
 	}
 }
