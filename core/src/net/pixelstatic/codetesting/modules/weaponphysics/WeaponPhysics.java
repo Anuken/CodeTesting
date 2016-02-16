@@ -5,20 +5,38 @@ import net.pixelstatic.codetesting.utils.Atlas;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.*;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.*;
+import com.badlogic.gdx.math.Matrix4;
 
 public class WeaponPhysics extends Module{
 	public WeaponWorld world;
 	public Atlas atlas;
 	public SpriteBatch batch;
+	public BitmapFont font;
+	public GlyphLayout layout;
 	public OrthographicCamera camera;
+	public Matrix4 matrix;
 	public float pixsize = 10;
+	public Material block = Material.iron;
 
-	void draw(){
+	private void draw(){
 		for(int x = 0;x < world.size;x ++){
 			for(int y = 0;y < world.size;y ++){
-				if(world.world[x][y] != 0) draw("pixel", x * pixsize, y * pixsize, pixsize, pixsize);
+				if(!block(x,y).empty()) block(x,y).material.draw(this, x, y);
 			}
+		}
+	}
+	
+	private void drawGUI(){
+		Material[] blocks = Material.values();
+		int blockamount = 10;
+		for(int i = 0; i < blockamount; i ++){
+			int offset = i - blockamount/2 + block.ordinal();
+			if(offset < 0 || offset >= blocks.length) continue;
+			Material block = blocks[offset];
+			layout.setText(font, block.name());
+			font.setColor(block == this.block ? Color.YELLOW : Color.WHITE);
+			font.draw(batch, block.name(), Gdx.graphics.getWidth() - layout.width , Gdx.graphics.getHeight()/2 + layout.height/2 + font.getLineHeight() * (i-blockamount/2));
 		}
 	}
 
@@ -26,23 +44,34 @@ public class WeaponPhysics extends Module{
 		float scl = 10f;
 		if(camera.zoom + amount / scl > 0) camera.zoom += amount / scl;
 	}
-
+	
 	void updateCamera(){
 		camera.update();
 	}
 
-	public void placeBlock(float sx, float sy){
-		int x = (int)(sx / pixsize);
-		int y = (int)(sy / pixsize);
-		world.world[x][y] = 1;
+	public void placeBlock(int x, int y){
+		if(!inBounds(x,y)) return;
+		world.world[x][y].material = block;
+	}
+	
+	public void removeBlock(int x, int y){
+		if(!inBounds(x,y)) return;
+		world.world[x][y].material = null;
+	}
+	
+	public boolean inBounds(int x, int y){
+		return !(x < 0 || y < 0 || x >= world.size || y >= world.size);
 	}
 
 	@Override
 	public void init(){
+		matrix = new Matrix4();
 		batch = new SpriteBatch();
 		atlas = new Atlas(Gdx.files.internal("sprites/codetesting.pack"));
 		camera = new OrthographicCamera();
 		world = getModule(WeaponWorld.class);
+		font = new BitmapFont(Gdx.files.internal("fonts/font.fnt"));
+		layout = new GlyphLayout();
 	}
 
 	@Override
@@ -53,17 +82,30 @@ public class WeaponPhysics extends Module{
 		batch.begin();
 		draw();
 		batch.end();
+		batch.setProjectionMatrix(matrix);
+		batch.begin();
+		drawGUI();
+		batch.end();
 	}
 
 	public void resize(int width, int height){
+		matrix.setToOrtho2D(0, 0, width, height);
 		camera.setToOrtho(false, width, height);
 		camera.position.x = world.size * pixsize / 2;
 		camera.position.y = world.size * pixsize / 2;
-
 	}
 
-	void draw(String region, float x, float y, float w, float h){
+	public void draw(String region, float x, float y, float w, float h){
 		batch.draw(atlas.findRegion(region), x, y, w, h);
+	}
+	
+	public Block block(int x, int y){
+		return world.world[x][y];
+	}
+	
+	public float fontwidth(String string){
+		layout.setText(font, string);
+		return layout.width;
 	}
 
 	void clear(){

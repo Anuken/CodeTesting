@@ -18,7 +18,8 @@ public class WeaponInput extends Module implements InputProcessor{
 		if(Gdx.input.isKeyPressed(Keys.A)) weapon.camera.position.x -= speed;
 		if(Gdx.input.isKeyPressed(Keys.S)) weapon.camera.position.y -= speed;
 		if(Gdx.input.isKeyPressed(Keys.D)) weapon.camera.position.x += speed;
-		if(Gdx.input.isButtonPressed(Buttons.LEFT))tryPlace();
+		if(Gdx.input.isButtonPressed(Buttons.LEFT)) tryPlace();
+		if(Gdx.input.isButtonPressed(Buttons.RIGHT)) tryRemove();
 	}
 	
 	@Override
@@ -70,15 +71,27 @@ public class WeaponInput extends Module implements InputProcessor{
 
 	@Override
 	public boolean scrolled(int amount){
-		getModule(WeaponPhysics.class).scroll(amount);;
+		if(!Gdx.input.isKeyPressed(Keys.SHIFT_LEFT)){
+			getModule(WeaponPhysics.class).scroll(amount);;
+		}else{
+			amount = -amount;
+			int next = weapon.block.ordinal() + amount;
+			if(next < 0 || next >= Material.values().length) return false;
+			weapon.block = Material.values()[next];
+		}
 		return false;
 	}
 	
 	void tryPlace(){
 		Vector3 v = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0f);
 		Vector3 unproject = weapon.camera.unproject(v);
-		weapon.placeBlock(unproject.x, unproject.y);
-
+		weapon.placeBlock((int)(unproject.x / weapon.pixsize),(int)(unproject.y / weapon.pixsize));
+	}
+	
+	void tryRemove(){
+		Vector3 v = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0f);
+		Vector3 unproject = weapon.camera.unproject(v);
+		weapon.removeBlock((int)(unproject.x / weapon.pixsize),(int)(unproject.y / weapon.pixsize));
 	}
 	
 }
