@@ -13,11 +13,12 @@ public class WeaponInput extends Module implements InputProcessor{
 
 	@Override
 	public void update(){
+		float speedtemp = speed * getModule(WeaponPhysics.class).camera.zoom;
 		if(Gdx.input.isKeyPressed(Keys.ESCAPE)) Gdx.app.exit();
-		if(Gdx.input.isKeyPressed(Keys.W)) weapon.camera.position.y += speed;
-		if(Gdx.input.isKeyPressed(Keys.A)) weapon.camera.position.x -= speed;
-		if(Gdx.input.isKeyPressed(Keys.S)) weapon.camera.position.y -= speed;
-		if(Gdx.input.isKeyPressed(Keys.D)) weapon.camera.position.x += speed;
+		if(Gdx.input.isKeyPressed(Keys.W)) weapon.camera.position.y += speedtemp;
+		if(Gdx.input.isKeyPressed(Keys.A)) weapon.camera.position.x -= speedtemp;
+		if(Gdx.input.isKeyPressed(Keys.S)) weapon.camera.position.y -= speedtemp;
+		if(Gdx.input.isKeyPressed(Keys.D)) weapon.camera.position.x += speedtemp;
 		if(Gdx.input.isButtonPressed(Buttons.LEFT)) tryPlace();
 		if(Gdx.input.isButtonPressed(Buttons.RIGHT)) tryRemove();
 	}

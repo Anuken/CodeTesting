@@ -1,5 +1,6 @@
 package net.pixelstatic.codetesting.modules.weaponphysics;
 
+import net.pixelstatic.codetesting.entities.*;
 import net.pixelstatic.codetesting.modules.Module;
 import net.pixelstatic.codetesting.utils.Atlas;
 
@@ -42,7 +43,7 @@ public class WeaponPhysics extends Module{
 
 	public void scroll(float amount){
 		float scl = 10f;
-		if(camera.zoom + amount / scl > 0) camera.zoom += amount / scl;
+		if(camera.zoom + amount / scl > 0.1f) camera.zoom += amount / scl;
 	}
 	
 	void updateCamera(){
@@ -76,6 +77,7 @@ public class WeaponPhysics extends Module{
 
 	@Override
 	public void update(){
+		uppateEntities();
 		clear();
 		updateCamera();
 		batch.setProjectionMatrix(camera.combined);
@@ -87,16 +89,41 @@ public class WeaponPhysics extends Module{
 		drawGUI();
 		batch.end();
 	}
+	
+	void uppateEntities(){
+		for(Entity entity : Entity.entities.values()){
+			entity.Update();
+			entity.Draw();
+			if(entity instanceof SolidEntity){
+				SolidEntity s = (SolidEntity)entity;
+				int x = toGrid(s.x);
+				int y = toGrid(s.y);
+				if(!inBounds(x,y)) continue;
+				if(world.solid(x, y)){
+					s.collisionEvent(x, y);
+				}
+			}
+		}
+	}
+	
+	int toGrid(float x){
+		return (int)(x / pixsize);
+	}
 
 	public void resize(int width, int height){
 		matrix.setToOrtho2D(0, 0, width, height);
 		camera.setToOrtho(false, width, height);
+		camera.zoom = 0.3f;
 		camera.position.x = world.size * pixsize / 2;
 		camera.position.y = world.size * pixsize / 2;
 	}
 
 	public void draw(String region, float x, float y, float w, float h){
 		batch.draw(atlas.findRegion(region), x, y, w, h);
+	}
+	
+	public void draw(String region, int x, int y){
+		batch.draw(atlas.findRegion(region), x * pixsize + pixsize/2 - atlas.RegionWidth(region)/2, y * pixsize + pixsize/2 - atlas.RegionHeight(region)/2);
 	}
 	
 	public Block block(int x, int y){

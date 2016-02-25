@@ -18,35 +18,17 @@ public class WeaponWorld extends Module{
 			}
 		}
 	}
+	
+	public boolean solid(int x, int y){
+		return !(world[x][y] == null  ||world[x][y].empty());
+	}
 
 	@Override
 	public void update(){
-		Block[][] worldclone = cloneWorld();
 		for(int x = 0;x < size;x ++){
 			for(int y = 0;y < size;y ++){
-				if( !world[x][y].empty()) world[x][y].update(x, y, worldclone);
-			}
-		}
-		world = worldclone;
-
-	}
-
-	void set(Block[][] clone){
-		for(int x = 0;x < size;x ++){
-			for(int y = 0;y < size;y ++){
-				world[x][y] = clone[x][y];
+				if( !world[x][y].empty()) world[x][y].update(x, y, world);
 			}
 		}
 	}
-
-	Block[][] cloneWorld(){
-		Block[][] temp = new Block[size][size];
-		for(int x = 0;x < size;x ++){
-			for(int y = 0;y < size;y ++){
-				temp[x][y] = new Block(this.world[x][y]);
-			}
-		}
-		return temp;
-	}
-
 }

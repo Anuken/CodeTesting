@@ -16,6 +16,6 @@ public class Block{
 	}
 	
 	public void update(int x, int y, Block[][] world){
-		material.getType().update(x, y, world);
+		material.update(x, y, world);
 	}
 }
