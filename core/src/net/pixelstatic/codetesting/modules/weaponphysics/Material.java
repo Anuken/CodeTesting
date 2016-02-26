@@ -1,6 +1,8 @@
 package net.pixelstatic.codetesting.modules.weaponphysics;
 
-import net.pixelstatic.codetesting.entities.IronCube;
+import java.util.ArrayList;
+
+import net.pixelstatic.codetesting.entities.*;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -43,8 +45,8 @@ public enum Material{
 			render.draw("massmaker", x,y);
 		}
 		
-		public void update(int x, int y, Block[][] blocks, Block block){
-			if(Gdx.graphics.getFrameId() % 100 == 0 && world.noEntities(x, y+1)){
+		public void powerEvent(int x, int y, Block[][] blocks, Block block){
+			if(world.vacant(x, y+1)){
 				new IronCube().setVelocity(0, 0).setBlockPosition(x, y+1).AddSelf();
 			}
 		}
@@ -56,6 +58,15 @@ public enum Material{
 	repulsor{
 		public void draw(WeaponPhysics render, int x, int y){
 			render.draw("repulsor", x,y);
+		}
+		
+		public void powerEvent(int x, int y, Block[][] blocks, Block block){
+			for(int i = 0; i < 4; i ++){
+				ArrayList<Entity> list = world.getEntities(x +(i == 0 ? 1 : 0) +(i == 1 ? -1 : 0), y  +(i == 2 ? 1 : 0) +(i == 3 ? -1 : 0));
+				for(Entity e1 : list){
+					if(e1 instanceof FlyingEntity) ((FlyingEntity)e1).velocity.x = 1;
+				}
+			}
 		}
 		
 		public PowerType getPowerType(){
@@ -77,6 +88,10 @@ public enum Material{
 		render.draw("pixel", x * render.pixsize, y * render.pixsize, render.pixsize, render.pixsize);
 	}
 	
+	public void powerEvent(int x, int y, Block[][] blocks, Block block){
+		
+	}
+	
 	public PowerType getPowerType(){
 		return PowerType.neutral;
 	}
@@ -93,11 +108,11 @@ public enum Material{
 		return getPowerType().equals(PowerType.acceptor);
 	}
 	
-	public final boolean isPowerable(){
-		return isConducting() || isAcceptor();
+	public final boolean isNeutral(){
+		return getPowerType().equals(PowerType.neutral);
 	}
 	
-	public BlockType getType(){
-		return BlockType.solid;
+	public final boolean isPowerable(){
+		return isConducting() || isAcceptor();
 	}
 }
