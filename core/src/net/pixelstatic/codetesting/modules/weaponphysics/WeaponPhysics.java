@@ -19,6 +19,7 @@ public class WeaponPhysics extends Module{
 	public Matrix4 matrix;
 	public float pixsize = 10;
 	public Material block = Material.iron;
+	int lastrotation;
 
 	private void draw(){
 		for(int x = 0;x < world.size;x ++){
@@ -54,18 +55,22 @@ public class WeaponPhysics extends Module{
 		if(!inBounds(x,y)) return;
 		world.world[x][y].rotation ++;
 		if(world.world[x][y].rotation > 3) world.world[x][y].rotation = 0;
+		lastrotation = world.world[x][y].rotation;
 	}
 
 	public void placeBlock(int x, int y){
 		if(!inBounds(x,y)) return;
+		Material mat = world.world[x][y].material;
 		world.world[x][y].material = block;
-		world.updateBlocks();
+		world.world[x][y].rotation = lastrotation;
+		if(mat != block)world.updateBlocks();
 	}
 	
 	public void removeBlock(int x, int y){
 		if(!inBounds(x,y)) return;
+		Material mat = world.world[x][y].material;
 		world.world[x][y].material = null;
-		world.updateBlocks();
+		if(mat != null)world.updateBlocks();
 	}
 	
 	public boolean inBounds(int x, int y){

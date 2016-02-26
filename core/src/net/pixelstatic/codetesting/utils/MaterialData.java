@@ -9,6 +9,7 @@ public class MaterialData{
 	public float mass = 1f;
 	public float drag = 0.08f;
 	public float maxvelocity = 5f;
+	public float friction = 0.5f;
 	private SolidEntity entity;
 	private Rectangle rectangle;
 	

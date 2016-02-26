@@ -95,8 +95,9 @@ public class WeaponWorld extends Module{
 			if(!(entity instanceof FlyingEntity)) continue;
 			FlyingEntity fly = (FlyingEntity)entity;
 			v.set(entity.x - x, entity.y - y);
-			if(v.len() < range){
-				v.setLength(force);
+			float dist = v.len();
+			if(dist < range){
+				v.setLength(force * (1f-dist/range));
 				fly.velocity.add(v);
 				new ShieldEffect().setPosition(x, y).AddSelf();
 			}
@@ -105,14 +106,19 @@ public class WeaponWorld extends Module{
 	
 	public boolean lineForce(int x, int y, Block block, int range, float force){
 		boolean any = false;
-		if(solid(x + block.rotationX(), y + block.rotationY())) return false;
+		for(int i = 1; i <= range; i ++){
+			if(solid(x + block.rotationX()*i, y + block.rotationY()*i)) return false;
+		}
 		for(Entity entity : Entity.entities.values()){
 			if(!(entity instanceof FlyingEntity)) continue;
 			FlyingEntity fly = (FlyingEntity)entity;
 			if((block.xRotation() && entity.blockY() == y && signe(worldPos(x) - entity.x, block.rotationX()) && Math.abs(x - entity.blockX()) < range) 
 					|| (!block.xRotation() && entity.blockX() == x && signe(worldPos(y) - entity.y, block.rotationY()) && Math.abs(y - entity.blockY()) < range)){
-				v.set((worldPos(x) - entity.x) * (force < 0 ? -1 : 1), (worldPos(y) - entity.y)  * (force < 0 ? -1 : 1));
-				v.setLength(force);
+				v.set((worldPos(x) - entity.x), (worldPos(y) - entity.y));
+				v.setAngle(block.rotation * 90 + (force < 0 ? 0 : 180));
+				float dist = v.len();
+				v.setLength((force*1.3f) / (0.5f-dist/range));
+				
 				fly.velocity.add(v);
 				any = true;
 			}

@@ -10,8 +10,14 @@ public abstract class FlyingEntity extends SolidEntity{
 	//updates velocity and position
 	void UpdateVelocity(){
 		velocity.limit(material.maxvelocity);
-		if(tester.getModule(WeaponWorld.class).solid(x + velocity.x*delta(), y)) velocity.x = 0;
-		if(tester.getModule(WeaponWorld.class).solid(x,y + velocity.y*delta())) velocity.y = 0;
+		if(tester.getModule(WeaponWorld.class).solid(x + velocity.x*delta(), y)){ 
+			velocity.x = 0;
+			velocity.y *= (1f-material.friction);
+		}
+		if(tester.getModule(WeaponWorld.class).solid(x,y + velocity.y*delta())){ 
+			velocity.y = 0;
+			velocity.x *= (1f-material.friction);
+		}
 		x += velocity.x*delta();
 		y += velocity.y*delta();
 		velocity.scl((float)Math.pow(1f - material.drag, delta()));
