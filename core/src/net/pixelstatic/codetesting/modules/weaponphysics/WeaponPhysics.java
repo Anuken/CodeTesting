@@ -30,7 +30,7 @@ public class WeaponPhysics extends Module{
 	
 	private void drawGUI(){
 		Material[] blocks = Material.values();
-		int blockamount = 10;
+		int blockamount = 20;
 		for(int i = 0; i < blockamount; i ++){
 			int offset = i - blockamount/2 + block.ordinal();
 			if(offset < 0 || offset >= blocks.length) continue;

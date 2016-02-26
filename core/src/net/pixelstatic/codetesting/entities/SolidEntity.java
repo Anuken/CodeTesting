@@ -16,6 +16,7 @@ public abstract class SolidEntity extends Entity{
 	
 	//called when this entity hit a solid block
 	public void collisionEvent(int x, int y){
-		
+		new ExplosionEffect().setPosition(this.x, this.y).AddSelf();
+		RemoveSelf();
 	}
 }

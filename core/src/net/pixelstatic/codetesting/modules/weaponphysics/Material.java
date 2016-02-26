@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import net.pixelstatic.codetesting.entities.*;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.math.Vector2;
 
 
 public enum Material{
@@ -40,6 +40,25 @@ public enum Material{
 			return PowerType.source;
 		}
 	},
+	detector{
+		public void draw(WeaponPhysics render, int x, int y, Block block){
+			render.draw(!block.sourcepower ? "detector" : "detectorglow", x,y);
+		}
+		
+		public void update(int x, int y, Block[][] blocks, Block block){
+			for(int i = 0; i < 4; i ++){
+				if(!world.noEntities(x +(i == 0 ? 1 : 0) +(i == 1 ? -1 : 0), y  +(i == 2 ? 1 : 0) +(i == 3 ? -1 : 0))){
+					block.sourcepower = true;
+					return;
+				}
+			}
+			block.sourcepower = false;
+		}
+		
+		public PowerType getPowerType(){
+			return PowerType.source;
+		}
+	},
 	massmaker{
 		public void draw(WeaponPhysics render, int x, int y){
 			render.draw("massmaker", x,y);
@@ -64,7 +83,26 @@ public enum Material{
 			for(int i = 0; i < 4; i ++){
 				ArrayList<Entity> list = world.getEntities(x +(i == 0 ? 1 : 0) +(i == 1 ? -1 : 0), y  +(i == 2 ? 1 : 0) +(i == 3 ? -1 : 0));
 				for(Entity e1 : list){
-					if(e1 instanceof FlyingEntity) ((FlyingEntity)e1).velocity.x = 1;
+					if(e1 instanceof FlyingEntity) ((FlyingEntity)e1).setVelocity((i == 0 ? 1 : 0) +(i == 1 ? -1 : 0), (i == 2 ? 1 : 0) +(i == 3 ? -1 : 0));
+				}
+			}
+		}
+		
+		public PowerType getPowerType(){
+			return PowerType.acceptor;
+		}
+	},
+	autorepulsor{
+		Vector2 v = new Vector2();
+		public void update(int x, int y, Block[][] blocks, Block block){
+			for(Entity entity : Entity.entities.values()){
+				if(!(entity instanceof FlyingEntity)) continue;
+				FlyingEntity fly = (FlyingEntity)entity;
+				v.set(entity.x - world.worldPos(x), entity.y - world.worldPos(y));
+				if(v.len() < 10f){
+					v.setLength(2f);
+					fly.velocity.set(v);
+					new ShieldEffect().setPosition(world.worldPos(x), world.worldPos(y)).AddSelf();
 				}
 			}
 		}
@@ -84,8 +122,7 @@ public enum Material{
 	}
 	
 	public void draw(WeaponPhysics render, int x, int y){
-		render.batch.setColor(Color.WHITE);
-		render.draw("pixel", x * render.pixsize, y * render.pixsize, render.pixsize, render.pixsize);
+		render.draw(name(), x,y);
 	}
 	
 	public void powerEvent(int x, int y, Block[][] blocks, Block block){

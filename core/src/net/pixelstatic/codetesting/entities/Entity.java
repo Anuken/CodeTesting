@@ -29,7 +29,6 @@ public abstract class Entity{
     	return this;
     }
     
-    
     public Entity AddSelf(){
     	entities.put(id, this);
     	return this;
@@ -58,8 +57,8 @@ public abstract class Entity{
     	return entities.get(id) != null;
     }
     
-    public void serverUpdate(){
-    	//do nothing
+    public boolean withinRange(float x, float y, float range){
+    	return Math.abs(x- this.x) < range && Math.abs(y-this.y) < range;
     }
     
     public float delta(){

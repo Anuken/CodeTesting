@@ -48,6 +48,7 @@ public class WeaponWorld extends Module{
 			for(int y = 0;y < size;y ++){
 				if(world[x][y].empty()) continue;
 				world[x][y].sources.clear();
+				world[x][y].sourcepower = false;
 			}
 		}
 		for(int x = 0;x < size;x ++){
@@ -83,6 +84,10 @@ public class WeaponWorld extends Module{
 
 	public boolean conductor(int x, int y){
 		return inBounds(x, y) && !world[x][y].empty() && world[x][y].material.isPowerable();
+	}
+	
+	public float worldPos(int gridpos){
+		return gridpos * physics.pixsize + physics.pixsize/2;
 	}
 
 	public boolean inBounds(int x, int y){

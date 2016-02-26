@@ -3,6 +3,32 @@ codetesting.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
+effects/shield
+  rotate: false
+  xy: 1, 13
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+effects/arrow
+  rotate: false
+  xy: 19, 24
+  size: 12, 5
+  orig: 12, 5
+  offset: 0, 0
+  index: -1
+effects/explosion
+  rotate: false
+  xy: 1, 1
+  size: 10, 10
+  orig: 10, 10
+  offset: 0, 0
+  index: -1
+
+codetesting2.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
 objects/ironcube
   rotate: false
   xy: 1, 1
@@ -11,7 +37,7 @@ objects/ironcube
   offset: 0, 0
   index: -1
 
-codetesting2.png
+codetesting3.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
@@ -30,7 +56,7 @@ pixel
   offset: 0, 0
   index: -1
 
-codetesting3.png
+codetesting4.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
@@ -69,16 +95,37 @@ blocks/massmaker
   orig: 10, 10
   offset: 0, 0
   index: -1
-blocks/ironblock
+blocks/autorepulsor
   rotate: false
   xy: 61, 1
   size: 10, 10
   orig: 10, 10
   offset: 0, 0
   index: -1
-blocks/pulsetimer
+blocks/detectorglow
   rotate: false
   xy: 73, 1
+  size: 10, 10
+  orig: 10, 10
+  offset: 0, 0
+  index: -1
+blocks/ironblock
+  rotate: false
+  xy: 85, 1
+  size: 10, 10
+  orig: 10, 10
+  offset: 0, 0
+  index: -1
+blocks/pulsetimer
+  rotate: false
+  xy: 97, 1
+  size: 10, 10
+  orig: 10, 10
+  offset: 0, 0
+  index: -1
+blocks/detector
+  rotate: false
+  xy: 109, 1
   size: 10, 10
   orig: 10, 10
   offset: 0, 0
