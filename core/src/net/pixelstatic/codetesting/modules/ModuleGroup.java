@@ -2,6 +2,7 @@ package net.pixelstatic.codetesting.modules;
 
 import java.util.HashMap;
 
+import net.pixelstatic.codetesting.modules.generator.Generator;
 import net.pixelstatic.codetesting.modules.weaponphysics.*;
 
 
@@ -13,6 +14,14 @@ public enum ModuleGroup{
 				new WeaponPhysics(),
 				new WeaponWorld(),
 				new WeaponInput()
+			};
+		}
+	},
+	GENERATOR{
+		@Override
+		Module[] modules(){
+			return new Module[]{
+				new Generator()
 			};
 		}
 	};

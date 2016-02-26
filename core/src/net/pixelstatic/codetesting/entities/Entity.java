@@ -3,6 +3,7 @@ package net.pixelstatic.codetesting.entities;
 import java.util.concurrent.ConcurrentHashMap;
 
 import net.pixelstatic.codetesting.CodeTester;
+import net.pixelstatic.codetesting.modules.weaponphysics.WeaponPhysics;
 
 import com.badlogic.gdx.Gdx;
 
@@ -21,6 +22,13 @@ public abstract class Entity{
     	this.y = y;
     	return this;
     }
+    
+    public Entity setBlockPosition(int x, int y){
+    	this.x = tester.getModule(WeaponPhysics.class).pixsize * x + tester.getModule(WeaponPhysics.class).pixsize/2;
+    	this.y = tester.getModule(WeaponPhysics.class).pixsize * y + tester.getModule(WeaponPhysics.class).pixsize/2;
+    	return this;
+    }
+    
     
     public Entity AddSelf(){
     	entities.put(id, this);

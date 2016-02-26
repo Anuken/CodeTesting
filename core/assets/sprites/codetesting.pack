@@ -3,6 +3,18 @@ codetesting.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
+objects/ironcube
+  rotate: false
+  xy: 1, 1
+  size: 6, 6
+  orig: 6, 6
+  offset: 0, 0
+  index: -1
+
+codetesting2.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
 error
   rotate: false
   xy: 1, 4
@@ -18,13 +30,55 @@ pixel
   offset: 0, 0
   index: -1
 
-codetesting2.png
+codetesting3.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-blocks/ironblock
+blocks/repulsor
   rotate: false
   xy: 1, 1
+  size: 10, 10
+  orig: 10, 10
+  offset: 0, 0
+  index: -1
+blocks/pulsewireglow
+  rotate: false
+  xy: 13, 1
+  size: 10, 10
+  orig: 10, 10
+  offset: 0, 0
+  index: -1
+blocks/pulsewire
+  rotate: false
+  xy: 25, 1
+  size: 10, 10
+  orig: 10, 10
+  offset: 0, 0
+  index: -1
+blocks/pulsetimerglow
+  rotate: false
+  xy: 37, 1
+  size: 10, 10
+  orig: 10, 10
+  offset: 0, 0
+  index: -1
+blocks/massmaker
+  rotate: false
+  xy: 49, 1
+  size: 10, 10
+  orig: 10, 10
+  offset: 0, 0
+  index: -1
+blocks/ironblock
+  rotate: false
+  xy: 61, 1
+  size: 10, 10
+  orig: 10, 10
+  offset: 0, 0
+  index: -1
+blocks/pulsetimer
+  rotate: false
+  xy: 73, 1
   size: 10, 10
   orig: 10, 10
   offset: 0, 0

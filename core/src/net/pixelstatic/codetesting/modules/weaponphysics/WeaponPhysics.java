@@ -23,7 +23,7 @@ public class WeaponPhysics extends Module{
 	private void draw(){
 		for(int x = 0;x < world.size;x ++){
 			for(int y = 0;y < world.size;y ++){
-				if(!block(x,y).empty()) block(x,y).material.draw(this, x, y);
+				if(!block(x,y).empty()) block(x,y).material.draw(this, x, y, block(x,y));
 			}
 		}
 	}
@@ -53,11 +53,13 @@ public class WeaponPhysics extends Module{
 	public void placeBlock(int x, int y){
 		if(!inBounds(x,y)) return;
 		world.world[x][y].material = block;
+		world.updateBlocks();
 	}
 	
 	public void removeBlock(int x, int y){
 		if(!inBounds(x,y)) return;
 		world.world[x][y].material = null;
+		world.updateBlocks();
 	}
 	
 	public boolean inBounds(int x, int y){
@@ -77,12 +79,12 @@ public class WeaponPhysics extends Module{
 
 	@Override
 	public void update(){
-		uppateEntities();
 		clear();
 		updateCamera();
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
 		draw();
+		updateEntities();
 		batch.end();
 		batch.setProjectionMatrix(matrix);
 		batch.begin();
@@ -90,7 +92,7 @@ public class WeaponPhysics extends Module{
 		batch.end();
 	}
 	
-	void uppateEntities(){
+	void updateEntities(){
 		for(Entity entity : Entity.entities.values()){
 			entity.Update();
 			entity.Draw();
@@ -124,6 +126,10 @@ public class WeaponPhysics extends Module{
 	
 	public void draw(String region, int x, int y){
 		batch.draw(atlas.findRegion(region), x * pixsize + pixsize/2 - atlas.RegionWidth(region)/2, y * pixsize + pixsize/2 - atlas.RegionHeight(region)/2);
+	}
+	
+	public void draw(String region, float x, float y){
+		batch.draw(atlas.findRegion(region), x- atlas.RegionWidth(region)/2, y - atlas.RegionHeight(region)/2);
 	}
 	
 	public Block block(int x, int y){

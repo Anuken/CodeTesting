@@ -11,4 +11,9 @@ public abstract class FlyingEntity extends SolidEntity{
 		y += velocity.y*delta();
 		velocity.scl((float)Math.pow(1f - material.drag, delta()));
 	}
+	
+	public FlyingEntity setVelocity(float x, float y){
+		velocity.set(x,y);
+		return this;
+	}
 }
