@@ -1,5 +1,7 @@
 package net.pixelstatic.codetesting.entities;
 
+import net.pixelstatic.codetesting.modules.weaponphysics.WeaponWorld;
+
 import com.badlogic.gdx.math.Vector2;
 
 public abstract class FlyingEntity extends SolidEntity{
@@ -7,6 +9,9 @@ public abstract class FlyingEntity extends SolidEntity{
 	
 	//updates velocity and position
 	void UpdateVelocity(){
+		velocity.limit(material.maxvelocity);
+		if(tester.getModule(WeaponWorld.class).solid(x + velocity.x*delta(), y)) velocity.x = 0;
+		if(tester.getModule(WeaponWorld.class).solid(x,y + velocity.y*delta())) velocity.y = 0;
 		x += velocity.x*delta();
 		y += velocity.y*delta();
 		velocity.scl((float)Math.pow(1f - material.drag, delta()));

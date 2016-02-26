@@ -1,11 +1,12 @@
 package net.pixelstatic.codetesting.modules.weaponphysics;
 
+import net.pixelstatic.codetesting.entities.ShieldBitEffect;
 import net.pixelstatic.codetesting.modules.Module;
 
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.math.*;
 
 public class WeaponInput extends Module implements InputProcessor{
 	WeaponPhysics weapon;
@@ -21,6 +22,10 @@ public class WeaponInput extends Module implements InputProcessor{
 		if(Gdx.input.isKeyPressed(Keys.D)) weapon.camera.position.x += speedtemp;
 		if(Gdx.input.isButtonPressed(Buttons.LEFT)) tryPlace();
 		if(Gdx.input.isButtonPressed(Buttons.RIGHT)) tryRemove();
+		if(Gdx.input.isKeyJustPressed(Keys.R)) tryRotate();
+		if(Gdx.input.isButtonPressed(Buttons.LEFT)){
+			new ShieldBitEffect().setRotation(MathUtils.random(360f)).AddSelf();;
+		}
 	}
 	
 	@Override
@@ -81,6 +86,12 @@ public class WeaponInput extends Module implements InputProcessor{
 			weapon.block = Material.values()[next];
 		}
 		return false;
+	}
+	
+	void tryRotate(){
+		Vector3 v = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0f);
+		Vector3 unproject = weapon.camera.unproject(v);
+		weapon.rotateBlock((int)(unproject.x / weapon.pixsize),(int)(unproject.y / weapon.pixsize));
 	}
 	
 	void tryPlace(){

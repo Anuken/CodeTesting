@@ -6,7 +6,7 @@ public class IronCube extends DestructibleEntity{
 	final static int lifetime = 3000;
 	float life;
 	{
-		material.drag = 0;
+		material.drag = 0.03f;
 	}
 
 	@Override

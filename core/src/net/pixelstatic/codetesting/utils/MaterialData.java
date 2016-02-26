@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Rectangle;
 public class MaterialData{
 	public float mass = 1f;
 	public float drag = 0.08f;
+	public float maxvelocity = 5f;
 	private SolidEntity entity;
 	private Rectangle rectangle;
 	

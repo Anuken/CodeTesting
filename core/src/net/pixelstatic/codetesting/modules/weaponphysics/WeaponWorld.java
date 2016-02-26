@@ -2,10 +2,13 @@ package net.pixelstatic.codetesting.modules.weaponphysics;
 
 import java.util.*;
 
-import net.pixelstatic.codetesting.entities.Entity;
+import net.pixelstatic.codetesting.entities.*;
 import net.pixelstatic.codetesting.modules.Module;
 
+import com.badlogic.gdx.math.Vector2;
+
 public class WeaponWorld extends Module{
+	private Vector2 v = new Vector2();
 	public WeaponPhysics physics;
 	public Block[][] world;
 	public Block[][] temp;
@@ -86,6 +89,41 @@ public class WeaponWorld extends Module{
 		return inBounds(x, y) && !world[x][y].empty() && world[x][y].material.isPowerable();
 	}
 	
+	public void repulseForce(int blockx, int blocky, float range, float force){
+		float x = blockx * physics.pixsize+ physics.pixsize/2, y =  blocky* physics.pixsize + physics.pixsize/2;
+		for(Entity entity : Entity.entities.values()){
+			if(!(entity instanceof FlyingEntity)) continue;
+			FlyingEntity fly = (FlyingEntity)entity;
+			v.set(entity.x - x, entity.y - y);
+			if(v.len() < range){
+				v.setLength(force);
+				fly.velocity.add(v);
+				new ShieldEffect().setPosition(x, y).AddSelf();
+			}
+		}
+	}
+	
+	public boolean lineForce(int x, int y, Block block, int range, float force){
+		boolean any = false;
+		if(solid(x + block.rotationX(), y + block.rotationY())) return false;
+		for(Entity entity : Entity.entities.values()){
+			if(!(entity instanceof FlyingEntity)) continue;
+			FlyingEntity fly = (FlyingEntity)entity;
+			if((block.xRotation() && entity.blockY() == y && signe(worldPos(x) - entity.x, block.rotationX()) && Math.abs(x - entity.blockX()) < range) 
+					|| (!block.xRotation() && entity.blockX() == x && signe(worldPos(y) - entity.y, block.rotationY()) && Math.abs(y - entity.blockY()) < range)){
+				v.set((worldPos(x) - entity.x) * (force < 0 ? -1 : 1), (worldPos(y) - entity.y)  * (force < 0 ? -1 : 1));
+				v.setLength(force);
+				fly.velocity.add(v);
+				any = true;
+			}
+		}
+		return any;
+	}
+	
+	public boolean signe(float a, float b){
+		return !((a < 0 && b < 0) || (a > 0 && b > 0)); 
+	}
+	
 	public float worldPos(int gridpos){
 		return gridpos * physics.pixsize + physics.pixsize/2;
 	}
@@ -95,7 +133,12 @@ public class WeaponWorld extends Module{
 	}
 
 	public boolean solid(int x, int y){
+		if(!inBounds(x,y)) return false;
 		return !(world[x][y] == null || world[x][y].empty());
+	}
+	
+	public boolean solid(float x, float y){
+		return solid((int)(x/physics.pixsize), (int)(y/physics.pixsize));
 	}
 
 	@Override

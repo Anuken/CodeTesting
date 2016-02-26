@@ -4,9 +4,10 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Block{
 	final int x,y;
+	int rotation;
 	CopyOnWriteArrayList<Block> sources = new CopyOnWriteArrayList<Block>();
 	Material material;
-	boolean powered, sourcepower;
+	boolean powered, sourcepower, active;
 	
 	public Block(int x, int y){
 		this.x = x;
@@ -31,6 +32,20 @@ public class Block{
 			}
 		}
 		powered = false;
+	}
+	//returns whether or not the block is facing in an X direction
+	boolean xRotation(){
+		return rotationX() != 0;
+	}
+	//returns the facing X direction
+	int rotationX(){
+		int i = rotation;
+		return (i == 0 ? 1 : 0) +(i == 2 ? -1 : 0); 
+	}
+	//returns the facing Y direction
+	int rotationY(){
+		int i = rotation;
+		return (i == 1 ? 1 : 0) +(i == 3 ? -1 : 0);
 	}
 	
 	public String toString(){

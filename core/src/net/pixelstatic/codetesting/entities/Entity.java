@@ -29,6 +29,15 @@ public abstract class Entity{
     	return this;
     }
     
+    public int blockX(){
+    	return (int)(x/ tester.getModule(WeaponPhysics.class).pixsize); 
+    }
+    
+    public int blockY(){
+    	return (int)(y/ tester.getModule(WeaponPhysics.class).pixsize); 
+    }
+    
+    
     public Entity AddSelf(){
     	entities.put(id, this);
     	return this;

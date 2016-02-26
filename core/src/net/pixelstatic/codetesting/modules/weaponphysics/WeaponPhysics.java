@@ -49,6 +49,12 @@ public class WeaponPhysics extends Module{
 	void updateCamera(){
 		camera.update();
 	}
+	
+	public void rotateBlock(int x, int y){
+		if(!inBounds(x,y)) return;
+		world.world[x][y].rotation ++;
+		if(world.world[x][y].rotation > 3) world.world[x][y].rotation = 0;
+	}
 
 	public void placeBlock(int x, int y){
 		if(!inBounds(x,y)) return;
@@ -126,6 +132,10 @@ public class WeaponPhysics extends Module{
 	
 	public void draw(String region, int x, int y){
 		batch.draw(atlas.findRegion(region), x * pixsize + pixsize/2 - atlas.RegionWidth(region)/2, y * pixsize + pixsize/2 - atlas.RegionHeight(region)/2);
+	}
+	
+	public void draw(String region, int x, int y, int rotation){
+		batch.draw(atlas.findRegion(region), x * pixsize + pixsize/2 - atlas.RegionWidth(region)/2, y * pixsize + pixsize/2 - atlas.RegionHeight(region)/2, atlas.RegionWidth(region)/2, atlas.RegionHeight(region)/2, 10, 10, 1, 1, rotation * 90);
 	}
 	
 	public void draw(String region, float x, float y){
