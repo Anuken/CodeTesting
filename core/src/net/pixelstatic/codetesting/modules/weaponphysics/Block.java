@@ -5,6 +5,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class Block{
 	final int x,y;
 	int rotation;
+	float lifetime;
 	CopyOnWriteArrayList<Block> sources = new CopyOnWriteArrayList<Block>();
 	Material material;
 	boolean powered, sourcepower, active;
@@ -46,6 +47,10 @@ public class Block{
 	int rotationY(){
 		int i = rotation;
 		return (i == 1 ? 1 : 0) +(i == 3 ? -1 : 0);
+	}
+	
+	public boolean opposite(Block other){
+		return other.rotationX() == -this.rotationX() && other.rotationY() == -this.rotationY();
 	}
 	
 	public String toString(){

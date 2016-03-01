@@ -2,7 +2,7 @@ package net.pixelstatic.codetesting.modules;
 
 import java.util.HashMap;
 
-import net.pixelstatic.codetesting.modules.generator.Generator;
+import net.pixelstatic.codetesting.modules.generator.*;
 import net.pixelstatic.codetesting.modules.weaponphysics.*;
 
 
@@ -21,7 +21,10 @@ public enum ModuleGroup{
 		@Override
 		Module[] modules(){
 			return new Module[]{
-				new Generator()
+				new Generator(),
+				new PlantGenerator(),
+				new GeneratorInput(),
+				new Renderer()
 			};
 		}
 	};

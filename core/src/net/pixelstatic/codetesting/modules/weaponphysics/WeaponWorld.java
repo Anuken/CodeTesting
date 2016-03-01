@@ -126,6 +126,11 @@ public class WeaponWorld extends Module{
 		return any;
 	}
 	
+	public boolean isType(int x, int y, Material mat){
+		if(!inBounds(x,y)) return false;
+		return world[x][y].material == mat;
+	}
+	
 	public boolean signe(float a, float b){
 		return !((a < 0 && b < 0) || (a > 0 && b > 0)); 
 	}
@@ -136,6 +141,11 @@ public class WeaponWorld extends Module{
 
 	public boolean inBounds(int x, int y){
 		return !(x < 0 || y < 0 || x >= size || y >= size);
+	}
+	
+	public Block block(int x, int y){
+		if(!inBounds(x,y)) return world[0][0];
+		return world[x][y];
 	}
 
 	public boolean solid(int x, int y){

@@ -1,8 +1,10 @@
 package net.pixelstatic.codetesting.modules.weaponphysics;
 
-import net.pixelstatic.codetesting.entities.IronCube;
+import net.pixelstatic.codetesting.entities.*;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 
 public enum Material{
 	iron{
@@ -19,13 +21,22 @@ public enum Material{
 			return PowerType.conductor;
 		}
 	},
+	pulsedelayer{
+		
+	},
 	pulsetimer{
 		public void draw(WeaponPhysics render, int x, int y, Block block){
 			render.draw( !block.sourcepower ? "pulsetimer" : "pulsetimerglow", x, y);
 		}
 
 		public void update(int x, int y, Block[][] blocks, Block block){
-			if(Gdx.graphics.getFrameId() % 100 < 50){
+			block.lifetime += Entity.delta();
+			int time = 100;
+			for(int i = 0; i < 4; i ++){
+				block.rotation = i;
+				if(world.isType(x + block.rotationX(), y + block.rotationY(), Material.pulsedelayer)) time += 100;
+			}
+			if(((int)block.lifetime) % time < time/2){
 				block.sourcepower = true;
 			}else{
 				block.sourcepower = false;
@@ -84,10 +95,6 @@ public enum Material{
 			block.active = world.lineForce(x, y, block, 5, 0.2f);
 		}
 
-		public PowerType getPowerType(){
-			return PowerType.acceptor;
-		}
-
 		public boolean isRotateable(){
 			return true;
 		}
@@ -102,12 +109,40 @@ public enum Material{
 			block.active = world.lineForce(x, y, block, 5, -0.2f);
 		}
 
-		public PowerType getPowerType(){
-			return PowerType.acceptor;
-		}
-
 		public boolean isRotateable(){
 			return true;
+		}
+	},
+	shieldmagnet{
+		public boolean isRotateable(){
+			return true;
+		}
+		
+		public float addscl(int x, int y, Block block){
+			for(int i = 1; i < 13; i ++){ //scan 10 blocks
+				//new scan coord
+				int nx = block.rotationX()  * i + x, ny =  block.rotationY()  * i + y;
+				if(world.isType(nx, ny, Material.shieldmagnet) && block.opposite(world.block(nx,ny))){
+					return (i-4) / 4f;
+				}else if(world.isType(nx, ny, Material.shieldmagnet)){
+					return 0f;
+				}
+			}
+			return 0f;
+		}
+		
+		public void draw(WeaponPhysics render, int x, int y, Block block){
+			render.draw("shieldmagnet", x, y, world.world[x][y].rotation - 1);
+			float scl = 0.7f;
+			//scan blocks..
+			scl += addscl(x,y, block);
+			Sprite sprite = new Sprite(world.getModule(WeaponPhysics.class).atlas.findRegion("shieldpart"));
+			sprite.setPosition(x*10 - 15 + block.rotationX() * 20 * scl + block.rotationX() *5, y*10 - 15 + block.rotationY() * 20 * scl + block.rotationY() *5);
+			sprite.setOriginCenter();
+			sprite.setRotation((block.rotation-1) * 90 );
+			sprite.setScale(scl);
+			sprite.setColor(new Color(1,1,1, (float)Math.abs(Math.sin(Gdx.graphics.getFrameId()/60f))));
+			sprite.draw(world.getModule(WeaponPhysics.class).batch);
 		}
 	}
 	/*

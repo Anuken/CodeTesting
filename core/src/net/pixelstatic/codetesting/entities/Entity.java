@@ -70,7 +70,7 @@ public abstract class Entity{
     	return Math.abs(x- this.x) < range && Math.abs(y-this.y) < range;
     }
     
-    public float delta(){
+    public static float delta(){
     	return Gdx.graphics.getDeltaTime() * 60f;
     }
     

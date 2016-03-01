@@ -3,30 +3,37 @@ codetesting.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
+effects/shieldpart
+  rotate: false
+  xy: 1, 23
+  size: 40, 40
+  orig: 40, 40
+  offset: 0, 0
+  index: -1
 effects/shieldbit
   rotate: false
-  xy: 1, 8
+  xy: 1, 1
   size: 20, 20
   orig: 20, 20
   offset: 0, 0
   index: -1
 effects/shield
   rotate: false
-  xy: 23, 12
+  xy: 43, 47
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 effects/explosion
   rotate: false
-  xy: 41, 18
+  xy: 23, 11
   size: 10, 10
   orig: 10, 10
   offset: 0, 0
   index: -1
 effects/arrow
   rotate: false
-  xy: 1, 1
+  xy: 43, 40
   size: 12, 5
   orig: 12, 5
   offset: 0, 0
@@ -67,100 +74,114 @@ codetesting4.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-blocks/repulsor
+blocks/shieldmagnet
   rotate: false
   xy: 1, 1
+  size: 14, 10
+  orig: 14, 10
+  offset: 0, 0
+  index: -1
+blocks/repulsor
+  rotate: false
+  xy: 17, 1
   size: 10, 10
   orig: 10, 10
   offset: 0, 0
   index: -1
 blocks/pulsewireglow
   rotate: false
-  xy: 13, 1
+  xy: 29, 1
   size: 10, 10
   orig: 10, 10
   offset: 0, 0
   index: -1
 blocks/repulsemagnet
   rotate: false
-  xy: 25, 1
+  xy: 41, 1
   size: 10, 10
   orig: 10, 10
   offset: 0, 0
   index: -1
 blocks/pulsewire
   rotate: false
-  xy: 37, 1
+  xy: 53, 1
   size: 10, 10
   orig: 10, 10
   offset: 0, 0
   index: -1
 blocks/pulsetimerglow
   rotate: false
-  xy: 49, 1
+  xy: 65, 1
   size: 10, 10
   orig: 10, 10
   offset: 0, 0
   index: -1
 blocks/massmaker
   rotate: false
-  xy: 61, 1
+  xy: 77, 1
   size: 10, 10
   orig: 10, 10
   offset: 0, 0
   index: -1
 blocks/magnetlight
   rotate: false
-  xy: 73, 1
+  xy: 89, 1
   size: 10, 10
   orig: 10, 10
   offset: 0, 0
   index: -1
 blocks/autorepulsor
   rotate: false
-  xy: 85, 1
+  xy: 101, 1
   size: 10, 10
   orig: 10, 10
   offset: 0, 0
   index: -1
 blocks/magnet
   rotate: false
-  xy: 97, 1
+  xy: 113, 1
   size: 10, 10
   orig: 10, 10
   offset: 0, 0
   index: -1
 blocks/detectorglow
   rotate: false
-  xy: 109, 1
+  xy: 125, 1
+  size: 10, 10
+  orig: 10, 10
+  offset: 0, 0
+  index: -1
+blocks/pulsedelayer
+  rotate: false
+  xy: 137, 1
   size: 10, 10
   orig: 10, 10
   offset: 0, 0
   index: -1
 blocks/ironblock
   rotate: false
-  xy: 121, 1
+  xy: 149, 1
   size: 10, 10
   orig: 10, 10
   offset: 0, 0
   index: -1
 blocks/pulsetimer
   rotate: false
-  xy: 133, 1
+  xy: 161, 1
   size: 10, 10
   orig: 10, 10
   offset: 0, 0
   index: -1
 blocks/detector
   rotate: false
-  xy: 145, 1
+  xy: 173, 1
   size: 10, 10
   orig: 10, 10
   offset: 0, 0
   index: -1
 blocks/repulsemagnetlight
   rotate: false
-  xy: 157, 1
+  xy: 185, 1
   size: 10, 10
   orig: 10, 10
   offset: 0, 0
