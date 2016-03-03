@@ -147,6 +147,10 @@ public class WeaponPhysics extends Module{
 		batch.draw(atlas.findRegion(region), x- atlas.RegionWidth(region)/2, y - atlas.RegionHeight(region)/2);
 	}
 	
+	public void draw(String region, float x, float y, float size){
+		batch.draw(atlas.findRegion(region), x- size/2, y - size/2, size, size);
+	}
+	
 	public Block block(int x, int y){
 		return world.world[x][y];
 	}

@@ -22,7 +22,7 @@ public enum Material{
 		}
 	},
 	pulsedelayer{
-		
+
 	},
 	pulsetimer{
 		public void draw(WeaponPhysics render, int x, int y, Block block){
@@ -32,11 +32,11 @@ public enum Material{
 		public void update(int x, int y, Block[][] blocks, Block block){
 			block.lifetime += Entity.delta();
 			int time = 100;
-			for(int i = 0; i < 4; i ++){
+			for(int i = 0;i < 4;i ++){
 				block.rotation = i;
 				if(world.isType(x + block.rotationX(), y + block.rotationY(), Material.pulsedelayer)) time += 100;
 			}
-			if(((int)block.lifetime) % time < time/2){
+			if(((int)block.lifetime) % time < time / 2){
 				block.sourcepower = true;
 			}else{
 				block.sourcepower = false;
@@ -85,12 +85,49 @@ public enum Material{
 			return true;
 		}
 	},
+	heater{
+		
+	},
+	gasemitter{
+		int contained(int x, int y, Block block){
+			for(int i = 1; i < 6; i ++){
+				Block detect = world.block(x, y + i);
+				if(detect.material == Material.shieldmagnet && detect.rotationY() == -1){
+					for(int r = 2; r < 5; r ++){
+						int num = r % 4;
+						Block check = world.block(rotationX(num) * i + x, rotationY(num) * i + y);
+						if(check.rotation == (num+2)%4 && check.material == Material.shieldmagnet){
+							
+						}else{
+						//	System.out.println("checking " + check + " returning false " + check.rotation + " " + num);
+							return 0;
+						}
+					}
+					return i;
+				}
+			}
+			return 0;
+		}
+		
+		public void draw(WeaponPhysics render, int x, int y, Block block){
+			int contained = contained(x,y,block);
+	
+			
+			render.batch.setColor(contained == 0 ? new Color(1,1,1,(float)Math.abs(Math.sin(Gdx.graphics.getFrameId() / 200f)) / 2f + 0.2f)
+			: new Color((float)Math.abs(Math.sin(Gdx.graphics.getFrameId() / 20f + 2))/2f + 0.5f,1,(float)Math.abs(Math.sin(Gdx.graphics.getFrameId() / 20f))/2f + 0.5f,1));
+			render.draw(contained != 0 ? "gascontained" : "gas", x*10+5, y*10+5, contained != 0 ? (contained / 5f) * 100 : 100f);
+			
+			
+			render.batch.setColor(Color.WHITE);
+			render.draw("gasemitter", x, y);
+		}
+	},
 	magnet{
 
 		public void draw(WeaponPhysics render, int x, int y){
 			render.draw( !world.world[x][y].active ? "magnet" : "magnetlight", x, y, world.world[x][y].rotation - 1);
 		}
-		
+
 		public void update(int x, int y, Block[][] blocks, Block block){
 			block.active = world.lineForce(x, y, block, 5, 0.2f);
 		}
@@ -117,31 +154,31 @@ public enum Material{
 		public boolean isRotateable(){
 			return true;
 		}
-		
+
 		public float addscl(int x, int y, Block block){
-			for(int i = 1; i < 13; i ++){ //scan 10 blocks
+			for(int i = 1;i < 13;i ++){ //scan 10 blocks
 				//new scan coord
-				int nx = block.rotationX()  * i + x, ny =  block.rotationY()  * i + y;
-				if(world.isType(nx, ny, Material.shieldmagnet) && block.opposite(world.block(nx,ny))){
-					return (i-4) / 4f;
+				int nx = block.rotationX() * i + x, ny = block.rotationY() * i + y;
+				if(world.isType(nx, ny, Material.shieldmagnet) && block.opposite(world.block(nx, ny))){
+					return (i - 4) / 4f;
 				}else if(world.isType(nx, ny, Material.shieldmagnet)){
 					return 0f;
 				}
 			}
 			return 0f;
 		}
-		
+
 		public void draw(WeaponPhysics render, int x, int y, Block block){
 			render.draw("shieldmagnet", x, y, world.world[x][y].rotation - 1);
 			float scl = 0.7f;
 			//scan blocks..
-			scl += addscl(x,y, block);
+			scl += addscl(x, y, block);
 			Sprite sprite = new Sprite(world.getModule(WeaponPhysics.class).atlas.findRegion("shieldpart"));
-			sprite.setPosition(x*10 - 15 + block.rotationX() * 20 * scl + block.rotationX() *5, y*10 - 15 + block.rotationY() * 20 * scl + block.rotationY() *5);
+			sprite.setPosition(x * 10 - 15 + block.rotationX() * 20 * scl + block.rotationX() * 5, y * 10 - 15 + block.rotationY() * 20 * scl + block.rotationY() * 5);
 			sprite.setOriginCenter();
-			sprite.setRotation((block.rotation-1) * 90 );
+			sprite.setRotation((block.rotation - 1) * 90);
 			sprite.setScale(scl);
-			sprite.setColor(new Color(1,1,1, (float)Math.abs(Math.sin(Gdx.graphics.getFrameId()/60f))));
+			sprite.setColor(new Color(1, 1, 1, (float)Math.abs(Math.sin(Gdx.graphics.getFrameId() / 60f))));
 			sprite.draw(world.getModule(WeaponPhysics.class).batch);
 		}
 	}
@@ -186,6 +223,13 @@ public enum Material{
 	}
 	*/;
 	public static WeaponWorld world;
+	
+	int rotationX(int i){
+		return (i == 0 ? 1 : 0) +(i == 2 ? -1 : 0); 
+	}
+	int rotationY(int i){
+		return (i == 1 ? 1 : 0) +(i == 3 ? -1 : 0);
+	}
 
 	public boolean signe(float a, float b){
 		return !((a < 0 && b < 0) || (a > 0 && b > 0));
