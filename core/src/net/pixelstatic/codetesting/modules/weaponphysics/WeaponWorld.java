@@ -106,8 +106,9 @@ public class WeaponWorld extends Module{
 	
 	public boolean lineForce(int x, int y, Block block, int range, float force){
 		boolean any = false;
+		int ray = 100;
 		for(int i = 1; i <= range; i ++){
-			if(solid(x + block.rotationX()*i, y + block.rotationY()*i)) return false;
+			if(solid(x + block.rotationX()*i, y + block.rotationY()*i)){ ray = i;break;}
 		}
 		for(Entity entity : Entity.entities.values()){
 			if(!(entity instanceof FlyingEntity)) continue;
@@ -115,6 +116,9 @@ public class WeaponWorld extends Module{
 			if((block.xRotation() && entity.blockY() == y && signe(worldPos(x) - entity.x, block.rotationX()) && Math.abs(x - entity.blockX()) < range) 
 					|| (!block.xRotation() && entity.blockX() == x && signe(worldPos(y) - entity.y, block.rotationY()) && Math.abs(y - entity.blockY()) < range)){
 				v.set((worldPos(x) - entity.x), (worldPos(y) - entity.y));
+				if(Math.abs(x- entity.blockX()) > ray || Math.abs(y- entity.blockY()) > ray){
+					return false;
+				}
 				v.setAngle(block.rotation * 90 + (force < 0 ? 0 : 180));
 				float dist = v.len();
 				v.setLength((force*1.3f) / (0.5f-dist/range));

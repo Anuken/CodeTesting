@@ -90,7 +90,7 @@ public enum Material{
 	},
 	gasemitter{
 		int contained(int x, int y, Block block){
-			for(int i = 1; i < 6; i ++){
+			for(int i = 1; i < 7; i ++){
 				Block detect = world.block(x, y + i);
 				if(detect.material == Material.shieldmagnet && detect.rotationY() == -1){
 					for(int r = 2; r < 5; r ++){
@@ -109,14 +109,46 @@ public enum Material{
 			return 0;
 		}
 		
+		int heat(int x, int y, Block block, int radius){
+			int heat = 0;
+			for(int scanx = - radius; scanx < radius; scanx ++){
+				for(int scany = - radius; scany < radius; scany ++){
+					if(Math.sqrt(scanx*scanx + scany*scany) < radius){
+						if(heat > 4) return 4;
+						if(world.isType(x + scanx, y + scany, Material.heater)){
+							heat ++;
+						}
+					}
+				}
+			}
+			return heat;
+		}
+		
 		public void draw(WeaponPhysics render, int x, int y, Block block){
 			int contained = contained(x,y,block);
-	
 			
-			render.batch.setColor(contained == 0 ? new Color(1,1,1,(float)Math.abs(Math.sin(Gdx.graphics.getFrameId() / 200f)) / 2f + 0.2f)
-			: new Color((float)Math.abs(Math.sin(Gdx.graphics.getFrameId() / 20f + 2))/2f + 0.5f,1,(float)Math.abs(Math.sin(Gdx.graphics.getFrameId() / 20f))/2f + 0.5f,1));
-			render.draw(contained != 0 ? "gascontained" : "gas", x*10+5, y*10+5, contained != 0 ? (contained / 5f) * 100 : 100f);
+			int radius = (int)((contained != 0 ? (contained / 5f) * 100 : 200f) / 20f);
 			
+			int heat = heat(x,y,block,radius);
+			
+			float drad = radius*10f;
+			if(heat > 0)
+			for(Entity entity : Entity.entities.values()){
+				if(!(entity instanceof DestructibleEntity)) continue;
+				DestructibleEntity d = (DestructibleEntity)entity;
+				float dist = (float)Math.sqrt(Math.pow(x*10+5-entity.x,2) + Math.pow(y*10+5-entity.y,2));
+				if(dist < drad){
+					d.heat += 0.006f * (drad-dist)/(drad) * heat/4f * (contained != 0 ? 28f/contained : 1f);
+				}
+			}
+			
+			render.batch.setColor(contained == 0 ? new Color(1,1,1,(float)Math.abs(Math.sin(Gdx.graphics.getFrameId() / 200f)) / 4f + 0.05f)
+			: new Color(1f,1f,1f,(float)Math.abs(Math.sin(Gdx.graphics.getFrameId() / 200f)) / 2f+0.2f));
+			
+			render.draw(contained != 0 ? "gascontained" : "gas", x*10+5, y*10+5, radius*20f);
+			
+			render.batch.setColor(new Color(1,0.5f,0f,heat / 20f * (contained != 0 ? 2f : 1f)));
+			render.draw("gascontained", x*10+5, y*10+5, radius*20f);
 			
 			render.batch.setColor(Color.WHITE);
 			render.draw("gasemitter", x, y);

@@ -8,7 +8,7 @@ import net.pixelstatic.codetesting.modules.*;
 import com.badlogic.gdx.ApplicationAdapter;
 
 public class CodeTester extends ApplicationAdapter{
-	ModuleGroup type = ModuleGroup.WEAPON_PHYSICS;
+	ModuleGroup type = ModuleGroup.GENERATOR;
 	HashMap<Class<? extends Module>, Module> modules;
 
 	@Override
