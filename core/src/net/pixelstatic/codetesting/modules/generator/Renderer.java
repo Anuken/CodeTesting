@@ -22,7 +22,12 @@ public class Renderer extends Module{
 	boolean done = false;
 	float extrasize = 1.3f;
 	boolean square = true;
-
+	boolean curves = false;
+	boolean scaletrunk = false;
+	int trunkscale = 75;
+	int leafscale = 20;
+	int branchoffset = size/4;
+		
 	public void init(){
 		batch = new SpriteBatch();
 		grid = new int[size][size];
@@ -115,7 +120,7 @@ public class Renderer extends Module{
 		//thicker trunk
 		for(int x = 0;x < size;x ++){
 			for(int y = 0;y < size;y ++){
-				//trunkwidth = (size-y)/75+1;
+				if(scaletrunk)trunkwidth = (size-y)/trunkscale+1;
 				if(grid[x][y] == 3){
 					for(int i = -trunkwidth;i <= trunkwidth;i ++){
 						pixel(x + i, y);
@@ -132,7 +137,7 @@ public class Renderer extends Module{
 					pixmap.drawPixel(x, y, Color.rgba8888(barkcolor(y).mul(0.7f, 0.7f, 0.7f, 1f)));
 				}
 
-				if(((pe(x - 1, y) || pe(x + 1, y)) && !pe(x, y + 1) && pe(x, y)) || ( !pe(x + 1, y) && pe(x - 1, y) && pe(x, y))){
+				if(((pe(x - 1, y) || pe(x + 1, y)) && !pe(x, y + 1) && pe(x, y)) || (!curves && !pe(x + 1, y) && pe(x - 1, y) && pe(x, y))){
 					pixmap.drawPixel(x, y, Color.rgba8888(barkcolor(y).mul(1.3f)));
 				}
 
@@ -143,7 +148,7 @@ public class Renderer extends Module{
 		for(int x = 0;x < size;x ++){
 			for(int y = 0;y < size;y ++){
 				if((grid[x][y] != 2 && grid[x][y] != 1) && !(y == size - 1 && grid[x][y] == 3)) continue;
-				int size = y / 20 + 3 + MathUtils.random(0, 5) * 4;
+				int size = y / leafscale + 3 + MathUtils.random(0, 5) * 4;
 				//shadows
 				Pixmap.setBlending(Blending.SourceOver);
 				pixmap.setColor(new Color(0, 0, 0, 0.05f));
@@ -208,30 +213,8 @@ public class Renderer extends Module{
 			}
 		}
 		y --;
-		//if(add == 0 && Math.random() < 0.3) add = MathUtils.randomSign();
-		/*
-		if(Math.random() < 0.05){
-			int leftr = 0, rightr = 0;
-			for(int i = 1;i < spacing;i ++){
-				if(leftr != 0 && rightr != 0) break;
-				if(leftr != 0 && occupied( -i + x, y)){
-					leftr = i;
-				}
-				if(rightr != 0 && occupied(i + x, y)){
-					rightr = i;
-				}
-			}
-			if(leftr == 0 && rightr == 0){
-				seed(x + MathUtils.randomSign(), y);
-			}else if(leftr == rightr){
-				//do nothing
-			}else{
-				seed(x + leftr < rightr ? leftr : ri2ghtr, y);
-			}
-		}
-		*/
 		float tallness = size / 1.5f;
-		float offset = size / 4;
+		float offset = branchoffset;
 		if(Math.random() < 0.01){
 			for(int ix = 0;ix < size;ix ++){
 				for(int iy = (int)offset;iy < tallness - 5;iy ++){
@@ -260,17 +243,6 @@ public class Renderer extends Module{
 								}
 							}
 						}
-						/*
-						if(leftr == 199 && leftr == 199){
-							continue;
-						}else if(leftr == 0 && rightr == 0){
-							seed(ix + MathUtils.randomSign(), iy);
-						}else{
-							seed(ix + leftr < rightr ? -1 : 1, iy);
-						}
-						*/
-						//seed(ix + (ix < size/2 ? -1 : 1), iy);
-
 						branches ++;
 						if(branches > maxbranches){
 							done = true;
@@ -281,7 +253,7 @@ public class Renderer extends Module{
 				}
 			}
 		}
-		seed(x + add, y + (add == 0 ? 1 : 0));
+		seed(x + add, y + (add == 0 || curves ? 1 : 0));
 		grid[x][y] = 3;
 	}
 

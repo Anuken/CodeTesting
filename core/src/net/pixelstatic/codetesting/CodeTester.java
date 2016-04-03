@@ -3,12 +3,13 @@ package net.pixelstatic.codetesting;
 import java.util.HashMap;
 
 import net.pixelstatic.codetesting.entities.Entity;
-import net.pixelstatic.codetesting.modules.*;
+import net.pixelstatic.codetesting.modules.Module;
+import net.pixelstatic.codetesting.modules.ModuleGroup;
 
 import com.badlogic.gdx.ApplicationAdapter;
 
 public class CodeTester extends ApplicationAdapter{
-	ModuleGroup type = ModuleGroup.GENERATOR;
+	ModuleGroup type = ModuleGroup.VERTEX_EDTIOR;
 	HashMap<Class<? extends Module>, Module> modules;
 
 	@Override
