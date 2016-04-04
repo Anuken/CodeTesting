@@ -7,15 +7,22 @@ import net.pixelstatic.codetesting.modules.Module;
 import net.pixelstatic.codetesting.modules.ModuleGroup;
 
 import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.utils.Array;
 
 public class CodeTester extends ApplicationAdapter{
 	ModuleGroup type = ModuleGroup.VERTEX_EDTIOR;
-	HashMap<Class<? extends Module>, Module> modules;
+	Array<Module> moduleArray = new Array<Module>();
+	HashMap<Class<? extends Module>, Module> modules = new HashMap<Class<? extends Module>, Module>();
 
 	@Override
 	public void create(){
 		Entity.tester = this;
-		modules = type.getModules();
+		Module[] array = type.modules();
+		for(Module module : array){
+			moduleArray.add(module);
+			modules.put(module.getClass(), module);
+		}
+		
 		for(Module module : modules.values()){
 			module.tester = this;
 			module.init();
@@ -24,13 +31,13 @@ public class CodeTester extends ApplicationAdapter{
 
 	@Override
 	public void render(){
-		for(Module module : modules.values())
+		for(Module module : moduleArray)
 			module.update();
 	}
 	
 	@Override
 	public void resize(int width, int height){
-		for(Module module : modules.values())
+		for(Module module : moduleArray)
 			module.resize(width, height);
 	}
 	

@@ -14,7 +14,7 @@ import net.pixelstatic.codetesting.modules.weaponphysics.WeaponWorld;
 public enum ModuleGroup{
 	WEAPON_PHYSICS{
 		@Override
-		Module[] modules(){
+		public Module[] modules(){
 			return new Module[]{
 				new WeaponPhysics(),
 				new WeaponWorld(),
@@ -24,7 +24,7 @@ public enum ModuleGroup{
 	},
 	GENERATOR{
 		@Override
-		Module[] modules(){
+		public Module[] modules(){
 			return new Module[]{
 				new Generator(),
 				new PlantGenerator(),
@@ -35,7 +35,7 @@ public enum ModuleGroup{
 	},
 	GENERATOR2{
 		@Override
-		Module[] modules(){
+		public Module[] modules(){
 			return new Module[]{
 				new TreeGenerator(),
 			};
@@ -43,15 +43,15 @@ public enum ModuleGroup{
 	},
 	VERTEX_EDTIOR{
 		@Override
-		Module[] modules(){
+		public Module[] modules(){
 			return new Module[]{
-				new VertexEditor(),
-				new VertexGUI()
+				new VertexGUI(),
+				new VertexEditor()
 			};
 		}
 	};;
 	
-	abstract Module[] modules();
+	abstract public Module[] modules();
 		
 	
 	
