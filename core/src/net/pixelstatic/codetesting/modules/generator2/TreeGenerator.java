@@ -1,8 +1,9 @@
 package net.pixelstatic.codetesting.modules.generator2;
 
 import net.pixelstatic.codetesting.modules.Module;
-import net.pixelstatic.codetesting.modules.vertex.VertexLoader;
-import net.pixelstatic.codetesting.modules.vertex.VertexObject;
+import net.pixelstatic.codetesting.modules.vertex.VertexCanvas.PolygonType;
+import net.pixelstatic.codetesting.modules.vertex.*;
+import net.pixelstatic.codetesting.modules.vertex.VertexObject.VertexList;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
@@ -10,16 +11,16 @@ import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.Pixmap.Blending;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Polygon;
+import com.badlogic.gdx.utils.ObjectMap;
 
 public class TreeGenerator extends Module{
-	final int width = 40, height = 56, scl = 5;
+	final int width = 100, height = 100, scl = 5;
 	boolean generated;
 	SpriteBatch batch;
 	GrowMaterial[][] materials;
 	Pixmap materialPixmap;
 	Texture materialTexture;
-	int iterations = 0;
 	
 	class GrowMaterial{
 		//final int maxgrowths = MathUtils.random(1, 20);
@@ -51,28 +52,32 @@ public class TreeGenerator extends Module{
 	}
 
 	void generate(){
-		int maxiterations = 30;
+		VertexObject object = VertexLoader.read(Gdx.files.internal("vertexobjects/tree.vto"));
+		object.normalize();
+		object.alignBottom();
+		//VertexLoader.write(object, Gdx.files.local("test"));
+		ObjectMap<String, Polygon> polygons = object.getPolygons();
+		for(Polygon polygon : polygons.values())
+			print(polygon.getBoundingRectangle());
 		for(int x = 0;x < width;x ++){
 			for(int y = 0;y < height;y ++){
-				if(materials[x][y].material== Material.wood){
-					
-					if(Math.random() < 0.3 && y == 0){
-						set(x+MathUtils.randomSign(),y,Material.wood);
-					}else{
-						set(x,y+1,Material.wood);
-					}
-						
+				float scl = 1f / 60f;
+				float rx = (x - width/2)*scl, ry = y*scl;
+				for(String key : object.polygons.keys()){
+					VertexList list = object.polygons.get(key);
+					if(list.type == PolygonType.line) continue;
+					if(polygons.get(key).contains(rx, ry)) set(x,y, list.flag == 2147418367 ? Material.leaves : Material.wood);
+				
 				}
-				materials[x][y].grow();
 			}
 		}
-		if(++ iterations > maxiterations) finish();
+		finish();
 	}
 	
 	void set(int x, int y, Material material){
 		if(x < 0 || y < 0 || x >= width || y >= height) return;
 			
-		materials[x][y].grow = material;
+		materials[x][y].material = material;
 	}
 
 	@Override
@@ -113,7 +118,7 @@ public class TreeGenerator extends Module{
 				materials[x][y] = new GrowMaterial();
 			}
 		}
-		materials[width / 2][0].material = Material.wood;
+	//	materials[width / 2][0].material = Material.wood;
 		materialPixmap = new Pixmap(width, height, Format.RGBA8888);
 		materialTexture = new Texture(materialPixmap);
 		
@@ -134,10 +139,9 @@ public class TreeGenerator extends Module{
 				materialPixmap.drawPixel(x,y, Color.rgba8888(Color.CLEAR));
 			}
 		}
-		materials[width / 2][0].material = Material.wood;
+		//materials[width / 2][0].material = Material.wood;
 		generated = false;
 		Pixmap.setBlending(Blending.SourceOver);
-		iterations = 0;
 	}
 
 	void finish(){
