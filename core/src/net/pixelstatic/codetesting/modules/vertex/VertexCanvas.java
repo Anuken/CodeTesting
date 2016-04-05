@@ -13,12 +13,17 @@ import com.badlogic.gdx.utils.Array;
 public class VertexCanvas{
 	static VertexGUI gui;
 	int index;
+	PolygonType type = PolygonType.polygon;
 	TextButton button;
 	Color color = Color.RED;
 	String name;
 	ActorAlign align;
 	Array<Vector2> vertices = new Array<Vector2>();
 	boolean symmetry;
+
+	public enum PolygonType{
+		polygon, line
+	}
 
 	public VertexCanvas(String name, int index){
 		this.index = index;
@@ -30,9 +35,22 @@ public class VertexCanvas{
 		if(symmetry) clear();
 	}
 
-	public VertexObject toObject(){
-		return new VertexObject(vertices);
+	/*
+	public Array<Vector2> normalize(){
+		Array<Vector2> vertices = new Array<Vector2>();
+		for(Vector2 vector : this.vertices) vertices.add(vector.cpy());
+		
+		float max = 0;
+		for(Vector2 vertice : vertices){
+			if(vertice.x > max) max = vertice.x;
+			if(vertice.y > max) max = vertice.y;
+		}
+		
+		for(Vector2 vertice : vertices)
+			vertice.scl(1f/max);
+		return vertices;
 	}
+	*/
 
 	public void scale(float amount){
 		Vector2 avg = Vector2.Zero.cpy();
@@ -43,17 +61,17 @@ public class VertexCanvas{
 				avg.add(vertice);
 			}
 		}
-		
+
 		avg.scl(1f / vertices.size);
-		
+
 		for(Vector2 vertice : vertices)
 			vertice.sub(avg);
-		
+
 		for(Vector2 vertice : vertices){
 			vertice.scl(amount);
 			vertice.add(avg);
 		}
-		
+
 	}
 
 	public void translate(float x, float y){
@@ -72,14 +90,23 @@ public class VertexCanvas{
 			button.addListener(new ClickListener(){
 				public void clicked(InputEvent event, float x, float y){
 					gui.canvas = canvas;
-					gui.field.setText(name);
-					gui.box.setSelected(color);
+					updateBoxes();
 				}
 			});
 
 		}
 		align.set(Align.topLeft, 0, 1, 0, -index * button.getHeight());
 		button.setChecked(selected == this);
+	}
+	
+	public void smooth(){
+		
+	}
+
+	public void updateBoxes(){
+		gui.field.setText(name);
+		gui.box.setSelected(color);
+		gui.typebox.setSelected(type);
 	}
 
 	public void delete(){
