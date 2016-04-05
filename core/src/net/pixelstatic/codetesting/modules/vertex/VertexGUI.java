@@ -180,6 +180,7 @@ public class VertexGUI extends Module{
 		if(Gdx.input.isButtonPressed(Buttons.LEFT) && (Gdx.input.getX() < Gdx.graphics.getWidth() - 130 || Gdx.input.getY() > 30)){
 			editor.stage.setKeyboardFocus(null);
 		}
+		if(editor.stage.getKeyboardFocus() != null) return;
 		float speed = 6f;
 		float offsetx = 0, offsety = 0;
 		if(Gdx.input.isKeyPressed(Keys.W)) offsety += speed;
@@ -364,6 +365,7 @@ public class VertexGUI extends Module{
 			VertexCanvas canvas = addCanvas(string);
 			canvas.vertices = object.polygons.get(string).vertices;
 			canvas.color = new Color(object.polygons.get(string).flag);
+			canvas.type = object.polygons.get(string).type;
 		}
 		canvas = canvases.first();
 		canvas.updateBoxes();

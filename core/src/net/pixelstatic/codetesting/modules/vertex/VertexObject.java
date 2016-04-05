@@ -11,13 +11,15 @@ public class VertexObject{
 	public int flag;
 	public ObjectMap<String, VertexList> polygons = new ObjectMap<String, VertexList>();
 	
-	class VertexList{
+	static class VertexList{
 		int flag;
 		Array<Vector2> vertices;
 		PolygonType type;
 		
 		public VertexList(Array<Vector2> vertices, PolygonType type, int flag){
 			this.vertices = vertices;
+			this.type = type;
+			this.flag = flag;
 		}
 		
 		public VertexList(){
