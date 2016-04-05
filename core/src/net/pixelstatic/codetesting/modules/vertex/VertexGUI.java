@@ -36,7 +36,7 @@ public class VertexGUI extends Module{
 	VertexCanvas canvas = new VertexCanvas("canvas", 0);
 	Vector2 vertice;
 	VertexEditor editor;
-	TextButton symmetry, overwrite, add, clear, delete;
+	TextButton symmetry, overwrite, add, clear, delete, smooth;
 	SelectBox<Color> box;
 	SelectBox<PolygonType> typebox;
 	TextField field;
@@ -67,6 +67,8 @@ public class VertexGUI extends Module{
 		symmetry.setTouchable( !drawMode ? Touchable.disabled : Touchable.enabled);
 		delete.setColor( !drawMode ? Color.LIGHT_GRAY : Color.WHITE);
 		delete.setTouchable( !drawMode ? Touchable.disabled : Touchable.enabled);
+		smooth.setColor( !drawMode ? Color.LIGHT_GRAY : Color.WHITE);
+		smooth.setTouchable( !drawMode ? Touchable.disabled : Touchable.enabled);
 
 	}
 
@@ -263,6 +265,17 @@ public class VertexGUI extends Module{
 		});
 
 		align(overwrite, Align.topRight, 1f, 1f, 0, -field.getHeight() * 4);
+		
+		smooth = new TextButton("Smooth", editor.skin);
+		smooth.setSize(field.getWidth(), 30);
+		smooth.addListener(new ClickListener(){
+			public void clicked(InputEvent event, float x, float y){
+				canvas.smooth();
+			}
+		});
+
+		align(smooth, Align.topRight, 1f, 1f, 0, -field.getHeight() * 5);
+
 
 		clear = new TextButton("Clear", editor.skin);
 		clear.setSize(field.getWidth(), 30);
@@ -272,7 +285,7 @@ public class VertexGUI extends Module{
 			}
 		});
 
-		align(clear, Align.topRight, 1f, 1f, 0, -field.getHeight() * 5);
+		align(clear, Align.topRight, 1f, 1f, 0, -field.getHeight() * 6);
 
 		delete = new TextButton("Delete Canvas", editor.skin);
 		delete.setSize(field.getWidth(), 30);
@@ -287,8 +300,9 @@ public class VertexGUI extends Module{
 			}
 		});
 
-		align(delete, Align.topRight, 1f, 1f, 0, -field.getHeight() * 6);
-
+		align(delete, Align.topRight, 1f, 1f, 0, -field.getHeight() * 7);
+		
+	
 		Button button = new TextButton("Export", editor.skin);
 		button.setSize(field.getWidth(), 30);
 		button.addListener(new ClickListener(){
@@ -306,7 +320,7 @@ public class VertexGUI extends Module{
 			}
 		});
 
-		align(button, Align.topRight, 1f, 1f, 0, -field.getHeight() * 6);
+		align(button, Align.topRight, 1f, 1f, 0, -field.getHeight() * 8);
 
 		Button button2 = new TextButton("Import", editor.skin);
 		button2.setSize(field.getWidth(), 30);
@@ -326,7 +340,7 @@ public class VertexGUI extends Module{
 			}
 		});
 
-		align(button2, Align.topRight, 1f, 1f, 0, -field.getHeight() * 7);
+		align(button2, Align.topRight, 1f, 1f, 0, -field.getHeight() * 9);
 
 		add = new TextButton("New Canvas", editor.skin);
 		add.setSize(100, 30);
