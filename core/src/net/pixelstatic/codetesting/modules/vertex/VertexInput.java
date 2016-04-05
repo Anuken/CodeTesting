@@ -1,11 +1,13 @@
 package net.pixelstatic.codetesting.modules.vertex;
 
+import com.badlogic.gdx.*;
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.Vector2;
 
 public class VertexInput implements InputProcessor{
+	static final int alt_key = Keys.CONTROL_LEFT;
+	static final int draw_key = Keys.SHIFT_LEFT;
 	private VertexGUI gui;
 
 	public VertexInput(VertexGUI gui){
@@ -14,8 +16,8 @@ public class VertexInput implements InputProcessor{
 
 	@Override
 	public boolean keyDown(int keycode){
-		if(keycode == Keys.SHIFT_LEFT){
-			gui.drawMode = true;
+		if(keycode == draw_key && gui.drawMode){
+			gui.drawing = true;
 			gui.canvas.clear();
 			return true;
 		}
@@ -24,9 +26,9 @@ public class VertexInput implements InputProcessor{
 
 	@Override
 	public boolean keyUp(int keycode){
-		if(keycode == Keys.SHIFT_LEFT) if(gui.drawMode){
+		if(keycode == draw_key) if(gui.drawing){
 			gui.finishDrawMode();
-			gui.drawMode = false;
+			gui.drawing = false;
 		}
 		return false;
 	}
@@ -40,7 +42,7 @@ public class VertexInput implements InputProcessor{
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button){
 		if(button == Buttons.LEFT){
-			if(gui.drawMode){
+			if(gui.drawing && gui.drawMode){
 				gui.canvas.vertices.add(gui.mouseVector());
 				return false;
 			}
@@ -52,7 +54,7 @@ public class VertexInput implements InputProcessor{
 			}
 		}else if(button == Buttons.RIGHT){
 			if(gui.canvas.vertices.size > 3){
-				gui.canvas.vertices.removeValue(gui.vertice, true);
+				gui.canvas.vertices.removeValue(gui.selectedVertice(), true);
 				gui.vertice = null;
 			}
 			/*
@@ -92,8 +94,12 @@ public class VertexInput implements InputProcessor{
 
 	@Override
 	public boolean scrolled(int amount){
-		gui.canvas.scale(amount > 0 ? 0.9f : 1.1f);
-
+		if(Gdx.input.isKeyPressed(alt_key)){
+		for(VertexCanvas canvas : gui.canvases)
+			canvas.scale(amount > 0 ? 0.9f : 1.1f);
+		}else{
+			gui.canvas.scale(amount > 0 ? 0.9f : 1.1f);
+		}
 		return false;
 	}
 

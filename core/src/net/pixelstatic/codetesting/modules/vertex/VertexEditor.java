@@ -16,8 +16,6 @@ public class VertexEditor extends Module{
 	@Override
 	public void update(){
 		if(Gdx.input.isKeyPressed(Keys.ESCAPE)) Gdx.app.exit();
-
-		
 		stage.act(Gdx.graphics.getDeltaTime());
 		stage.draw();
 	}

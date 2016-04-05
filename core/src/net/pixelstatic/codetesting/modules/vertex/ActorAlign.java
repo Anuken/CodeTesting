@@ -12,22 +12,41 @@ public class ActorAlign{
 	private float x, y;
 	private int align;
 	public Actor actor;
-	
+
 	public ActorAlign(Actor actor, int align, float wscl, float hscl, float xoffset, float yoffset){
-		this.wscl = wscl;
-		this.hscl = hscl;
+		set(align, wscl, hscl, xoffset, yoffset);
 		this.actor = actor;
-		this.x = xoffset;
-		this.y = yoffset;
-		this.align = align;
 		stage.addActor(actor);
 		aligns.add(this);
 	}
-	
+
+	public void set(int align, float wscl, float hscl, float xoffset, float yoffset){
+		this.wscl = wscl;
+		this.hscl = hscl;
+		this.x = xoffset;
+		this.y = yoffset;
+		this.align = align;
+
+	}
+
 	public void update(){
 		actor.setPosition(Gdx.graphics.getWidth() * wscl + x, Gdx.graphics.getHeight() * hscl + y, align);
 	}
 	
+
+	public static void removeAlign(ActorAlign align){
+		aligns.removeValue(align, true);
+	}
+	
+	public static void removeAlign(Actor actor){
+		for(ActorAlign align : aligns){
+			if(align.actor == actor){
+				aligns.removeValue(align, true);
+				return;
+			}
+		}
+	}
+
 	public static void updateAll(){
 		for(ActorAlign align : aligns){
 			align.update();
