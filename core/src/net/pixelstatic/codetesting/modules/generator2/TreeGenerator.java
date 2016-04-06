@@ -20,7 +20,7 @@ public class TreeGenerator extends Module{
 	final int width = 100, height = 100, scl = 5;
 	SpriteBatch batch;
 	Pixel[][] materials;
-	Pixmap materialPixmap;
+	Pixmap pixmap;
 	Texture materialTexture;
 
 	class Pixel{
@@ -29,7 +29,7 @@ public class TreeGenerator extends Module{
 	}
 
 	public enum Material{
-		bone(Color.MAGENTA), wood(Color.BROWN.cpy().sub(0.1f, 0.1f, 0.1f, 0f), CellularFilter.HEXAGONAL), 
+		bone(Color.MAGENTA), wood(Color.BROWN.cpy().sub(0.1f, 0.1f, 0.1f, 0f), -1), 
 		leaves(new Color(0.0f, 0.4f, 0.3f, 1f),-1);
 
 		public Color color;
@@ -87,7 +87,7 @@ public class TreeGenerator extends Module{
 		//store color array
 		for(int x = 0;x < width;x ++){
 			for(int y = 0;y < height;y ++){
-				colors[y * width + x] = toARGB(materialPixmap.getPixel(x, y));
+				colors[y * width + x] = toARGB(pixmap.getPixel(x, y));
 			}
 		}
 		
@@ -101,34 +101,29 @@ public class TreeGenerator extends Module{
 				if(pixel.material.type == -1) continue;
 				int color = Patterns.leafPattern(x, y, width, height, colors, pixel.material.type);
 				Color cc = new Color(color);
+				float mscl = 0.8f;
 				if(cc.a < 0.5f){
 					cc.a = 0f;
 				}else{
 					cc.a = 1f;
-					cc.set(pixel.material.getColor().cpy().mul(0.8f, 0.8f, 0.8f,1f));
+					cc.set(pixel.material.getColor().cpy().mul(mscl, mscl, mscl,1f));
 				}
-				materialPixmap.setColor(cc);
-				if(new Color(materialPixmap.getPixel(x, y)).a > 0.001f)
-				materialPixmap.drawPixel(x, y);
+				pixmap.setColor(cc);
+				if(new Color(pixmap.getPixel(x, y)).a > 0.001f)
+				pixmap.drawPixel(x, y);
 			}
 		}
 		
-		float round = 0.1f;
-		//add brightness
+		//add brightness, leaf patterns
 		for(int x = 0;x < width;x ++){
 			for(int cy = 0;cy < height;cy ++){
 				int y = height - 1 - cy;
 				Pixel pixel = materials[x][y];
-				if(pixel.polygon == null || pixel.polygon.material() != Material.leaves) continue;
-
-				float dist = 0.7f * ((1.5f - pixel.polygon.lightVertice.dst(project(x - width / 2), project(y))));
-				float lightdist = 0.6f * ((1f - GeneratorPolygon.lightsource.dst(project(x - width / 2), project(y))));
-
-				float scl = /*(project(y) - pixel.polygon.bottom()) / pixel.polygon.height()+*/dist + lightdist;// + (float)Noise.NormalNoise(x, y, 4f, 0.3f, 1f);
-				materialPixmap.drawPixel(x, cy, Color.rgba8888(brighter(new Color(materialPixmap.getPixel(x, cy)), round * (int)(((scl * 0.5f) / round)))));
-
-				if(pixel.polygon.center.dst(project(x - width / 2), project(y)) < 0.1){
-					//	materialPixmap.drawPixel(x, cy,Color.rgba8888(Color.WHITE));
+				if(pixel.polygon == null) continue;
+				if(pixel.polygon.material() == Material.leaves){
+					generateLeafPattern(x,y,cy,pixel);
+				}else if(pixel.polygon.material() == Material.wood){
+					generateLogPattern(x,y,cy,pixel);
 				}
 			}
 		}
@@ -148,23 +143,85 @@ public class TreeGenerator extends Module{
 				if(!(poly.above(other))) continue;
 			//	float scl = 1f -poly.center.dst(project(offsetx - width / 2), project(offsety)) / (poly.height());
 				
-				materialPixmap.setColor(new Color(0, 0, 0, 0.3f));
-				materialPixmap.drawPixel(x, cy);
+				pixmap.setColor(new Color(0, 0, 0, 0.3f));
+				pixmap.drawPixel(x, cy);
 
 			}
 		}
 		
 		//add outlines...
+		//if(false)
 		for(int x = 0;x < width;x ++){
 			for(int cy = 0;cy < height;cy ++){
 				int y = height - 1 - cy;
 				Pixel pixel = materials[x][y];
 				if(pixel.material == null) continue;
+				int color = Color.rgba8888(new Color(0,0,0,0.2f));
 				
+				if(!same(pixel, x, y-1)){
+					pixmap.drawPixel(x, cy, color);
+				}else if(!same(pixel, x, y+1)){
+					pixmap.drawPixel(x, cy, color);
+				}else if(!same(pixel, x+1, y)){
+					pixmap.drawPixel(x, cy, color);
+				}else if(!same(pixel, x-1, y)){
+					pixmap.drawPixel(x, cy, color);
+				}
 			}
 		}
-		
 	}
+	
+	public void generateLogPattern(int x, int y, int cy, Pixel pixel){
+		Color color = new Color(pixmap.getPixel(x, cy));
+
+		
+		//if(project(x-width/2) < pixel.polygon.center.x){
+			float m = 0f;
+			m = (Patterns.nMod(x,y, 0.2f));
+			m+=1f;
+			//m += (Patterns.mod(x,-y, 0.1f));
+			//color.add(m,m,m,0f);
+			color.mul(m,m,m,1f);
+		//}
+		pixmap.drawPixel(x, cy, Color.rgba8888(color));
+	}
+	
+	
+	public void generateLeafPattern(int x, int y, int cy, Pixel pixel){
+		float round = 0.1f;
+		float gscl = -0.1f;
+		
+		float dist = gscl +0.7f * ((1.5f - pixel.polygon.lightVertice.dst(project(x - width / 2), project(y))));
+		float lightdist = gscl +0.6f * ((1f - GeneratorPolygon.lightsource.dst(project(x - width / 2), project(y))));
+
+		float scl = /*(project(y) - pixel.polygon.bottom()) / pixel.polygon.height()+*/dist + lightdist 
+				+ Patterns.noise(x, y, 4f, 0.2f)
+				+ Patterns.mod(x, y, 0.07f);
+		pixmap.drawPixel(x, cy, Color.rgba8888(brighter(new Color(pixmap.getPixel(x, cy)), round * (int)(((scl * 0.5f) / round)))));
+
+		if(pixel.polygon.center.dst(project(x - width / 2), project(y)) < 0.1){
+			//	materialPixmap.drawPixel(x, cy,Color.rgba8888(Color.WHITE));
+		}
+	}
+	
+	public float alim(float a){
+		if(a < 1f){
+			return -1f;
+		}else if( a > 1f){
+			return 1f;
+		}
+		return a;
+	}
+	
+	public float round(float a, float b){
+		return b *(int)(a/b);
+	}
+	
+	public boolean same(Pixel pixel, int x, int y){
+		if(x < 0 || y < 0 || x >= width || y >= height) return true;
+		return !pixel.polygon.above(materials[x][y].polygon);
+	}
+	
 	Color temp = new Color();
 	public int toARGB(int rgb){
 		temp.set(rgb);
@@ -216,13 +273,13 @@ public class TreeGenerator extends Module{
 		for(int x = 0;x < width;x ++){
 			for(int y = 0;y < height;y ++){
 			//	 materialPixmap.drawPixel(x, height - 1 - y, Color.rgba8888(Color.WHITE));
-				if(materials[x][y] != null && materials[x][y].material != null) materialPixmap.drawPixel(x, height - 1 - y, Color.rgba8888(materials[x][y].material.getColor()));
+				if(materials[x][y] != null && materials[x][y].material != null) pixmap.drawPixel(x, height - 1 - y, Color.rgba8888(materials[x][y].material.getColor()));
 			}
 		}
 		print("Applying shading...");
 		applyShading();
 		print("Finished applying shading.");
-		materialTexture.draw(materialPixmap, 0, 0);
+		materialTexture.draw(pixmap, 0, 0);
 	}
 
 	@Override
@@ -235,8 +292,8 @@ public class TreeGenerator extends Module{
 			}
 		}
 		//	materials[width / 2][0].material = Material.wood;
-		materialPixmap = new Pixmap(width, height, Format.RGBA8888);
-		materialTexture = new Texture(materialPixmap);
+		pixmap = new Pixmap(width, height, Format.RGBA8888);
+		materialTexture = new Texture(pixmap);
 
 		generate();
 		generatePixmaps();
@@ -251,7 +308,7 @@ public class TreeGenerator extends Module{
 		for(int x = 0;x < width;x ++){
 			for(int y = 0;y < height;y ++){
 				materials[x][y] = new Pixel();
-				materialPixmap.drawPixel(x, y, Color.rgba8888(Color.CLEAR));
+				pixmap.drawPixel(x, y, Color.rgba8888(Color.CLEAR));
 			}
 		}
 		//materials[width / 2][0].material = Material.wood;
