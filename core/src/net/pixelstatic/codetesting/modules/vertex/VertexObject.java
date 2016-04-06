@@ -23,6 +23,16 @@ public class VertexObject{
 			this.flag = flag;
 		}
 		
+		public boolean collides(float x, float y, float range){
+			for(Vector2 vector : vertices){
+				if(vector.dst(x,y) < range){
+					return true;
+				}
+			//	range -= 0.01f;
+			}
+			return false;
+		}
+		
 		public Material material(){
 			return Material.values()[flag];
 		}

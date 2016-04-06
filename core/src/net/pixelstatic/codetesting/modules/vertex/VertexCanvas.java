@@ -103,23 +103,25 @@ public class VertexCanvas{
 	
 	public void smooth(){
 		if(vertices.size > 100){
-
 			JOptionPane.showMessageDialog(null, "calm down m8", "pls", JOptionPane.ERROR_MESSAGE);
 			return;
 		}
-		Vector2[] array = new Vector2[vertices.size*2];
+		
+		Vector2[] array = new Vector2[vertices.size*2 - (type == PolygonType.line ? 1 : 0)];
 		for(int i = 0; i < vertices.size; i ++){
 			array[i*2] = vertices.get(i);
 			Vector2 next = (i == vertices.size - 1 ? vertices.first() : vertices.get(i+1));
-			array[i*2+1] = next.cpy().add(vertices.get(i)).scl(0.5f);
+			if(!(type == PolygonType.line && i == vertices.size-1))array[i*2+1] = next.cpy().add(vertices.get(i)).scl(0.5f);
 		}
 		
 		for(int i = 0; i < array.length; i += 2){
+			if(type == PolygonType.line && i == array.length-1) break;
 			
 			Vector2 next = (i == array.length -1 ? array [0] : array[i+1]);
 			
 			Vector2 last = (i == 0 ? array [array.length-1] : array[i-1]);
 			
+			if(!((i == 0 || i == array.length -1) && type == PolygonType.line))
 			array[i] = next.cpy().add(last).scl(0.5f);
 		}
 		
