@@ -3,8 +3,8 @@ package net.pixelstatic.codetesting.modules.vertex;
 import javax.swing.JOptionPane;
 
 import net.pixelstatic.codetesting.entities.Entity;
+import net.pixelstatic.codetesting.modules.generator2.TreeGenerator.Material;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -17,7 +17,7 @@ public class VertexCanvas{
 	int index;
 	PolygonType type = PolygonType.polygon;
 	TextButton button;
-	Color color = Color.RED;
+	Material material = Material.bone;
 	String name;
 	ActorAlign align;
 	Array<Vector2> vertices = new Array<Vector2>();
@@ -128,7 +128,7 @@ public class VertexCanvas{
 
 	public void updateBoxes(){
 		gui.field.setText(name);
-		gui.box.setSelected(color);
+		gui.box.setSelected(material);
 		gui.typebox.setSelected(type);
 	}
 

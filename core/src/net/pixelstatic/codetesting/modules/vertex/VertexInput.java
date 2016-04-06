@@ -98,7 +98,7 @@ public class VertexInput implements InputProcessor{
 		for(VertexCanvas canvas : gui.canvases)
 			canvas.scale(amount > 0 ? 0.9f : 1.1f);
 		}else{
-			gui.canvas.scale(amount > 0 ? 0.9f : 1.1f);
+		//	gui.canvas.scale(amount > 0 ? 0.9f : 1.1f);
 		}
 		return false;
 	}

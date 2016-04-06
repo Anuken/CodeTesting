@@ -4,13 +4,13 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
 import net.pixelstatic.codetesting.modules.Module;
+import net.pixelstatic.codetesting.modules.generator2.TreeGenerator.Material;
 import net.pixelstatic.codetesting.modules.vertex.VertexCanvas.PolygonType;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Colors;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
@@ -37,7 +37,7 @@ public class VertexGUI extends Module{
 	Vector2 vertice;
 	VertexEditor editor;
 	TextButton symmetry, overwrite, add, clear, delete, smooth;
-	SelectBox<Color> box;
+	SelectBox<Material> box;
 	SelectBox<PolygonType> typebox;
 	TextField field;
 	boolean drawing, drawMode = true;
@@ -99,7 +99,7 @@ public class VertexGUI extends Module{
 
 	void drawVertices(VertexCanvas canvas, Array<Vector2> vertices, boolean mirror){
 		shape.set(ShapeType.Line);
-		shape.setColor(canvas.color);
+		shape.setColor(canvas.material.getColor());
 		Gdx.gl.glLineWidth(4);
 		shape.setAutoShapeType(true);
 		for(int i = 0;i < vertices.size;i ++){
@@ -218,15 +218,15 @@ public class VertexGUI extends Module{
 
 		align(field, Align.topRight, 1f, 1f, 0, 0);
 
-		box = new SelectBox<Color>(editor.skin);
+		box = new SelectBox<Material>(editor.skin);
 		box.setSize(field.getWidth(), field.getHeight());
-		box.setItems(Colors.getColors().values().toArray());
+		box.setItems(Material.values());
 		box.setSelectedIndex(0);
 
 		box.addListener(new ChangeListener(){
 			@Override
 			public void changed(ChangeEvent event, Actor actor){
-				canvas.color = box.getSelected();
+				canvas.material = box.getSelected();
 			}
 		});
 
@@ -361,11 +361,11 @@ public class VertexGUI extends Module{
 	
 	void loadObject(VertexObject object){
 		canvases.clear();
-		for(String string : object.polygons.keys()){
+		for(String string : object.lists.keys()){
 			VertexCanvas canvas = addCanvas(string);
-			canvas.vertices = object.polygons.get(string).vertices;
-			canvas.color = new Color(object.polygons.get(string).flag);
-			canvas.type = object.polygons.get(string).type;
+			canvas.vertices = object.lists.get(string).vertices;
+			canvas.material = Material.values()[(object.lists.get(string).flag)];
+			canvas.type = object.lists.get(string).type;
 		}
 		canvas = canvases.first();
 		canvas.updateBoxes();

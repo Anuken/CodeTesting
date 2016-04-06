@@ -1,8 +1,8 @@
 package net.pixelstatic.codetesting.modules.vertex;
 
+import net.pixelstatic.codetesting.modules.generator2.TreeGenerator.Material;
 import net.pixelstatic.codetesting.modules.vertex.VertexCanvas.PolygonType;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
@@ -10,7 +10,7 @@ import com.badlogic.gdx.utils.ObjectMap;
 
 public class VertexObject{
 	public int flag;
-	public ObjectMap<String, VertexList> polygons = new ObjectMap<String, VertexList>();
+	public ObjectMap<String, VertexList> lists = new ObjectMap<String, VertexList>();
 	
 	public static class VertexList{
 		public int flag;
@@ -21,6 +21,10 @@ public class VertexObject{
 			this.vertices = vertices;
 			this.type = type;
 			this.flag = flag;
+		}
+		
+		public Material material(){
+			return Material.values()[flag];
 		}
 		
 		public VertexList(){
@@ -34,15 +38,15 @@ public class VertexObject{
 
 	public VertexObject(Array<VertexCanvas> canvases){
 		for(VertexCanvas canvas : canvases){
-			polygons.put(canvas.name, new VertexList(canvas.vertices, canvas.type, Color.rgba8888(canvas.color)));
+			lists.put(canvas.name, new VertexList(canvas.vertices, canvas.type, canvas.material.ordinal()));
 		}
 		//normalize();
 	}
 	
 	public ObjectMap<String, Polygon> getPolygons(){
 		ObjectMap<String, Polygon> polygons = new ObjectMap<String, Polygon>();
-		for(String key : this.polygons.keys()){
-			VertexList list = this.polygons.get(key);
+		for(String key : this.lists.keys()){
+			VertexList list = this.lists.get(key);
 			if(list.type == PolygonType.polygon){
 				polygons.put(key, toPolygon(list.vertices));
 			}
@@ -60,26 +64,40 @@ public class VertexObject{
 		//Polygon polygon = 
 	}
 	
+	public void alignSides(){
+		float min = 0, max = 0;
+		
+		for(VertexList poly : lists.values())
+			for(Vector2 vertice : poly.vertices){
+				if(vertice.x < min) min = vertice.x;
+				if(vertice.x > max) max = vertice.x;
+			}
+		
+		for(VertexList poly : lists.values())
+			for(Vector2 vertice : poly.vertices)
+				vertice.x -= (min + max)/2; 
+	}
+	
 	public void alignBottom(){
 		float min = 0;
 		
-		for(VertexList poly : polygons.values())
+		for(VertexList poly : lists.values())
 			for(Vector2 vertice : poly.vertices)
 				if(vertice.y < min) min = vertice.y;
-		for(VertexList poly : polygons.values())
+		for(VertexList poly : lists.values())
 			for(Vector2 vertice : poly.vertices)
 				vertice.y -= min; 
 	}
 
 	public void normalize(){
 		float max = 1;
-		for(VertexList poly : polygons.values())
+		for(VertexList poly : lists.values())
 			for(Vector2 vertice : poly.vertices){
 				if(Math.abs(vertice.x) > max) max = Math.abs(vertice.x);
 				if(Math.abs(vertice.y) > max) max = Math.abs(vertice.y);
 			}
 
-		for(VertexList poly : polygons.values())
+		for(VertexList poly : lists.values())
 			for(Vector2 vertice : poly.vertices){
 				
 				vertice.scl(1f / max);
