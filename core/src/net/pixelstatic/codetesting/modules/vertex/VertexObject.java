@@ -1,6 +1,6 @@
 package net.pixelstatic.codetesting.modules.vertex;
 
-import net.pixelstatic.codetesting.modules.generator2.TreeGenerator.Material;
+import net.pixelstatic.codetesting.modules.generator2.GeneratorRenderer.Material;
 import net.pixelstatic.codetesting.modules.vertex.VertexCanvas.PolygonType;
 
 import com.badlogic.gdx.math.Polygon;

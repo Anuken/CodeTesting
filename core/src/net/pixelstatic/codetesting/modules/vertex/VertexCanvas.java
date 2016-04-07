@@ -3,7 +3,7 @@ package net.pixelstatic.codetesting.modules.vertex;
 import javax.swing.JOptionPane;
 
 import net.pixelstatic.codetesting.entities.Entity;
-import net.pixelstatic.codetesting.modules.generator2.TreeGenerator.Material;
+import net.pixelstatic.codetesting.modules.generator2.GeneratorRenderer.Material;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;

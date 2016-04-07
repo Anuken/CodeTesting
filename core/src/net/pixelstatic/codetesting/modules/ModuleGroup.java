@@ -3,7 +3,7 @@ package net.pixelstatic.codetesting.modules;
 import java.util.HashMap;
 
 import net.pixelstatic.codetesting.modules.generator.*;
-import net.pixelstatic.codetesting.modules.generator2.TreeGenerator;
+import net.pixelstatic.codetesting.modules.generator2.GeneratorRenderer;
 import net.pixelstatic.codetesting.modules.vertex.VertexEditor;
 import net.pixelstatic.codetesting.modules.vertex.VertexGUI;
 import net.pixelstatic.codetesting.modules.weaponphysics.WeaponInput;
@@ -37,7 +37,7 @@ public enum ModuleGroup{
 		@Override
 		public Module[] modules(){
 			return new Module[]{
-				new TreeGenerator(),
+				new GeneratorRenderer(),
 			};
 		}
 	},

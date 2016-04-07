@@ -4,7 +4,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
 import net.pixelstatic.codetesting.modules.Module;
-import net.pixelstatic.codetesting.modules.generator2.TreeGenerator.Material;
+import net.pixelstatic.codetesting.modules.generator2.GeneratorRenderer.Material;
 import net.pixelstatic.codetesting.modules.vertex.VertexCanvas.PolygonType;
 
 import com.badlogic.gdx.Gdx;
@@ -78,8 +78,9 @@ public class VertexGUI extends Module{
 			drawVertices(canvas, canvas.vertices, false);
 			if(canvas.symmetry) drawVertices(canvas, mirror(canvas.vertices), true);
 		}
+		
 		drawVertices(canvas, canvas.vertices, false);
-		if(canvas.symmetry) drawVertices(canvas, mirror(canvas.vertices), true);
+		if(canvas.symmetry && drawMode) drawVertices(canvas, mirror(canvas.vertices), true);
 	
 
 		add.setPosition(0, Gdx.graphics.getHeight() - add.getHeight() * (canvases.size + 1));
