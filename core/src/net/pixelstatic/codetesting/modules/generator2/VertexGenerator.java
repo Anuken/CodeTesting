@@ -35,10 +35,6 @@ public class VertexGenerator{
 		}
 		
 		part.lists.get("trunk").translateY(185f);
-		
-		//for(Vector2 vector : part.lists.get("trunk").vertices){
-	//		System.out.println(vector);
-		//}
 	
 	}
 }

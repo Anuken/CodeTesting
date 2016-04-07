@@ -8,7 +8,15 @@ import com.jhlabs.image.CrystallizeFilter;
 
 public class Patterns{
 	static CrystallizeFilter filter;
-	
+	static float b = 0.15f;
+	static float[][] bark = 
+		{
+		{0, b, 0, b, 0},
+		{0, b, 0, b, 0},
+		{0, b, b, b, 0},
+		{0, 0, b, 0, 0},
+		{0, 0, b, 0, 0}
+		};
 	static{
 	
 		filter = new CrystallizeFilter();
@@ -17,6 +25,13 @@ public class Patterns{
 		filter.setRandomness(0.6f);
 		filter.setGridType(CellularFilter.HEXAGONAL);
 		filter.setScale(7);
+	}
+	
+	
+	public static float leaves(int x, int y){
+		int nscl = 6; // noise scale
+		int mag = 5; //noise magnitutde
+		return bark[bark.length-1-(y+(int)noise(x,y,nscl,mag)) % bark.length][(x+(int)noise(x,y,nscl,mag)) % bark.length];
 	}
 	
 	public static float nMod(int x, int y, float scl){
@@ -33,6 +48,10 @@ public class Patterns{
 			return -scl;
 		}
 		return 0;
+	}
+	
+	public static float smod(int x, int y, float scl, float xscl, float yscl){
+		return (int)((x*xscl)+(y*yscl))%10 == 0? scl : 0;
 	}
 	
 	public static float mod(int x, int y, float scl){

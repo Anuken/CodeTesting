@@ -1,6 +1,6 @@
 package net.pixelstatic.codetesting.modules.generator;
 
-import com.badlogic.gdx.graphics.*;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 
 public enum PlantGenerationType{
@@ -8,7 +8,7 @@ public enum PlantGenerationType{
 		public Pixmap generate(){
 			int size = 100;
 			Pixmap pixmap = new Pixmap(size, size, Format.RGBA8888);
-			Branch trunk = new Branch(null);
+			//Branch trunk = new Branch(null);
 			return pixmap;
 		}
 	};

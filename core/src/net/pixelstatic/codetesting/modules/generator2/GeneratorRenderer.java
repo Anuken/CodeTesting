@@ -38,8 +38,9 @@ public class GeneratorRenderer extends Module{
 			return color;
 		}
 	}
-	
+
 	Color temp = new Color();
+
 	public int toARGB(int rgb){
 		temp.set(rgb);
 		java.awt.Color color = new java.awt.Color(temp.r, temp.g, temp.b, temp.a);
@@ -50,7 +51,7 @@ public class GeneratorRenderer extends Module{
 		java.awt.Color color = new java.awt.Color(rgb);
 		return Color.rgba8888(color.getRed(), color.getGreen(), color.getBlue(), 1f);
 	}
-	
+
 	@Override
 	public void update(){
 		if(Gdx.input.isKeyPressed(Keys.ESCAPE)) Gdx.app.exit();

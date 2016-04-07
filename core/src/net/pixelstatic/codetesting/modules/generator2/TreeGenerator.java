@@ -158,13 +158,11 @@ public class TreeGenerator{
 
 		float dist =pixel.polygon.height()/3f+gscl + selflightscale * (((1.5f) - pixel.polygon.lightVertice.dst(project(x - width / 2), project(y))));
 		float lightdist = gscl + globallightscale * ((1f - lightsource.dst(project(x - width / 2), project(y))));
-
-		float scl = dist + lightdist+ Patterns.noise(x, y, 4f, 0.2f) + Patterns.mod(x, y, 0.07f);
+	
+		
+		float scl = Patterns.leaves(x, y) +dist + lightdist+ Patterns.noise(x, y, 4f, 0.2f) + Patterns.mod(x, y, 0.07f);
 		pixmap.drawPixel(x, cy, Color.rgba8888(brighter(new Color(pixmap.getPixel(x, cy)), round * (int)(((scl * 0.5f) / round)))));
 
-		if(pixel.polygon.center.dst(project(x - width / 2), project(y)) < 0.1){
-			//	materialPixmap.drawPixel(x, cy,Color.rgba8888(Color.WHITE));
-		}
 	}
 	
 	void loadPolygons(){
@@ -204,6 +202,7 @@ public class TreeGenerator{
 	}
 	
 	public void reset(){
+		long starttime = System.currentTimeMillis();
 		Pixmap.setBlending(Blending.None);
 		for(int x = 0;x < width;x ++){
 			for(int y = 0;y < height;y ++){
@@ -221,7 +220,12 @@ public class TreeGenerator{
 		
 		print("Done generating.");
 		texture.draw(pixmap, 0, 0);
+		
+		long endtime = System.currentTimeMillis();
+		print("Time taken: " + (endtime -starttime) + " ms.");
+
 	}
+
 	
 	public float project(int i){
 		return i * scale;

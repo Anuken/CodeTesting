@@ -52,8 +52,8 @@ public class GeneratorPolygon{
 		center = new Vector2();
 		center = boundingbox.getCenter(center);
 
-		Vector2 ray = new Vector2(center);
-		float step = 0.02f;
+		//Vector2 ray = new Vector2(center);
+		//float step = 0.02f;
 		/*
 		for(int i = 0;i < 20;i ++){
 			ray.x -= step;
