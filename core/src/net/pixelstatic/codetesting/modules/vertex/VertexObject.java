@@ -4,6 +4,7 @@ import net.pixelstatic.codetesting.modules.generator2.GeneratorRenderer.Material
 import net.pixelstatic.codetesting.modules.vertex.VertexCanvas.PolygonType;
 
 import com.badlogic.gdx.math.Polygon;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
@@ -31,6 +32,26 @@ public class VertexObject{
 			//	range -= 0.01f;
 			}
 			return false;
+		}
+		
+		public float height(){
+			float max = 0;
+			for(Vector2 vector : vertices){
+				max = Math.max(max, vector.y);
+			}
+			return max;
+		}
+		
+		public void alignBottom(){
+			float min = 0;
+			for(Vector2 vector : vertices){
+				if(Math.abs(vector.y) > min){
+					min = vector.y;
+				}
+			}
+			
+			for(Vector2 vector : vertices)
+				vector.y -= min;
 		}
 		
 		public Material material(){
@@ -62,6 +83,18 @@ public class VertexObject{
 			}
 		}
 		return polygons;
+	}
+	
+	public Rectangle boundingBox(){
+		Rectangle rect = new Rectangle();
+		for(VertexList poly : lists.values())
+			for(Vector2 vertice : poly.vertices){
+				rect.x = Math.min(rect.x, vertice.x);
+				rect.width = Math.max(rect.width, rect.x + vertice.x);
+				rect.height = Math.max(rect.height, vertice.y);
+			}
+	
+		return rect;
 	}
 	
 	public Polygon toPolygon(Array<Vector2> vertices){

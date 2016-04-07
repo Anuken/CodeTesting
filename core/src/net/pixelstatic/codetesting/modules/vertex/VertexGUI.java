@@ -76,11 +76,11 @@ public class VertexGUI extends Module{
 		for(VertexCanvas canvas : canvases){
 			if(canvas == this.canvas) continue;
 			drawVertices(canvas, canvas.vertices, false);
-			if(canvas.symmetry) drawVertices(canvas, mirror(canvas.vertices), true);
+			if(canvas.symmetry && drawing) drawVertices(canvas, mirror(canvas.vertices), true);
 		}
 		
 		drawVertices(canvas, canvas.vertices, false);
-		if(canvas.symmetry && drawMode) drawVertices(canvas, mirror(canvas.vertices), true);
+		if(canvas.symmetry && drawing) drawVertices(canvas, mirror(canvas.vertices), true);
 	
 
 		add.setPosition(0, Gdx.graphics.getHeight() - add.getHeight() * (canvases.size + 1));
@@ -361,6 +361,8 @@ public class VertexGUI extends Module{
 	}
 	
 	void loadObject(VertexObject object){
+		for(VertexCanvas canvas : canvases)
+			canvas.delete();
 		canvases.clear();
 		for(String string : object.lists.keys()){
 			VertexCanvas canvas = addCanvas(string);

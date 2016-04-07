@@ -11,6 +11,8 @@ import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.Pixmap.Blending;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.math.Polygon;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 
@@ -21,60 +23,15 @@ public class TreeGenerator{
 	Texture texture;
 	VertexObject object;
 	Array<GeneratorPolygon> polygons;
-	
-	public TreeGenerator(){
-		materials = new Pixel[width][height];
-		pixmap = new Pixmap(width, height, Format.RGBA8888);
-		texture = new Texture(pixmap);
-	}
-	
-	public void reset(){
-		Pixmap.setBlending(Blending.None);
-		for(int x = 0;x < width;x ++){
-			for(int y = 0;y < height;y ++){
-				materials[x][y] = new Pixel();
-				pixmap.drawPixel(x, y, Color.rgba8888(Color.CLEAR));
-			}
-		}
-		Pixmap.setBlending(Blending.SourceOver);
-		
-		print("Loading polygons...");
-		loadPolygons();
-		
-		print("Procesing polygons...");
-		processPolygons();
-		
-		print("Done generating.");
-		texture.draw(pixmap, 0, 0);
-	}
-
-	void loadPolygons(){
-		object = VertexLoader.read(Gdx.files.internal("vertexobjects/tree.vto"));
-		object.normalize();
-		object.alignBottom();
-		object.alignSides();
-		ObjectMap<String, Polygon> rawpolygons = object.getPolygons();
-
-		polygons = new Array<GeneratorPolygon>();
-
-		for(String key : rawpolygons.keys())
-			polygons.add(new GeneratorPolygon(key, object.lists.get(key), rawpolygons.get(key)));
-
-		for(int x = 0;x < width;x ++){
-			for(int y = 0;y < height;y ++){
-				float scl = 1f / 60f;
-				float rx = project(x - width / 2), ry = project(y);
-				for(GeneratorPolygon poly : polygons){
-					if(poly.list.type == PolygonType.line) continue;
-					if(poly.polygon.contains(rx, ry)) set(x, y, poly.list.material(), poly);
-				}
-			}
-		}
-	}
+	String filename = "vertexobjects/pinetreepart.vto";
+	Vector2 lightsource = new Vector2();
+	float scale = 1/60f, trunkLightScale = 1f;
 
 	void processPolygons(){
 		drawMaterials();
-		
+		generateShadingPatterns();
+		addShadows();
+		drawOutlines();
 	}
 	
 	void drawOutlines(){
@@ -178,38 +135,31 @@ public class TreeGenerator{
 
 	void generateLogPattern(int x, int y, int cy, Pixel pixel){
 		Color color = new Color(pixmap.getPixel(x, cy));
-
+		
 		float m = 0f;
 		m = (Patterns.nMod(x, y, 0.2f));
+		float dist = pixel.polygon.distance(project(x-width/2), project(y));
+		m += dist*10f *trunkLightScale;
+		//print(dist);
+		m = round(m, 0.4f);
 		m += 1f;
 		color.mul(m, m, m, 1f);
-
-		/*
-		float px = project(x-width/2), py = project(y);
-		boolean broke = false;
-		for(VertexList list : object.lists.values()){
-			if(list.type == PolygonType.line){
-				if(list.collides(px, py, 0.05f)){
-					float a = 0.2f;
-					color.mul(1+a,1+a,1+a,1f);
-					broke = true;
-					break;
-				}
-			}
-			if(broke) break;
-		}
-		*/
+		
+		
 		pixmap.drawPixel(x, cy, Color.rgba8888(color));
 	}
 
 	void generateLeafPattern(int x, int y, int cy, Pixel pixel){
 		float round = 0.1f;
 		float gscl = -0.1f;
+		
+		float selflightscale = 0.4f; //default is 0.7f
+		float globallightscale = 0.8f; //default is 0.6f;
 
-		float dist = gscl + 0.7f * ((1.5f - pixel.polygon.lightVertice.dst(project(x - width / 2), project(y))));
-		float lightdist = gscl + 0.6f * ((1f - GeneratorPolygon.lightsource.dst(project(x - width / 2), project(y))));
+		float dist =pixel.polygon.height()/3f+gscl + selflightscale * (((1.5f) - pixel.polygon.lightVertice.dst(project(x - width / 2), project(y))));
+		float lightdist = gscl + globallightscale * ((1f - lightsource.dst(project(x - width / 2), project(y))));
 
-		float scl = /*(project(y) - pixel.polygon.bottom()) / pixel.polygon.height()+*/dist + lightdist + Patterns.noise(x, y, 4f, 0.2f) + Patterns.mod(x, y, 0.07f);
+		float scl = dist + lightdist+ Patterns.noise(x, y, 4f, 0.2f) + Patterns.mod(x, y, 0.07f);
 		pixmap.drawPixel(x, cy, Color.rgba8888(brighter(new Color(pixmap.getPixel(x, cy)), round * (int)(((scl * 0.5f) / round)))));
 
 		if(pixel.polygon.center.dst(project(x - width / 2), project(y)) < 0.1){
@@ -217,9 +167,64 @@ public class TreeGenerator{
 		}
 	}
 	
+	void loadPolygons(){
+		object = VertexLoader.read(Gdx.files.internal(filename));
+		
+		VertexGenerator.generatePineTree(object);
+		
+		object.normalize();
+		object.alignBottom();
+		object.alignSides();
+		
+		Rectangle rect = object.boundingBox();
+		lightsource.set(rect.x, rect.height);
+		
+		ObjectMap<String, Polygon> rawpolygons = object.getPolygons();
+
+		polygons = new Array<GeneratorPolygon>();
+
+		for(String key : rawpolygons.keys())
+			polygons.add(new GeneratorPolygon(key, object.lists.get(key), rawpolygons.get(key)));
+
+		for(int x = 0;x < width;x ++){
+			for(int y = 0;y < height;y ++){
+				float rx = project(x - width / 2), ry = project(y);
+				for(GeneratorPolygon poly : polygons){
+					if(poly.list.type == PolygonType.line) continue;
+					if(poly.polygon.contains(rx, ry)) set(x, y, poly.list.material(), poly);
+				}
+			}
+		}
+	}
+	
+	public TreeGenerator(){
+		materials = new Pixel[width][height];
+		pixmap = new Pixmap(width, height, Format.RGBA8888);
+		texture = new Texture(pixmap);
+	}
+	
+	public void reset(){
+		Pixmap.setBlending(Blending.None);
+		for(int x = 0;x < width;x ++){
+			for(int y = 0;y < height;y ++){
+				materials[x][y] = new Pixel();
+				pixmap.drawPixel(x, y, Color.rgba8888(Color.CLEAR));
+			}
+		}
+		Pixmap.setBlending(Blending.SourceOver);
+		
+		print("Loading polygons...");
+		loadPolygons();
+		
+		print("Procesing polygons...");
+		processPolygons();
+		
+		print("Done generating.");
+		texture.draw(pixmap, 0, 0);
+	}
+	
 	public float project(int i){
-		float scl = 1f / 60f;
-		return i * scl;
+		return i * scale;
 	}
 	
 	void set(int x, int y, Material material, GeneratorPolygon polygon){
@@ -244,7 +249,7 @@ public class TreeGenerator{
 	}
 	
 	Color brighter(Color color, float a){
-		color.add(a, a, -a * 2, 0f);
+		color.add(a, a, -a*2f, 0f);
 		return color;
 	}
 	
