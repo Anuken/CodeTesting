@@ -42,6 +42,12 @@ public class VertexObject{
 			return max;
 		}
 		
+		public void translateY(float amount){
+			for(Vector2 vector : vertices){
+				vector.y += amount;
+			}
+		}
+		
 		public void alignBottom(){
 			float min = 0;
 			for(Vector2 vector : vertices){

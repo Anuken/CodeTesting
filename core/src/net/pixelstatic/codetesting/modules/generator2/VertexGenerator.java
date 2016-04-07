@@ -13,7 +13,7 @@ import com.badlogic.gdx.utils.Array;
 public class VertexGenerator{
 	
 	public static void generatePineTree(VertexObject part){
-		part.lists.get("trunk").alignBottom();
+				
 		VertexList list = part.lists.get("leafsegment");
 		
 		list.alignBottom();
@@ -33,5 +33,12 @@ public class VertexGenerator{
 			offset += scl*height*compactness;
 			scl -= seg;
 		}
+		
+		part.lists.get("trunk").translateY(185f);
+		
+		//for(Vector2 vector : part.lists.get("trunk").vertices){
+	//		System.out.println(vector);
+		//}
+	
 	}
 }
