@@ -1,8 +1,5 @@
 package net.pixelstatic.codetesting.modules.vertex;
 
-import net.pixelstatic.codetesting.modules.generator2.GeneratorRenderer.Material;
-import net.pixelstatic.codetesting.modules.vertex.VertexCanvas.PolygonType;
-
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -13,60 +10,8 @@ public class VertexObject{
 	public int flag;
 	public ObjectMap<String, VertexList> lists = new ObjectMap<String, VertexList>();
 	
-	public static class VertexList{
-		public int flag;
-		public Array<Vector2> vertices;
-		public PolygonType type;
-		
-		public VertexList(Array<Vector2> vertices, PolygonType type, int flag){
-			this.vertices = vertices;
-			this.type = type;
-			this.flag = flag;
-		}
-		
-		public boolean collides(float x, float y, float range){
-			for(Vector2 vector : vertices){
-				if(vector.dst(x,y) < range){
-					return true;
-				}
-			//	range -= 0.01f;
-			}
-			return false;
-		}
-		
-		public float height(){
-			float max = 0;
-			for(Vector2 vector : vertices){
-				max = Math.max(max, vector.y);
-			}
-			return max;
-		}
-		
-		public void translateY(float amount){
-			for(Vector2 vector : vertices){
-				vector.y += amount;
-			}
-		}
-		
-		public void alignBottom(){
-			float min = 0;
-			for(Vector2 vector : vertices){
-				if(Math.abs(vector.y) > min){
-					min = vector.y;
-				}
-			}
-			
-			for(Vector2 vector : vertices)
-				vector.y -= min;
-		}
-		
-		public Material material(){
-			return Material.values()[flag];
-		}
-		
-		public VertexList(){
-			
-		}
+	public enum PolygonType{
+		polygon, line
 	}
 
 	public VertexObject(){
@@ -75,7 +20,7 @@ public class VertexObject{
 
 	public VertexObject(Array<VertexCanvas> canvases){
 		for(VertexCanvas canvas : canvases){
-			lists.put(canvas.name, new VertexList(canvas.vertices, canvas.type, canvas.material.ordinal()));
+			lists.put(canvas.name, new VertexList(canvas.list.vertices, canvas.list.type, canvas.list.material.ordinal()));
 		}
 		//normalize();
 	}

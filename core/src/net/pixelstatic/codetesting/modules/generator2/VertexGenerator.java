@@ -3,9 +3,9 @@ package net.pixelstatic.codetesting.modules.generator2;
 
 
 import net.pixelstatic.codetesting.modules.generator2.GeneratorRenderer.Material;
-import net.pixelstatic.codetesting.modules.vertex.VertexCanvas.PolygonType;
+import net.pixelstatic.codetesting.modules.vertex.VertexList;
 import net.pixelstatic.codetesting.modules.vertex.VertexObject;
-import net.pixelstatic.codetesting.modules.vertex.VertexObject.VertexList;
+import net.pixelstatic.codetesting.modules.vertex.VertexObject.PolygonType;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
@@ -34,7 +34,7 @@ public class VertexGenerator{
 			scl -= seg;
 		}
 		
-		part.lists.get("trunk").translateY(185f);
+		part.lists.get("trunk").translate(0, 185f);
 	
 	}
 }

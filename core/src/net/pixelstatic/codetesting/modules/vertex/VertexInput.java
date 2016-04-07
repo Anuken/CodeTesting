@@ -43,7 +43,7 @@ public class VertexInput implements InputProcessor{
 	public boolean touchDown(int screenX, int screenY, int pointer, int button){
 		if(button == Buttons.LEFT){
 			if(gui.drawing && gui.drawMode){
-				gui.canvas.vertices.add(gui.mouseVector());
+				gui.canvas.vertices().add(gui.mouseVector());
 				return false;
 			}
 
@@ -53,8 +53,8 @@ public class VertexInput implements InputProcessor{
 				return true;
 			}
 		}else if(button == Buttons.RIGHT){
-			if(gui.canvas.vertices.size > 3){
-				gui.canvas.vertices.removeValue(gui.selectedVertice(), true);
+			if(gui.canvas.vertices().size > 3){
+				gui.canvas.vertices().removeValue(gui.selectedVertice(), true);
 				gui.vertice = null;
 			}
 			/*
@@ -96,7 +96,7 @@ public class VertexInput implements InputProcessor{
 	public boolean scrolled(int amount){
 		if(Gdx.input.isKeyPressed(alt_key)){
 		for(VertexCanvas canvas : gui.canvases)
-			canvas.scale(amount > 0 ? 0.9f : 1.1f);
+			canvas.list.scale(amount > 0 ? 0.9f : 1.1f);
 		}else{
 		//	gui.canvas.scale(amount > 0 ? 0.9f : 1.1f);
 		}

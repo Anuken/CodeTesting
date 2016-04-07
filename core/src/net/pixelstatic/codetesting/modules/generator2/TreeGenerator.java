@@ -2,9 +2,9 @@ package net.pixelstatic.codetesting.modules.generator2;
 
 import net.pixelstatic.codetesting.modules.generator2.GeneratorRenderer.Material;
 import net.pixelstatic.codetesting.modules.generator2.GeneratorRenderer.Pixel;
-import net.pixelstatic.codetesting.modules.vertex.VertexCanvas.PolygonType;
 import net.pixelstatic.codetesting.modules.vertex.VertexLoader;
 import net.pixelstatic.codetesting.modules.vertex.VertexObject;
+import net.pixelstatic.codetesting.modules.vertex.VertexObject.PolygonType;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.*;

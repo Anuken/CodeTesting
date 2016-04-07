@@ -5,7 +5,7 @@ import javax.swing.JOptionPane;
 
 import net.pixelstatic.codetesting.modules.Module;
 import net.pixelstatic.codetesting.modules.generator2.GeneratorRenderer.Material;
-import net.pixelstatic.codetesting.modules.vertex.VertexCanvas.PolygonType;
+import net.pixelstatic.codetesting.modules.vertex.VertexObject.PolygonType;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Buttons;
@@ -75,12 +75,12 @@ public class VertexGUI extends Module{
 	void draw(){
 		for(VertexCanvas canvas : canvases){
 			if(canvas == this.canvas) continue;
-			drawVertices(canvas, canvas.vertices, false);
-			if(canvas.symmetry && drawing) drawVertices(canvas, mirror(canvas.vertices), true);
+			drawVertices(canvas, canvas.vertices(), false);
+			if(canvas.symmetry && drawing) drawVertices(canvas, mirror(canvas.vertices()), true);
 		}
 		
-		drawVertices(canvas, canvas.vertices, false);
-		if(canvas.symmetry && drawing) drawVertices(canvas, mirror(canvas.vertices), true);
+		drawVertices(canvas, canvas.vertices(), false);
+		if(canvas.symmetry && drawing) drawVertices(canvas, mirror(canvas.vertices()), true);
 	
 
 		add.setPosition(0, Gdx.graphics.getHeight() - add.getHeight() * (canvases.size + 1));
@@ -100,12 +100,12 @@ public class VertexGUI extends Module{
 
 	void drawVertices(VertexCanvas canvas, Array<Vector2> vertices, boolean mirror){
 		shape.set(ShapeType.Line);
-		shape.setColor(canvas.material.getColor());
+		shape.setColor(canvas.list.material.getColor());
 		Gdx.gl.glLineWidth(4);
 		shape.setAutoShapeType(true);
 		for(int i = 0;i < vertices.size;i ++){
 			Vector2 current = vertices.get(i);
-			Vector2 next = (i == vertices.size - 1 ? (((drawing && canvas == this.canvas) || canvas.type == PolygonType.line) ? null : vertices.get(0)) : vertices.get(i + 1));
+			Vector2 next = (i == vertices.size - 1 ? (((drawing && canvas == this.canvas) || canvas.list.type == PolygonType.line) ? null : vertices.get(0)) : vertices.get(i + 1));
 			if(next != null) shape.line(current.cpy().add(centerx(), centery()), next.cpy().add(centerx(), centery()));
 
 		}
@@ -154,10 +154,7 @@ public class VertexGUI extends Module{
 
 	void finishDrawMode(){
 		if( !canvas.symmetry) return;
-		Array<Vector2> mirror = mirror(canvas.vertices);
-		for(int i = mirror.size - 1;i >= 0;i --){
-			canvas.vertices.add(mirror.get(i));
-		}
+		canvas.list.mirrorVertices();
 	}
 
 	Vector2 mouseVector(){
@@ -165,7 +162,7 @@ public class VertexGUI extends Module{
 	}
 
 	Vector2 selectedVertice(){
-		for(Vector2 vector : canvas.vertices){
+		for(Vector2 vector : canvas.vertices()){
 			if(vector.dst(Gdx.input.getX() - centerx(), (Gdx.graphics.getHeight() - Gdx.input.getY()) - centery()) < grabrange){
 				return vector;
 			}
@@ -195,7 +192,7 @@ public class VertexGUI extends Module{
 			this.offsetx += offsetx;
 			this.offsety += offsety;
 		}else{
-			canvas.translate(offsetx, offsety);
+			canvas.list.translate(offsetx, offsety);
 		}
 
 		if(Gdx.input.isKeyJustPressed(Keys.SPACE)) drawMode = !drawMode;
@@ -227,7 +224,7 @@ public class VertexGUI extends Module{
 		box.addListener(new ChangeListener(){
 			@Override
 			public void changed(ChangeEvent event, Actor actor){
-				canvas.material = box.getSelected();
+				canvas.list.material = box.getSelected();
 			}
 		});
 
@@ -241,7 +238,7 @@ public class VertexGUI extends Module{
 		typebox.addListener(new ChangeListener(){
 			@Override
 			public void changed(ChangeEvent event, Actor actor){
-				canvas.type = typebox.getSelected();
+				canvas.list.type = typebox.getSelected();
 			}
 		});
 
@@ -272,7 +269,8 @@ public class VertexGUI extends Module{
 		smooth.setSize(field.getWidth(), 30);
 		smooth.addListener(new ClickListener(){
 			public void clicked(InputEvent event, float x, float y){
-				canvas.smooth();
+				if(!canvas.list.smooth())
+					JOptionPane.showMessageDialog(null, "calm down m8", "pls", JOptionPane.ERROR_MESSAGE);
 			}
 		});
 
@@ -366,9 +364,9 @@ public class VertexGUI extends Module{
 		canvases.clear();
 		for(String string : object.lists.keys()){
 			VertexCanvas canvas = addCanvas(string);
-			canvas.vertices = object.lists.get(string).vertices;
-			canvas.material = Material.values()[(object.lists.get(string).flag)];
-			canvas.type = object.lists.get(string).type;
+			canvas.list.vertices = object.lists.get(string).vertices;
+			canvas.list.material = object.lists.get(string).flagMaterial();
+			canvas.list.type = object.lists.get(string).type;
 		}
 		canvas = canvases.first();
 		canvas.updateBoxes();
