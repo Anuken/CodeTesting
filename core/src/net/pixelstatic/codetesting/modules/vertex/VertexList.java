@@ -32,11 +32,12 @@ public class VertexList{
 	
 
 	public float height(){
+		float min = min();
 		float max = 0;
 		for(Vector2 vector : vertices){
 			max = Math.max(max, vector.y);
 		}
-		return max;
+		return max - min;
 	}
 	
 	public void tscl(float scl){
@@ -66,11 +67,9 @@ public class VertexList{
 	}
 	
 	public float min(){
-		float min = 0;
+		float min = Float.MAX_VALUE;
 		for(Vector2 vector : vertices){
-			if(Math.abs(vector.y) > min){
-				min = vector.y;
-			}
+			min = Math.min(vector.y, min);
 		}
 		return min;
 	}

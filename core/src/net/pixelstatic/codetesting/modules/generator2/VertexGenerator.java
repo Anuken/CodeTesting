@@ -19,11 +19,10 @@ public class VertexGenerator{
 	public void generatePineTree(VertexObject part){
 				
 		VertexList list = part.lists.get("leafsegment");
-		//list.scale(0.01f);
-		part.lists.remove("leafsegment");
-		//part.lists.remove("trunk");
 		
-	//	list.alignBottom();
+		part.lists.remove("leafsegment");
+		
+		
 		float height = list.height();
 		
 		float scl = 1f;
@@ -44,6 +43,7 @@ public class VertexGenerator{
 			part.lists.put("leafsegment" + i, newlist);
 			lastrotation = rotation;
 			offsety += rotatevector.y*1f/rotatecompactness;
+			
 			scl -= seg;
 		}
 		

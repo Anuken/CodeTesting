@@ -166,12 +166,12 @@ public class TreeGenerator implements Disposable{
 	}
 	
 	private void loadPolygons(){
+		object.alignBottom();
+		object.alignSides();
 		vertexgenerator.generatePineTree(object);
 		
 		object.normalize();
-		//object.scl(0.0014f);
-		object.alignBottom();
-		object.alignSides();
+		
 		
 		Rectangle rect = object.boundingBox();
 		lightsource.set(rect.x, rect.height);

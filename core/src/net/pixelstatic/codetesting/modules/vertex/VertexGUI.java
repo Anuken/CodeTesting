@@ -200,6 +200,10 @@ public class VertexGUI extends Module{
 		if(editor.stage.getKeyboardFocus() != null) return;
 		float speed = 6f;
 		float offsetx = 0, offsety = 0;
+		if(Gdx.input.isKeyJustPressed(Keys.T)){
+			loadObject(VertexLoader.read(Gdx.files.internal("vertexobjects/pinetreepart.vto")));
+
+		}
 
 		if(Gdx.input.isKeyJustPressed(Keys.R)){
 			int minvertices = Integer.MAX_VALUE;
@@ -392,6 +396,7 @@ public class VertexGUI extends Module{
 
 		VertexCanvas trunk = addCanvas("trunk");
 		trunk.list.material = Material.wood;
+		
 	}
 
 	void loadObject(VertexObject object){
