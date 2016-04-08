@@ -2,11 +2,9 @@ package net.pixelstatic.codetesting.modules.generator2;
 
 import net.pixelstatic.codetesting.modules.generator2.GeneratorRenderer.Material;
 import net.pixelstatic.codetesting.modules.generator2.GeneratorRenderer.Pixel;
-import net.pixelstatic.codetesting.modules.vertex.VertexLoader;
 import net.pixelstatic.codetesting.modules.vertex.VertexObject;
 import net.pixelstatic.codetesting.modules.vertex.VertexObject.PolygonType;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.Pixmap.Blending;
 import com.badlogic.gdx.graphics.Pixmap.Format;
@@ -14,27 +12,27 @@ import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.ObjectMap;
 
-public class TreeGenerator{
-	final int width = 100, height = 100;
-	Pixel[][] materials;
-	Pixmap pixmap;
-	Texture texture;
-	VertexObject object;
-	Array<GeneratorPolygon> polygons;
-	String filename = "vertexobjects/pinetreepart.vto";
-	Vector2 lightsource = new Vector2();
-	float scale = 1/60f, trunkLightScale = 1f;
+public class TreeGenerator implements Disposable{
+	public final int width = 60, height = 80;
+	public Pixel[][] materials;
+	public Pixmap pixmap;
+	public Texture texture;
+	public VertexObject object;
+	public Array<GeneratorPolygon> polygons;
+	public Vector2 lightsource = new Vector2();
+	public float scale = 1/60f, trunkLightScale = 1f;
 
-	void processPolygons(){
+	private void processPolygons(){
 		drawMaterials();
 		generateShadingPatterns();
 		addShadows();
 		drawOutlines();
 	}
 	
-	void drawOutlines(){
+	private void drawOutlines(){
 		for(int x = 0;x < width;x ++){
 			for(int cy = 0;cy < height;cy ++){
 				int y = height - 1 - cy;
@@ -55,7 +53,7 @@ public class TreeGenerator{
 		}
 	}
 
-	void addShadows(){
+	private void addShadows(){
 		for(int x = 0;x < width;x ++){
 			for(int cy = 0;cy < height;cy ++){
 				int y = height - 1 - cy;
@@ -77,7 +75,7 @@ public class TreeGenerator{
 		}
 	}
 
-	void drawMaterials(){
+	private void drawMaterials(){
 		for(int x = 0;x < width;x ++){
 			for(int y = 0;y < height;y ++){
 				if(materials[x][y] != null && materials[x][y].material != null) pixmap.drawPixel(x, height - 1 - y, Color.rgba8888(materials[x][y].material.getColor()));
@@ -85,7 +83,7 @@ public class TreeGenerator{
 		}
 	}
 
-	void crystallize(){
+	private void crystallize(){
 		int[] colors = new int[width * height];
 		//store color array
 		for(int x = 0;x < width;x ++){
@@ -117,7 +115,7 @@ public class TreeGenerator{
 		}
 	}
 
-	void generateShadingPatterns(){
+	private void generateShadingPatterns(){
 		//add brightness, leaf patterns
 		for(int x = 0;x < width;x ++){
 			for(int cy = 0;cy < height;cy ++){
@@ -133,7 +131,7 @@ public class TreeGenerator{
 		}
 	}
 
-	void generateLogPattern(int x, int y, int cy, Pixel pixel){
+	private void generateLogPattern(int x, int y, int cy, Pixel pixel){
 		Color color = new Color(pixmap.getPixel(x, cy));
 		
 		float m = 0f;
@@ -149,7 +147,7 @@ public class TreeGenerator{
 		pixmap.drawPixel(x, cy, Color.rgba8888(color));
 	}
 
-	void generateLeafPattern(int x, int y, int cy, Pixel pixel){
+	private void generateLeafPattern(int x, int y, int cy, Pixel pixel){
 		float round = 0.1f;
 		float gscl = -0.1f;
 		
@@ -165,15 +163,13 @@ public class TreeGenerator{
 
 	}
 	
-	void loadPolygons(){
-		object = VertexLoader.read(Gdx.files.internal(filename));
-		
+	private void loadPolygons(){
 		VertexGenerator.generatePineTree(object);
 		
-		//object.normalize();
-		object.scl(0.0014f);
+		object.normalize();
+		//object.scl(0.0014f);
 		object.alignBottom();
-		//object.alignSides();
+		object.alignSides();
 		
 		Rectangle rect = object.boundingBox();
 		lightsource.set(rect.x, rect.height);
@@ -196,13 +192,15 @@ public class TreeGenerator{
 		}
 	}
 	
-	public TreeGenerator(){
+	public TreeGenerator(VertexObject object){
+		this.object = object;
 		materials = new Pixel[width][height];
 		pixmap = new Pixmap(width, height, Format.RGBA8888);
 		texture = new Texture(pixmap);
 	}
 	
-	public void reset(){
+	/** Resets the internal pixmap and generates the tree using the {@link VertexObject} provided. **/
+	public void generate(){
 		long starttime = System.currentTimeMillis();
 		Pixmap.setBlending(Blending.None);
 		for(int x = 0;x < width;x ++){
@@ -226,40 +224,50 @@ public class TreeGenerator{
 		print("Time taken: " + (endtime -starttime) + " ms.");
 
 	}
-
 	
+	public Texture getTexture(){
+		return texture;
+	}
+	
+	/**Returns an integer projected to polygon coordinates.**/
 	public float project(int i){
 		return i * scale;
 	}
 	
-	void set(int x, int y, Material material, GeneratorPolygon polygon){
+	private void set(int x, int y, Material material, GeneratorPolygon polygon){
 		if(x < 0 || y < 0 || x >= width || y >= height) return;
 		if( !(materials[x][y].material == null || materials[x][y].material.ordinal() < material.ordinal() || polygon.above(getPixelPolygon(x, y)))) return;
 		materials[x][y].material = material;
 		materials[x][y].polygon = polygon;
 	}
 
-	GeneratorPolygon getPixelPolygon(int x, int y){
+	private GeneratorPolygon getPixelPolygon(int x, int y){
 		if(x < 0 || y < 0 || x >= width || y >= height) return null;
 		return materials[x][y].polygon;
 	}
 	
-	public float round(float a, float b){
+	private float round(float a, float b){
 		return b * (int)(a / b);
 	}
 
-	public boolean same(Pixel pixel, int x, int y){
+	private boolean same(Pixel pixel, int x, int y){
 		if(x < 0 || y < 0 || x >= width || y >= height) return true;
 		return !pixel.polygon.above(materials[x][y].polygon);
 	}
 	
-	Color brighter(Color color, float a){
+	private Color brighter(Color color, float a){
 		color.add(a, a, -a*2f, 0f);
 		return color;
 	}
 	
 	void print(Object o){
 		System.out.println(o);
+	}
+
+	@Override
+	public void dispose(){
+		texture.dispose();
+		pixmap.dispose();
 	}
 
 }

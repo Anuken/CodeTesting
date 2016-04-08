@@ -37,7 +37,7 @@ public class VertexCanvas{
 			VertexCanvas canvas = this;
 			button.addListener(new ClickListener(){
 				public void clicked(InputEvent event, float x, float y){
-					gui.canvas = canvas;
+					gui.selectedCanvas = canvas;
 					updateBoxes();
 				}
 			});

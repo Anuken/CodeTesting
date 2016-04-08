@@ -22,8 +22,9 @@ public class VertexEditor extends Module{
 	
 	public void init(){
 		InputMultiplexer plex = new InputMultiplexer();
-		plex.addProcessor(stage);
+	
 		plex.addProcessor(new VertexInput(tester.getModule(VertexGUI.class)));
+		plex.addProcessor(stage);
 		Gdx.input.setInputProcessor(plex);
 	}
 

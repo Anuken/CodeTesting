@@ -5,6 +5,7 @@ import javax.swing.JOptionPane;
 
 import net.pixelstatic.codetesting.modules.Module;
 import net.pixelstatic.codetesting.modules.generator2.GeneratorRenderer.Material;
+import net.pixelstatic.codetesting.modules.generator2.TreeGenerator;
 import net.pixelstatic.codetesting.modules.vertex.VertexObject.PolygonType;
 
 import com.badlogic.gdx.Gdx;
@@ -33,15 +34,16 @@ public class VertexGUI extends Module{
 	final float grabrange = 20;
 	ShapeRenderer shape = new ShapeRenderer();
 	Array<VertexCanvas> canvases = new Array<VertexCanvas>();
-	VertexCanvas canvas = new VertexCanvas("canvas", 0);
+	VertexCanvas selectedCanvas;
 	Vector2 vertice;
 	VertexEditor editor;
 	TextButton symmetry, overwrite, add, clear, delete, smooth;
 	SelectBox<Material> box;
 	SelectBox<PolygonType> typebox;
 	TextField field;
+	TreeGenerator tree;
 	boolean drawing, drawMode = true;
-	float offsetx, offsety;
+	float offsetx, offsety, treeScale = 4f;
 
 	@Override
 	public void update(){
@@ -52,13 +54,14 @@ public class VertexGUI extends Module{
 		shape.begin(ShapeType.Line);
 		draw();
 		shape.end();
+		drawTree();
 		ActorAlign.updateAll();
 	}
 
 	void updateCanvases(){
 		for(VertexCanvas canvas : canvases)
-			canvas.update(this.canvas);
-		symmetry.setChecked(canvas.symmetry);
+			canvas.update(this.selectedCanvas);
+		symmetry.setChecked(selectedCanvas.symmetry);
 		overwrite.setChecked(drawMode);
 		overwrite.setText(drawMode ? "Draw Mode" : "Edit Mode");
 		clear.setColor( !drawMode ? Color.LIGHT_GRAY : Color.WHITE);
@@ -69,25 +72,42 @@ public class VertexGUI extends Module{
 		delete.setTouchable( !drawMode ? Touchable.disabled : Touchable.enabled);
 		smooth.setColor( !drawMode ? Color.LIGHT_GRAY : Color.WHITE);
 		smooth.setTouchable( !drawMode ? Touchable.disabled : Touchable.enabled);
-
+		
+		}
+	
+	void drawTree(){
+		editor.stage.getBatch().setColor(Color.WHITE);
+		editor.stage.getBatch().begin();
+		editor.stage.getBatch().draw(tree.getTexture(), 0 ,0, tree.getTexture().getWidth() * treeScale, tree.getTexture().getHeight() * treeScale);
+		editor.stage.getBatch().end();
 	}
 
 	void draw(){
+		//draw center of coords
+		shape.set(ShapeType.Line);
+		shape.setColor(Color.BLUE);
+		shape.line(Gdx.graphics.getWidth()/2+offsetx, 0, Gdx.graphics.getWidth()/2+offsetx, Gdx.graphics.getHeight());
+		shape.line(0, Gdx.graphics.getHeight()/2+offsety, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()/2+offsety);
+
+		
 		for(VertexCanvas canvas : canvases){
-			if(canvas == this.canvas) continue;
+			if(canvas == this.selectedCanvas) continue;
 			drawVertices(canvas, canvas.vertices(), false);
 		}
 		
-		drawVertices(canvas, canvas.vertices(), false);
-		if(canvas.symmetry && drawing) drawVertices(canvas, mirror(canvas.vertices()), true);
+		drawVertices(selectedCanvas, selectedCanvas.vertices(), false);
+		if(selectedCanvas.symmetry && drawing) drawVertices(selectedCanvas, mirror(selectedCanvas.vertices()), true);
 	
 
 		add.setPosition(0, Gdx.graphics.getHeight() - add.getHeight() * (canvases.size + 1));
 
 		shape.set(ShapeType.Line);
 		shape.setColor(Color.MAGENTA);
-		if(canvas.symmetry) shape.line(centerx(), 0, centerx(), Gdx.graphics.getHeight());
-	}
+		if(selectedCanvas.symmetry && drawing) shape.line(centerx(), 0, centerx(), Gdx.graphics.getHeight());
+		
+		float lineoffset = 1f;
+		shape.setColor(Color.RED);
+		shape.rect(lineoffset, lineoffset, tree.width*treeScale, tree.height*treeScale);	}
 
 	float centerx(){
 		return Gdx.graphics.getWidth() / 2 + offsetx;
@@ -104,12 +124,12 @@ public class VertexGUI extends Module{
 		shape.setAutoShapeType(true);
 		for(int i = 0;i < vertices.size;i ++){
 			Vector2 current = vertices.get(i);
-			Vector2 next = (i == vertices.size - 1 ? (((drawing && canvas == this.canvas) || canvas.list.type == PolygonType.line) ? null : vertices.get(0)) : vertices.get(i + 1));
+			Vector2 next = (i == vertices.size - 1 ? (((drawing && canvas == this.selectedCanvas) || canvas.list.type == PolygonType.line) ? null : vertices.get(0)) : vertices.get(i + 1));
 			if(next != null) shape.line(current.cpy().add(centerx(), centery()), next.cpy().add(centerx(), centery()));
 
 		}
 
-		if(drawing && vertices.size != 0 && canvas == this.canvas) shape.line(vertices.peek().cpy().add(centerx(), centery()), mouseVector().scl((mirror ? -1 : 1), 1f).add(centerx(), centery()));
+		if(drawing && vertices.size != 0 && canvas == this.selectedCanvas) shape.line(vertices.peek().cpy().add(centerx(), centery()), mouseVector().scl((mirror ? -1 : 1), 1f).add(centerx(), centery()));
 
 		Gdx.gl.glLineWidth(2);
 		shape.setColor(selectColor);
@@ -125,10 +145,10 @@ public class VertexGUI extends Module{
 
 		shape.setColor(selectColor);
 
-		if((selected != null || vertice != null) && !drawing && canvas == this.canvas) shape.circle(centerx() + selected.x, centery() + selected.y, grabrange);
+		if((selected != null || vertice != null) && !drawing && canvas == this.selectedCanvas) shape.circle(centerx() + selected.x, centery() + selected.y, grabrange);
 
 		shape.set(ShapeType.Filled);
-		if(canvas == this.canvas) for(int i = 0;i < vertices.size;i ++){
+		if(canvas == this.selectedCanvas) for(int i = 0;i < vertices.size;i ++){
 			Vector2 current = vertices.get(i);
 			if(current == vertice){
 				shape.setColor(Color.YELLOW);
@@ -139,7 +159,7 @@ public class VertexGUI extends Module{
 		}
 
 		shape.setColor(Color.CYAN);
-		if(drawing && canvas == this.canvas) shape.circle(centerx() + mouseVector().x * (mirror ? -1 : 1), centery() + mouseVector().y, 10);
+		if(drawing && canvas == this.selectedCanvas) shape.circle(centerx() + mouseVector().x * (mirror ? -1 : 1), centery() + mouseVector().y, 10);
 
 	}
 
@@ -152,8 +172,8 @@ public class VertexGUI extends Module{
 	}
 
 	void finishDrawMode(){
-		if( !canvas.symmetry) return;
-		canvas.list.mirrorVertices();
+		if( !selectedCanvas.symmetry) return;
+		selectedCanvas.list.mirrorVertices();
 	}
 
 	Vector2 mouseVector(){
@@ -161,7 +181,7 @@ public class VertexGUI extends Module{
 	}
 
 	Vector2 selectedVertice(){
-		for(Vector2 vector : canvas.vertices()){
+		for(Vector2 vector : selectedCanvas.vertices()){
 			if(vector.dst(Gdx.input.getX() - centerx(), (Gdx.graphics.getHeight() - Gdx.input.getY()) - centery()) < grabrange){
 				return vector;
 			}
@@ -175,7 +195,7 @@ public class VertexGUI extends Module{
 		}
 
 		if(Gdx.input.isButtonPressed(Buttons.LEFT) && (Gdx.input.getX() < Gdx.graphics.getWidth() - 130 || Gdx.input.getY() > 30)){
-			editor.stage.setKeyboardFocus(null);
+		//	editor.stage.setKeyboardFocus(null);
 		}
 		if(editor.stage.getKeyboardFocus() != null) return;
 		float speed = 6f;
@@ -185,29 +205,30 @@ public class VertexGUI extends Module{
 		if(Gdx.input.isKeyPressed(Keys.S)) offsety -= speed;
 		if(Gdx.input.isKeyPressed(Keys.A)) offsetx -= speed;
 
-		if(Gdx.input.isKeyPressed(VertexInput.alt_key)){
-			this.offsetx += offsetx;
-			this.offsety += offsety;
+		if(!Gdx.input.isKeyPressed(VertexInput.alt_key)){
+			this.offsetx -= offsetx;
+			this.offsety -= offsety;
 		}else{
-			canvas.list.translate(offsetx, offsety);
+			selectedCanvas.list.translate(offsetx, offsety);
 		}
 
 		if(Gdx.input.isKeyJustPressed(Keys.SPACE)) drawMode = !drawMode;
 	}
 
 	public void init(){
-		//Gdx.graphics.set
 		VertexCanvas.gui = this;
 		editor = tester.getModule(VertexEditor.class);
 		shape = new ShapeRenderer();
+		tree = new TreeGenerator(VertexLoader.read(Gdx.files.internal("vertexobjects/pinetreepart.vto")));
+		tree.generate();
 
 		field = new TextField("canvas", editor.skin);
 		field.setWidth(130);
 		field.setTextFieldListener(new TextFieldListener(){
 			@Override
 			public void keyTyped(TextField textField, char c){
-				canvas.name = field.getText();
-				canvas.button.setText(canvas.name);
+				selectedCanvas.name = field.getText();
+				selectedCanvas.button.setText(selectedCanvas.name);
 			}
 		});
 
@@ -221,7 +242,7 @@ public class VertexGUI extends Module{
 		box.addListener(new ChangeListener(){
 			@Override
 			public void changed(ChangeEvent event, Actor actor){
-				canvas.list.material = box.getSelected();
+				selectedCanvas.list.material = box.getSelected();
 			}
 		});
 
@@ -235,7 +256,7 @@ public class VertexGUI extends Module{
 		typebox.addListener(new ChangeListener(){
 			@Override
 			public void changed(ChangeEvent event, Actor actor){
-				canvas.list.type = typebox.getSelected();
+				selectedCanvas.list.type = typebox.getSelected();
 			}
 		});
 
@@ -247,8 +268,8 @@ public class VertexGUI extends Module{
 		symmetry.addListener(new ClickListener(){
 			public void clicked(InputEvent event, float x, float y){
 				if(drawMode){ 
-					canvas.symmetry = !canvas.symmetry;
-					if(canvas.symmetry) canvas.clear();
+					selectedCanvas.symmetry = !selectedCanvas.symmetry;
+					if(selectedCanvas.symmetry) selectedCanvas.clear();
 				}
 			}
 		});
@@ -269,7 +290,7 @@ public class VertexGUI extends Module{
 		smooth.setSize(field.getWidth(), 30);
 		smooth.addListener(new ClickListener(){
 			public void clicked(InputEvent event, float x, float y){
-				if(!canvas.list.smooth())
+				if(!selectedCanvas.list.smooth())
 					JOptionPane.showMessageDialog(null, "calm down m8", "pls", JOptionPane.ERROR_MESSAGE);
 			}
 		});
@@ -281,7 +302,7 @@ public class VertexGUI extends Module{
 		clear.setSize(field.getWidth(), 30);
 		clear.addListener(new ClickListener(){
 			public void clicked(InputEvent event, float x, float y){
-				if(drawMode) canvas.clear();
+				if(drawMode) selectedCanvas.clear();
 			}
 		});
 
@@ -292,9 +313,9 @@ public class VertexGUI extends Module{
 		delete.addListener(new ClickListener(){
 			public void clicked(InputEvent event, float x, float y){
 				if(drawMode && canvases.size > 1){
-					canvas.delete();
-					canvases.removeValue(canvas, true);
-					canvas = canvases.get(0);
+					selectedCanvas.delete();
+					canvases.removeValue(selectedCanvas, true);
+					selectedCanvas = canvases.get(0);
 					fixCanvases();
 				}
 			}
@@ -352,10 +373,14 @@ public class VertexGUI extends Module{
 		});
 
 		editor.stage.addActor(add);
+		
+		selectedCanvas = new VertexCanvas("leafsegment", 0);
+		selectedCanvas.list.material = Material.leaves;
+		canvases.add(selectedCanvas);
+		selectedCanvas.updateBoxes();
 
-		canvases.add(canvas);
-
-		addCanvas("canvas2");
+		VertexCanvas trunk = addCanvas("trunk");
+		trunk.list.material = Material.wood;
 	}
 	
 	void loadObject(VertexObject object){
@@ -368,8 +393,8 @@ public class VertexGUI extends Module{
 			canvas.list.material = object.lists.get(string).flagMaterial();
 			canvas.list.type = object.lists.get(string).type;
 		}
-		canvas = canvases.first();
-		canvas.updateBoxes();
+		selectedCanvas = canvases.first();
+		selectedCanvas.updateBoxes();
 	}
 
 	void fixCanvases(){

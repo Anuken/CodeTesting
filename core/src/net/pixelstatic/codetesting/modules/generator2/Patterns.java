@@ -61,7 +61,7 @@ public class Patterns{
 	}
 	
 	public static float noise(int x, int y, float scl, float mag){
-		return (float)Noise.NormalNoise(x, y, scl, mag, 1f);
+		return (float)Math.abs(Noise.NormalNoise(x, y, scl, mag, 1f));
 	}
 	
 	public static int leafPattern(int x, int y, int width, int height, int[] colors, int type){

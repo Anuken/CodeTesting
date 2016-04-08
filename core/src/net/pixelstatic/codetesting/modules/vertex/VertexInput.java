@@ -18,7 +18,7 @@ public class VertexInput implements InputProcessor{
 	public boolean keyDown(int keycode){
 		if(keycode == draw_key && gui.drawMode){
 			gui.drawing = true;
-			gui.canvas.clear();
+			gui.selectedCanvas.clear();
 			return true;
 		}
 		return false;
@@ -41,19 +41,20 @@ public class VertexInput implements InputProcessor{
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button){
 		if(button == Buttons.LEFT){
+			if((Gdx.input.getX() < Gdx.graphics.getWidth() - 130 || Gdx.input.getY() > 30)){
+				gui.editor.stage.setKeyboardFocus(null);
+			}
 			if(gui.drawing && gui.drawMode){
-				gui.canvas.vertices().add(gui.mouseVector());
-				return false;
+				gui.selectedCanvas.vertices().add(gui.mouseVector());
 			}
 
 			Vector2 selected = gui.selectedVertice();
-			if(selected != null){
+			if(selected != null && !gui.drawing){
 				gui.vertice = selected;
-				return true;
 			}
 		}else if(button == Buttons.RIGHT){
-			if(gui.canvas.vertices().size > 3){
-				gui.canvas.vertices().removeValue(gui.selectedVertice(), true);
+			if(gui.selectedCanvas.vertices().size > 3){
+				gui.selectedCanvas.vertices().removeValue(gui.selectedVertice(), true);
 				gui.vertice = null;
 			}
 		}
@@ -63,7 +64,6 @@ public class VertexInput implements InputProcessor{
 	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button){
 		if(button == Buttons.LEFT){
-
 			gui.vertice = null;
 		}
 		return false;
