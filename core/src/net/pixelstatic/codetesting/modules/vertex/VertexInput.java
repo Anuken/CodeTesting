@@ -8,9 +8,9 @@ import com.badlogic.gdx.math.Vector2;
 public class VertexInput implements InputProcessor{
 	static final int alt_key = Keys.CONTROL_LEFT;
 	static final int draw_key = Keys.SHIFT_LEFT;
-	private VertexGUI gui;
+	private VertexEditor gui;
 
-	public VertexInput(VertexGUI gui){
+	public VertexInput(VertexEditor gui){
 		this.gui = gui;
 	}
 
@@ -42,7 +42,7 @@ public class VertexInput implements InputProcessor{
 	public boolean touchDown(int screenX, int screenY, int pointer, int button){
 		if(button == Buttons.LEFT){
 			if((Gdx.input.getX() < Gdx.graphics.getWidth() - 130 || Gdx.input.getY() > 30)){
-				gui.editor.stage.setKeyboardFocus(null);
+				gui.gui.stage.setKeyboardFocus(null);
 			}
 			if(gui.drawing && gui.drawMode){
 				gui.selectedCanvas.vertices().add(gui.mouseVector());
@@ -81,10 +81,10 @@ public class VertexInput implements InputProcessor{
 
 	@Override
 	public boolean scrolled(int amount){
-		if(Gdx.input.isKeyPressed(alt_key)){
-		for(VertexCanvas canvas : gui.canvases)
-			canvas.list.scale(amount > 0 ? 0.9f : 1.1f);
-		}
+		if(Gdx.input.isKeyPressed(alt_key))
+	//	for(VertexCanvas canvas : gui.canvases)
+			gui.selectedCanvas.list.scale(amount > 0 ? 0.9f : 1.1f);
+		//}
 		return false;
 	}
 

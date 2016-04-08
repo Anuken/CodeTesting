@@ -169,9 +169,7 @@ public class TreeGenerator implements Disposable{
 		object.alignBottom();
 		object.alignSides();
 		vertexgenerator.generatePineTree(object);
-		
 		object.normalize();
-		
 		
 		Rectangle rect = object.boundingBox();
 		lightsource.set(rect.x, rect.height);
@@ -188,11 +186,16 @@ public class TreeGenerator implements Disposable{
 				float rx = project(x - width / 2), ry = project(y);
 				for(GeneratorPolygon poly : polygons){
 					if(poly.list.type == PolygonType.line) continue;
-					if(poly.polygon.contains(rx, ry)) set(x, y, poly.list.material(), poly);
+					if(poly.polygon.contains(rx, ry)) set(x, y, poly.list.material, poly);
 				}
 			}
 		}
 	}
+	
+	public TreeGenerator(){
+		this(null);
+	}
+	
 	
 	public TreeGenerator(VertexObject object){
 		this.object = object;
@@ -204,6 +207,10 @@ public class TreeGenerator implements Disposable{
 	
 	/** Resets the internal pixmap and generates the tree using the {@link VertexObject} provided. **/
 	public void generate(){
+		if(object == null){
+			throw new RuntimeException("Set a vertex object before calling generate()!");
+		}
+		
 		long starttime = System.currentTimeMillis();
 		Pixmap.setBlending(Blending.None);
 		for(int x = 0;x < width;x ++){

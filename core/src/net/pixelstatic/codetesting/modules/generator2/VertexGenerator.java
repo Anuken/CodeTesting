@@ -2,7 +2,6 @@ package net.pixelstatic.codetesting.modules.generator2;
 
 
 
-import net.pixelstatic.codetesting.modules.generator2.GeneratorRenderer.Material;
 import net.pixelstatic.codetesting.modules.vertex.VertexList;
 import net.pixelstatic.codetesting.modules.vertex.VertexObject;
 import net.pixelstatic.codetesting.modules.vertex.VertexObject.PolygonType;
@@ -12,6 +11,8 @@ import com.badlogic.gdx.utils.Array;
 
 public class VertexGenerator{
 	public float segmentRotation = 0;
+	public float segmentCompactness = 0.8f;
+	public int segments = 10;
 	
 
 	/** Creates a pine tree by stacking segment polygons on top of each other.*
@@ -19,19 +20,16 @@ public class VertexGenerator{
 	public void generatePineTree(VertexObject part){
 				
 		VertexList list = part.lists.get("leafsegment");
-		
 		part.lists.remove("leafsegment");
 		
-		
 		float height = list.height();
-		
 		float scl = 1f;
-		float seg = 0.1f;
+		float seg = 1f/segments;
 		float offsety = 0, lastx = 0f, lastrotation = 0;
-		float compactness = 0.86f;
+		float compactness = segmentCompactness;
 		float rotatecompactness = 0.7f;
-		for(int i = 0; i < 10; i ++){
-			VertexList newlist = new VertexList(new Array<Vector2>(), PolygonType.polygon, Material.leaves.ordinal());
+		for(int i = 0; i < segments; i ++){
+			VertexList newlist = new VertexList(new Array<Vector2>(), PolygonType.polygon, list.material);
 			float rotation = lastrotation*0.9f + segmentRotation;
 			Vector2 rotatevector = new Vector2(0,scl*height*compactness*rotatecompactness).rotate(rotation);
 			for(Vector2 vector : list.vertices)

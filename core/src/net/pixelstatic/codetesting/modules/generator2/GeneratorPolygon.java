@@ -85,7 +85,7 @@ public class GeneratorPolygon{
 	}
 
 	public Material material(){
-		return list.material();
+		return list.material;
 	}
 
 	public boolean above(GeneratorPolygon other){

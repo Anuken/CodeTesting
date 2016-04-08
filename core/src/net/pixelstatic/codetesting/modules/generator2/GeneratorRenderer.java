@@ -22,7 +22,8 @@ public class GeneratorRenderer extends Module{
 	}
 
 	public enum Material{
-		bone(Color.MAGENTA), wood(Color.BROWN.cpy().sub(0.1f, 0.1f, 0.1f, 0f), -1), leaves(new Color(0.0f, 0.4f, 0.3f, 1f), -1);
+		wood(Color.BROWN.cpy().sub(0.1f, 0.1f, 0.1f, 0f), -1), 
+		leaves(new Color(0.0f, 0.4f, 0.3f, 1f), -1);
 
 		public Color color;
 		public int type = CellularFilter.TRIANGULAR;

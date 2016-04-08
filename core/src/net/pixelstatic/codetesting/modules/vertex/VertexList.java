@@ -7,16 +7,15 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
 public class VertexList{
-	private int flag; //used for storing material type; a bit redundant
 	public Material material;
 	public Array<Vector2> vertices;
 	public PolygonType type;
+	public Vector2 origin = new Vector2();
 
-	public VertexList(Array<Vector2> vertices, PolygonType type, int flag){
+	public VertexList(Array<Vector2> vertices, PolygonType type, Material material){
 		this.vertices = vertices;
 		this.type = type;
-		this.flag = flag;
-		this.material = flagMaterial();
+		this.material = material;
 	}
 	
 	/**Creates a copy of the specified VertexList**/
@@ -25,9 +24,7 @@ public class VertexList{
 		for(Vector2 vertice : other.vertices)
 			vertices.add(vertice.cpy());
 		this.type = other.type;
-		this.flag = other.flag;
 		this.material = other.material;
-		this.flag = other.material.ordinal();
 	}
 	
 
@@ -143,14 +140,6 @@ public class VertexList{
 			vertice.add(avg);
 		}
 
-	}
-
-	public Material flagMaterial(){
-		return Material.values()[flag];
-	}
-
-	public Material material(){
-		return Material.values()[flag];
 	}
 
 	@SuppressWarnings("unused")
