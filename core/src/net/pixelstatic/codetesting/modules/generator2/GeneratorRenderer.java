@@ -12,7 +12,7 @@ import com.jhlabs.image.CellularFilter;
 public class GeneratorRenderer extends Module{
 	final int scl = 5;
 	SpriteBatch batch;
-	TreeGenerator tree;
+	TreeGenerator[] trees;
 
 	static class Pixel{
 		Material material;
@@ -55,13 +55,17 @@ public class GeneratorRenderer extends Module{
 	@Override
 	public void update(){
 		if(Gdx.input.isKeyPressed(Keys.ESCAPE)) Gdx.app.exit();
-		if(Gdx.input.isKeyJustPressed(Keys.R)) tree.reset();
+		//if(Gdx.input.isKeyJustPressed(Keys.R)) tree.reset();
 		draw();
 	}
 
 	void draw(){
 		Gdx.gl.glClearColor(0, 0, 0, 0);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		
+		int speed = 3;
+		
+		TreeGenerator tree = trees[(int)(Math.abs(((int)(Gdx.graphics.getFrameId() / speed) % (trees.length*2)) - trees.length) * 9f/10f)];
 		batch.begin();
 		batch.draw(tree.texture, Gdx.graphics.getWidth() / 2 - tree.width * scl / 2, Gdx.graphics.getHeight() / 2 - tree.height * scl / 2, tree.width * scl, tree.height * scl);
 		batch.end();
@@ -70,8 +74,15 @@ public class GeneratorRenderer extends Module{
 	@Override
 	public void init(){
 		batch = new SpriteBatch();
-		tree = new TreeGenerator();
-		tree.reset();
+		trees = new TreeGenerator[10];
+		float maxrot = 3f;
+		for(int i = 0; i < trees.length; i ++){
+			TreeGenerator tree = new TreeGenerator();
+			trees[i] = tree;
+			VertexGenerator.rot = (float)(i) / trees.length * maxrot;
+			tree.reset();
+		}
+		
 	}
 
 	public void resize(int width, int height){

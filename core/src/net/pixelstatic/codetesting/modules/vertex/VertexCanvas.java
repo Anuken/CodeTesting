@@ -14,23 +14,15 @@ public class VertexCanvas{
 	static VertexGUI gui;
 	int index;
 	VertexList list;
-	//PolygonType type = PolygonType.polygon;
 	TextButton button;
-	//Material material = Material.bone;
 	String name;
 	ActorAlign align;
-	//Array<Vector2> vertices = new Array<Vector2>();
 	boolean symmetry;
 
 	public VertexCanvas(String name, int index){
 		this.index = index;
 		this.name = name;
 		list = new VertexList(new Array<Vector2>(), PolygonType.polygon, 0);
-	}
-
-	void activateSymmetry(){
-		symmetry = !symmetry;
-		if(symmetry) clear();
 	}
 	
 	public Array<Vector2> vertices(){

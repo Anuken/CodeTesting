@@ -31,6 +31,8 @@ public class Patterns{
 	public static float leaves(int x, int y){
 		int nscl = 6; // noise scale
 		int mag = 5; //noise magnitutde
+		x = Math.abs(x);
+		y = Math.abs(y);
 		return bark[bark.length-1-(y+(int)noise(x,y,nscl,mag)) % bark.length][(x+(int)noise(x,y,nscl,mag)) % bark.length];
 	}
 	

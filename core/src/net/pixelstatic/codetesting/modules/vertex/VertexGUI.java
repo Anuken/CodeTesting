@@ -76,7 +76,6 @@ public class VertexGUI extends Module{
 		for(VertexCanvas canvas : canvases){
 			if(canvas == this.canvas) continue;
 			drawVertices(canvas, canvas.vertices(), false);
-			if(canvas.symmetry && drawing) drawVertices(canvas, mirror(canvas.vertices()), true);
 		}
 		
 		drawVertices(canvas, canvas.vertices(), false);
@@ -187,8 +186,6 @@ public class VertexGUI extends Module{
 		if(Gdx.input.isKeyPressed(Keys.A)) offsetx -= speed;
 
 		if(Gdx.input.isKeyPressed(VertexInput.alt_key)){
-			//for(VertexCanvas canvas : canvases)
-			//	canvas.translate(offsetx, offsety);
 			this.offsetx += offsetx;
 			this.offsety += offsety;
 		}else{
@@ -249,7 +246,10 @@ public class VertexGUI extends Module{
 		symmetry.setSize(field.getWidth(), 30);
 		symmetry.addListener(new ClickListener(){
 			public void clicked(InputEvent event, float x, float y){
-				if(drawMode) canvas.activateSymmetry();
+				if(drawMode){ 
+					canvas.symmetry = !canvas.symmetry;
+					if(canvas.symmetry) canvas.clear();
+				}
 			}
 		});
 

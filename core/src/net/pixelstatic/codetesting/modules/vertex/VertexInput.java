@@ -35,7 +35,6 @@ public class VertexInput implements InputProcessor{
 
 	@Override
 	public boolean keyTyped(char character){
-		// TODO Auto-generated method stub
 		return false;
 	}
 
@@ -57,16 +56,6 @@ public class VertexInput implements InputProcessor{
 				gui.canvas.vertices().removeValue(gui.selectedVertice(), true);
 				gui.vertice = null;
 			}
-			/*
-			Vector2 closest = gui.closestVertice();
-			gui.object.vectors.insert(gui.object.vectors.indexOf(closest, true) + closest.x < 0 ? 1 : 0, closest.cpy());
-			gui.vertice = closest;
-			if(!Gdx.input.isButtonPressed(Buttons.LEFT)){
-				gui.input();
-
-				gui.vertice = null;
-			}
-			*/
 		}
 		return false;
 	}
@@ -82,13 +71,11 @@ public class VertexInput implements InputProcessor{
 
 	@Override
 	public boolean touchDragged(int screenX, int screenY, int pointer){
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public boolean mouseMoved(int screenX, int screenY){
-		// TODO Auto-generated method stub
 		return false;
 	}
 
@@ -97,8 +84,6 @@ public class VertexInput implements InputProcessor{
 		if(Gdx.input.isKeyPressed(alt_key)){
 		for(VertexCanvas canvas : gui.canvases)
 			canvas.list.scale(amount > 0 ? 0.9f : 1.1f);
-		}else{
-		//	gui.canvas.scale(amount > 0 ? 0.9f : 1.1f);
 		}
 		return false;
 	}

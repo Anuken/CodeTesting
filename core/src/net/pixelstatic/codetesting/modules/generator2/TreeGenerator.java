@@ -60,7 +60,7 @@ public class TreeGenerator{
 			for(int cy = 0;cy < height;cy ++){
 				int y = height - 1 - cy;
 				if(y == 0) continue;
-				int offsetx = x - 3;
+				int offsetx = x - 2;
 				int offsety = y + 3;
 
 				GeneratorPolygon poly = getPixelPolygon(offsetx, offsety);
@@ -156,11 +156,11 @@ public class TreeGenerator{
 		float selflightscale = 0.4f; //default is 0.7f
 		float globallightscale = 0.8f; //default is 0.6f;
 
-		float dist =pixel.polygon.height()/3f+gscl + selflightscale * (((1.5f) - pixel.polygon.lightVertice.dst(project(x - width / 2), project(y))));
+		float dist = pixel.polygon.height()/3f+gscl + selflightscale * (((1.5f) - pixel.polygon.lightVertice.dst(project(x - width / 2), project(y))));
 		float lightdist = gscl + globallightscale * ((1f - lightsource.dst(project(x - width / 2), project(y))));
 	
 		
-		float scl = Patterns.leaves(x, y) +dist + lightdist+ Patterns.noise(x, y, 4f, 0.2f) + Patterns.mod(x, y, 0.07f);
+		float scl = Patterns.leaves(x + (int)(pixel.polygon.center.x/scale), y + (int)(pixel.polygon.center.y/scale)) +dist + lightdist+ Patterns.noise(x, y, 4f, 0.2f) + Patterns.mod(x, y, 0.07f);
 		pixmap.drawPixel(x, cy, Color.rgba8888(brighter(new Color(pixmap.getPixel(x, cy)), round * (int)(((scl * 0.5f) / round)))));
 
 	}
@@ -170,9 +170,10 @@ public class TreeGenerator{
 		
 		VertexGenerator.generatePineTree(object);
 		
-		object.normalize();
+		//object.normalize();
+		object.scl(0.0014f);
 		object.alignBottom();
-		object.alignSides();
+		//object.alignSides();
 		
 		Rectangle rect = object.boundingBox();
 		lightsource.set(rect.x, rect.height);

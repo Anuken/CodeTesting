@@ -22,7 +22,6 @@ public class VertexObject{
 		for(VertexCanvas canvas : canvases){
 			lists.put(canvas.name, new VertexList(canvas.list.vertices, canvas.list.type, canvas.list.material.ordinal()));
 		}
-		//normalize();
 	}
 	
 	public ObjectMap<String, Polygon> getPolygons(){
@@ -82,6 +81,12 @@ public class VertexObject{
 			for(Vector2 vertice : poly.vertices)
 				vertice.y -= min; 
 	}
+	
+	public void scl(float amount){
+		for(VertexList poly : lists.values())
+			for(Vector2 vertice : poly.vertices)
+				vertice.scl(amount);
+	}
 
 	public void normalize(){
 		float max = 1;
@@ -93,7 +98,6 @@ public class VertexObject{
 
 		for(VertexList poly : lists.values())
 			for(Vector2 vertice : poly.vertices){
-				
 				vertice.scl(1f / max);
 			}
 	}
