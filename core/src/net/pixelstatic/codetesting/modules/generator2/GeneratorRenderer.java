@@ -70,7 +70,7 @@ public class GeneratorRenderer extends Module{
 	//	TreeGenerator tree = trees[(int)(Math.abs(((int)(Gdx.graphics.getFrameId() / speed) % (trees.length*2)) - trees.length) * 9f/10f)];
 		TreeGenerator tree = trees[0];
 		batch.begin();
-		batch.draw(tree.texture, Gdx.graphics.getWidth() / 2 - tree.width * scl / 2, Gdx.graphics.getHeight() / 2 - tree.height * scl / 2, tree.width * scl, tree.height * scl);
+		batch.draw(tree.getTexture(), Gdx.graphics.getWidth() / 2 - tree.width * scl / 2, Gdx.graphics.getHeight() / 2 - tree.height * scl / 2, tree.width * scl, tree.height * scl);
 		batch.end();
 	}
 
@@ -82,7 +82,7 @@ public class GeneratorRenderer extends Module{
 		for(int i = 0; i < trees.length; i ++){
 			TreeGenerator tree = new TreeGenerator(VertexLoader.read(Gdx.files.internal(filename)));
 			trees[i] = tree;
-			VertexGenerator.rot = (float)(i) / trees.length * maxrot;
+			tree.getVertexGenerator().segmentRotation = (float)(i) / trees.length * maxrot;
 			tree.generate();
 		}
 		

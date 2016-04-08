@@ -18,6 +18,18 @@ public class VertexList{
 		this.flag = flag;
 		this.material = flagMaterial();
 	}
+	
+	/**Creates a copy of the specified VertexList**/
+	public VertexList(VertexList other){
+		vertices = new Array<Vector2>();
+		for(Vector2 vertice : other.vertices)
+			vertices.add(vertice.cpy());
+		this.type = other.type;
+		this.flag = other.flag;
+		this.material = other.material;
+		this.flag = other.material.ordinal();
+	}
+	
 
 	public float height(){
 		float max = 0;

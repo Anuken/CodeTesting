@@ -17,13 +17,14 @@ import com.badlogic.gdx.utils.ObjectMap;
 
 public class TreeGenerator implements Disposable{
 	public final int width = 60, height = 80;
-	public Pixel[][] materials;
-	public Pixmap pixmap;
-	public Texture texture;
-	public VertexObject object;
-	public Array<GeneratorPolygon> polygons;
-	public Vector2 lightsource = new Vector2();
-	public float scale = 1/60f, trunkLightScale = 1f;
+	private Pixel[][] materials;
+	private Pixmap pixmap;
+	private Texture texture;
+	private VertexObject object;
+	private Array<GeneratorPolygon> polygons;
+	private Vector2 lightsource = new Vector2();
+	private VertexGenerator vertexgenerator;
+	private float scale = 1/60f, trunkLightScale = 1f;
 
 	private void processPolygons(){
 		drawMaterials();
@@ -137,7 +138,8 @@ public class TreeGenerator implements Disposable{
 		float m = 0f;
 		m = (Patterns.nMod(x, y, 0.2f));
 		float dist = pixel.polygon.distance(project(x-width/2), project(y));
-		m += dist*10f *trunkLightScale;
+		m += dist*10f / (pixel.polygon.dimensions()*3.4f);
+		if(m > 1.4f) m /= 2f;
 		//print(dist);
 		m = round(m, 0.4f);
 		m += 1f;
@@ -164,7 +166,7 @@ public class TreeGenerator implements Disposable{
 	}
 	
 	private void loadPolygons(){
-		VertexGenerator.generatePineTree(object);
+		vertexgenerator.generatePineTree(object);
 		
 		object.normalize();
 		//object.scl(0.0014f);
@@ -197,6 +199,7 @@ public class TreeGenerator implements Disposable{
 		materials = new Pixel[width][height];
 		pixmap = new Pixmap(width, height, Format.RGBA8888);
 		texture = new Texture(pixmap);
+		vertexgenerator = new VertexGenerator();
 	}
 	
 	/** Resets the internal pixmap and generates the tree using the {@link VertexObject} provided. **/
@@ -225,8 +228,16 @@ public class TreeGenerator implements Disposable{
 
 	}
 	
+	public void setVertexObject(VertexObject object){
+		this.object = object;
+	}
+	
 	public Texture getTexture(){
 		return texture;
+	}
+	
+	public VertexGenerator getVertexGenerator(){
+		return vertexgenerator;
 	}
 	
 	/**Returns an integer projected to polygon coordinates.**/

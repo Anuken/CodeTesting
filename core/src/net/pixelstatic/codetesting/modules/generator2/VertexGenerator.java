@@ -11,19 +11,19 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
 public class VertexGenerator{
-	static float rot = 0;
+	public float segmentRotation = 0;
 	
 
 	/** Creates a pine tree by stacking segment polygons on top of each other.*
 	 * @param part the polygon segment to be stacked.*/
-	public static void generatePineTree(VertexObject part){
+	public void generatePineTree(VertexObject part){
 				
 		VertexList list = part.lists.get("leafsegment");
 		//list.scale(0.01f);
 		part.lists.remove("leafsegment");
 		//part.lists.remove("trunk");
 		
-		list.alignBottom();
+	//	list.alignBottom();
 		float height = list.height();
 		
 		float scl = 1f;
@@ -33,7 +33,7 @@ public class VertexGenerator{
 		float rotatecompactness = 0.7f;
 		for(int i = 0; i < 10; i ++){
 			VertexList newlist = new VertexList(new Array<Vector2>(), PolygonType.polygon, Material.leaves.ordinal());
-			float rotation = lastrotation*0.9f + rot;
+			float rotation = lastrotation*0.9f + segmentRotation;
 			Vector2 rotatevector = new Vector2(0,scl*height*compactness*rotatecompactness).rotate(rotation);
 			for(Vector2 vector : list.vertices)
 				newlist.vertices.add(vector.cpy().scl(scl));
@@ -47,7 +47,7 @@ public class VertexGenerator{
 			scl -= seg;
 		}
 		
-		part.lists.get("trunk").translate(0, 185f);
+		//part.lists.get("trunk").translate(0, 185f);
 	
 	}
 }

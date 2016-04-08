@@ -72,7 +72,7 @@ public class GeneratorPolygon{
 	public float distance(float x, float y){
 		point.set(x,y);
 		float minDist = Float.MAX_VALUE;
-		float ignoration = 0.11f;
+		float ignoration = dimensions()/20f;
 		for(int i =0; i < list.vertices.size; i ++){
 			Vector2 vector = list.vertices.get(i);
 			Vector2 next = (i == list.vertices.size - 1) ? list.vertices.get(0) : list.vertices.get(i+1);
@@ -90,6 +90,10 @@ public class GeneratorPolygon{
 
 	public boolean above(GeneratorPolygon other){
 		return other == null || layer > other.layer;
+	}
+	
+	public float dimensions(){
+		return Math.max(boundingbox.width, boundingbox.height);
 	}
 
 	public float height(){

@@ -20,7 +20,7 @@ public class VertexObject{
 
 	public VertexObject(Array<VertexCanvas> canvases){
 		for(VertexCanvas canvas : canvases){
-			lists.put(canvas.name, new VertexList(canvas.list.vertices, canvas.list.type, canvas.list.material.ordinal()));
+			lists.put(canvas.name, new VertexList(canvas.list));
 		}
 	}
 	
@@ -54,7 +54,6 @@ public class VertexObject{
 			array[i*2+1] = vertices.get(i).y;
 		}
 		return new Polygon(array);
-		//Polygon polygon = 
 	}
 	
 	public void alignSides(){
@@ -76,7 +75,7 @@ public class VertexObject{
 		
 		for(VertexList poly : lists.values())
 			for(Vector2 vertice : poly.vertices)
-				if(vertice.y < min) min = vertice.y;
+				min = Math.min(vertice.y, min);
 		for(VertexList poly : lists.values())
 			for(Vector2 vertice : poly.vertices)
 				vertice.y -= min; 

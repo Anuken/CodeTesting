@@ -33,6 +33,7 @@ public class VertexGUI extends Module{
 	final Color nodeColor = Color.GREEN;
 	final float grabrange = 20;
 	ShapeRenderer shape = new ShapeRenderer();
+	Dialog infodialog;
 	Array<VertexCanvas> canvases = new Array<VertexCanvas>();
 	VertexCanvas selectedCanvas;
 	Vector2 vertice;
@@ -72,13 +73,13 @@ public class VertexGUI extends Module{
 		delete.setTouchable( !drawMode ? Touchable.disabled : Touchable.enabled);
 		smooth.setColor( !drawMode ? Color.LIGHT_GRAY : Color.WHITE);
 		smooth.setTouchable( !drawMode ? Touchable.disabled : Touchable.enabled);
-		
-		}
-	
+
+	}
+
 	void drawTree(){
 		editor.stage.getBatch().setColor(Color.WHITE);
 		editor.stage.getBatch().begin();
-		editor.stage.getBatch().draw(tree.getTexture(), 0 ,0, tree.getTexture().getWidth() * treeScale, tree.getTexture().getHeight() * treeScale);
+		editor.stage.getBatch().draw(tree.getTexture(), 0, 0, tree.getTexture().getWidth() * treeScale, tree.getTexture().getHeight() * treeScale);
 		editor.stage.getBatch().end();
 	}
 
@@ -86,28 +87,27 @@ public class VertexGUI extends Module{
 		//draw center of coords
 		shape.set(ShapeType.Line);
 		shape.setColor(Color.BLUE);
-		shape.line(Gdx.graphics.getWidth()/2+offsetx, 0, Gdx.graphics.getWidth()/2+offsetx, Gdx.graphics.getHeight());
-		shape.line(0, Gdx.graphics.getHeight()/2+offsety, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()/2+offsety);
+		shape.line(Gdx.graphics.getWidth() / 2 + offsetx, 0, Gdx.graphics.getWidth() / 2 + offsetx, Gdx.graphics.getHeight());
+		shape.line(0, Gdx.graphics.getHeight() / 2 + offsety, Gdx.graphics.getWidth(), Gdx.graphics.getHeight() / 2 + offsety);
 
-		
 		for(VertexCanvas canvas : canvases){
 			if(canvas == this.selectedCanvas) continue;
 			drawVertices(canvas, canvas.vertices(), false);
 		}
-		
+
 		drawVertices(selectedCanvas, selectedCanvas.vertices(), false);
 		if(selectedCanvas.symmetry && drawing) drawVertices(selectedCanvas, mirror(selectedCanvas.vertices()), true);
-	
 
 		add.setPosition(0, Gdx.graphics.getHeight() - add.getHeight() * (canvases.size + 1));
 
 		shape.set(ShapeType.Line);
 		shape.setColor(Color.MAGENTA);
 		if(selectedCanvas.symmetry && drawing) shape.line(centerx(), 0, centerx(), Gdx.graphics.getHeight());
-		
+
 		float lineoffset = 1f;
 		shape.setColor(Color.RED);
-		shape.rect(lineoffset, lineoffset, tree.width*treeScale, tree.height*treeScale);	}
+		shape.rect(lineoffset, lineoffset, tree.width * treeScale, tree.height * treeScale);
+	}
 
 	float centerx(){
 		return Gdx.graphics.getWidth() / 2 + offsetx;
@@ -195,23 +195,36 @@ public class VertexGUI extends Module{
 		}
 
 		if(Gdx.input.isButtonPressed(Buttons.LEFT) && (Gdx.input.getX() < Gdx.graphics.getWidth() - 130 || Gdx.input.getY() > 30)){
-		//	editor.stage.setKeyboardFocus(null);
+			//	editor.stage.setKeyboardFocus(null);
 		}
 		if(editor.stage.getKeyboardFocus() != null) return;
 		float speed = 6f;
 		float offsetx = 0, offsety = 0;
+
+		if(Gdx.input.isKeyJustPressed(Keys.R)){
+			int minvertices = Integer.MAX_VALUE;
+			for(VertexCanvas canvas : canvases)
+				minvertices = Math.min(canvas.list.vertices.size, minvertices);
+			
+			if(minvertices >= 3){
+				tree.setVertexObject(new VertexObject(canvases));
+				tree.generate();
+			}else{
+				showInfo("Each polygon must have at least 3 vertices\nfor the tree to generate!");
+			}
+		}
+
 		if(Gdx.input.isKeyPressed(Keys.W)) offsety += speed;
 		if(Gdx.input.isKeyPressed(Keys.D)) offsetx += speed;
 		if(Gdx.input.isKeyPressed(Keys.S)) offsety -= speed;
 		if(Gdx.input.isKeyPressed(Keys.A)) offsetx -= speed;
 
-		if(!Gdx.input.isKeyPressed(VertexInput.alt_key)){
+		if( !Gdx.input.isKeyPressed(VertexInput.alt_key)){
 			this.offsetx -= offsetx;
 			this.offsety -= offsety;
 		}else{
 			selectedCanvas.list.translate(offsetx, offsety);
 		}
-
 		if(Gdx.input.isKeyJustPressed(Keys.SPACE)) drawMode = !drawMode;
 	}
 
@@ -247,7 +260,7 @@ public class VertexGUI extends Module{
 		});
 
 		align(box, Align.topRight, 1f, 1f, 0, -field.getHeight());
-		
+
 		typebox = new SelectBox<PolygonType>(editor.skin);
 		typebox.setSize(field.getWidth(), field.getHeight());
 		typebox.setItems(PolygonType.values());
@@ -260,14 +273,13 @@ public class VertexGUI extends Module{
 			}
 		});
 
-		align(typebox, Align.topRight, 1f, 1f, 0, -field.getHeight()*2);
-
+		align(typebox, Align.topRight, 1f, 1f, 0, -field.getHeight() * 2);
 
 		symmetry = new TextButton("Symmetry", editor.skin, "toggle");
 		symmetry.setSize(field.getWidth(), 30);
 		symmetry.addListener(new ClickListener(){
 			public void clicked(InputEvent event, float x, float y){
-				if(drawMode){ 
+				if(drawMode){
 					selectedCanvas.symmetry = !selectedCanvas.symmetry;
 					if(selectedCanvas.symmetry) selectedCanvas.clear();
 				}
@@ -285,18 +297,16 @@ public class VertexGUI extends Module{
 		});
 
 		align(overwrite, Align.topRight, 1f, 1f, 0, -field.getHeight() * 4);
-		
+
 		smooth = new TextButton("Smooth", editor.skin);
 		smooth.setSize(field.getWidth(), 30);
 		smooth.addListener(new ClickListener(){
 			public void clicked(InputEvent event, float x, float y){
-				if(!selectedCanvas.list.smooth())
-					JOptionPane.showMessageDialog(null, "calm down m8", "pls", JOptionPane.ERROR_MESSAGE);
+				if(!selectedCanvas.list.smooth())showInfo("Calm down m8");
 			}
 		});
 
 		align(smooth, Align.topRight, 1f, 1f, 0, -field.getHeight() * 5);
-
 
 		clear = new TextButton("Clear", editor.skin);
 		clear.setSize(field.getWidth(), 30);
@@ -322,8 +332,7 @@ public class VertexGUI extends Module{
 		});
 
 		align(delete, Align.topRight, 1f, 1f, 0, -field.getHeight() * 7);
-		
-	
+
 		Button button = new TextButton("Export", editor.skin);
 		button.setSize(field.getWidth(), 30);
 		button.addListener(new ClickListener(){
@@ -374,6 +383,8 @@ public class VertexGUI extends Module{
 
 		editor.stage.addActor(add);
 		
+		infodialog = new Dialog("Info", editor.skin, "dialog").text("").button("Ok", true).key(Keys.ENTER, true).key(Keys.ESCAPE, false);
+
 		selectedCanvas = new VertexCanvas("leafsegment", 0);
 		selectedCanvas.list.material = Material.leaves;
 		canvases.add(selectedCanvas);
@@ -382,7 +393,7 @@ public class VertexGUI extends Module{
 		VertexCanvas trunk = addCanvas("trunk");
 		trunk.list.material = Material.wood;
 	}
-	
+
 	void loadObject(VertexObject object){
 		for(VertexCanvas canvas : canvases)
 			canvas.delete();
@@ -413,6 +424,11 @@ public class VertexGUI extends Module{
 
 	ActorAlign align(Actor actor, int align, float wscl, float hscl, float xoffset, float yoffset){
 		return new ActorAlign(actor, align, wscl, hscl, xoffset, yoffset);
+	}
+
+	public void showInfo(String info){
+		((Label)infodialog.getContentTable().getChildren().get(0)).setText(info);
+		infodialog.show(editor.stage);
 	}
 
 	@Override
