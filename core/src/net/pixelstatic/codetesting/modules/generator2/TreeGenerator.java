@@ -22,7 +22,9 @@ public class TreeGenerator implements Disposable{
 	private Array<GeneratorPolygon> polygons;
 	private Vector2 lightsource = new Vector2();
 	private VertexGenerator vertexgenerator;
-	private float scale = 1/60f, trunkLightScale = 1f;
+	private float scale = 1 / 60f;
+	private float canvasScale = 1 / 1000f;
+	private boolean autoscale = true;
 
 	private void processPolygons(){
 		drawMaterials();
@@ -30,7 +32,7 @@ public class TreeGenerator implements Disposable{
 		addShadows();
 		drawOutlines();
 	}
-	
+
 	private void drawOutlines(){
 		for(int x = 0;x < width;x ++){
 			for(int cy = 0;cy < height;cy ++){
@@ -132,46 +134,48 @@ public class TreeGenerator implements Disposable{
 
 	private void generateLogPattern(int x, int y, int cy, Pixel pixel){
 		Color color = new Color(pixmap.getPixel(x, cy));
-		
+
 		float m = 0f;
 		m = (Patterns.nMod(x, y, 0.2f));
-		float dist = pixel.polygon.distance(project(x-width/2), project(y));
-		m += dist*10f / (pixel.polygon.dimensions()*3.4f);
+		float dist = pixel.polygon.distance(project(x - width / 2), project(y));
+		m += dist * 10f / (pixel.polygon.dimensions() * 3.4f);
 		if(m > 1.4f) m /= 2f;
 		//print(dist);
 		m = round(m, 0.4f);
 		m += 1f;
 		color.mul(m, m, m, 1f);
-		
-		
+
 		pixmap.drawPixel(x, cy, Color.rgba8888(color));
 	}
 
 	private void generateLeafPattern(int x, int y, int cy, Pixel pixel){
 		float round = 0.1f;
 		float gscl = -0.1f;
-		
+
 		float selflightscale = 0.4f; //default is 0.7f
 		float globallightscale = 0.8f; //default is 0.6f;
 
-		float dist = pixel.polygon.height()/3f+gscl + selflightscale * (((1.5f) - pixel.polygon.lightVertice.dst(project(x - width / 2), project(y))));
+		float dist = pixel.polygon.height() / 3f + gscl + selflightscale * (((1.5f) - pixel.polygon.lightVertice.dst(project(x - width / 2), project(y))));
 		float lightdist = gscl + globallightscale * ((1f - lightsource.dst(project(x - width / 2), project(y))));
-	
-		
-		float scl = Patterns.leaves(x + (int)(pixel.polygon.center.x/scale), y + (int)(pixel.polygon.center.y/scale)) +dist + lightdist+ Patterns.noise(x, y, 4f, 0.2f) + Patterns.mod(x, y, 0.07f);
+
+		float scl = Patterns.leaves(x + (int)(pixel.polygon.center.x / scale), y + (int)(pixel.polygon.center.y / scale)) + dist + lightdist + Patterns.noise(x, y, 4f, 0.2f) + Patterns.mod(x, y, 0.07f);
 		pixmap.drawPixel(x, cy, Color.rgba8888(brighter(new Color(pixmap.getPixel(x, cy)), round * (int)(((scl * 0.5f) / round)))));
 
 	}
-	
+
 	private void loadPolygons(){
 		object.alignBottom();
 		object.alignSides();
 		vertexgenerator.generatePineTree(object);
-		object.normalize();
-		
+		if(autoscale){
+			object.normalize();
+		}else{
+			object.scl(canvasScale);
+		}
+
 		Rectangle rect = object.boundingBox();
 		lightsource.set(rect.x, rect.height);
-		
+
 		ObjectMap<String, Polygon> rawpolygons = object.getPolygons();
 
 		polygons = new Array<GeneratorPolygon>();
@@ -189,12 +193,11 @@ public class TreeGenerator implements Disposable{
 			}
 		}
 	}
-	
+
 	public TreeGenerator(){
 		this(null);
 	}
-	
-	
+
 	public TreeGenerator(VertexObject object){
 		this.object = object;
 		materials = new Pixel[width][height];
@@ -202,13 +205,13 @@ public class TreeGenerator implements Disposable{
 		texture = new Texture(pixmap);
 		vertexgenerator = new VertexGenerator();
 	}
-	
+
 	/** Resets the internal pixmap and generates the tree using the {@link VertexObject} provided. **/
 	public void generate(){
 		if(object == null){
 			throw new RuntimeException("Set a vertex object before calling generate()!");
 		}
-		
+
 		long starttime = System.currentTimeMillis();
 		Pixmap.setBlending(Blending.None);
 		for(int x = 0;x < width;x ++){
@@ -218,38 +221,46 @@ public class TreeGenerator implements Disposable{
 			}
 		}
 		Pixmap.setBlending(Blending.SourceOver);
-		
+
 		print("Loading polygons...");
 		loadPolygons();
-		
+
 		print("Procesing polygons...");
 		processPolygons();
-		
+
 		print("Done generating.");
 		texture.draw(pixmap, 0, 0);
-		
+
 		long endtime = System.currentTimeMillis();
-		print("Time taken: " + (endtime -starttime) + " ms.");
+		print("Time taken: " + (endtime - starttime) + " ms.");
 
 	}
-	
+
 	public void setVertexObject(VertexObject object){
 		this.object = object;
 	}
-	
+
 	public Texture getTexture(){
 		return texture;
 	}
-	
+
 	public VertexGenerator getVertexGenerator(){
 		return vertexgenerator;
 	}
-	
+
+	public void setAutoScale(boolean autoscale){
+		this.autoscale = autoscale;
+	}
+
+	public void setCanvasScale(float scale){
+		this.canvasScale = scale;
+	}
+
 	/**Returns an integer projected to polygon coordinates.**/
 	public float project(int i){
 		return i * scale;
 	}
-	
+
 	private void set(int x, int y, Material material, GeneratorPolygon polygon){
 		if(x < 0 || y < 0 || x >= width || y >= height) return;
 		if( !(materials[x][y].material == null || materials[x][y].material.ordinal() < material.ordinal() || polygon.above(getPixelPolygon(x, y)))) return;
@@ -261,7 +272,7 @@ public class TreeGenerator implements Disposable{
 		if(x < 0 || y < 0 || x >= width || y >= height) return null;
 		return materials[x][y].polygon;
 	}
-	
+
 	private float round(float a, float b){
 		return b * (int)(a / b);
 	}
@@ -270,16 +281,16 @@ public class TreeGenerator implements Disposable{
 		if(x < 0 || y < 0 || x >= width || y >= height) return true;
 		return !pixel.polygon.above(materials[x][y].polygon);
 	}
-	
+
 	private Color brighter(Color color, float a){
-		color.add(a, a, -a*2f, 0f);
+		color.add(a, a, -a * 2f, 0f);
 		return color;
 	}
-	
+
 	void print(Object o){
 		System.out.println(o);
 	}
-	
+
 	static class Pixel{
 		Material material;
 		GeneratorPolygon polygon;

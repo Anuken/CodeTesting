@@ -267,6 +267,33 @@ public class VertexGUI extends Module{
 		});
 
 		add(rotationslider);
+		
+		text("Scale: 1/1000").setName("scaletext");;
+
+		Slider scaleslider = new Slider(1, 3000, 10f, false, skin);
+		scaleslider.setValue(1000);
+		scaleslider.addListener(new ChangeListener(){
+			public void changed(ChangeEvent event, Actor actor){
+				float value = (scaleslider.getValue());
+				((Label)table.findActor("scaletext")).setText("Scale: 1/" + (int)value);
+				editor.tree.setCanvasScale(1f/value);
+			}
+		});
+
+		add(scaleslider);
+		
+		CheckBox scalebox = new CheckBox("Autoscale", skin);
+		scalebox.setChecked(true);
+		scalebox.addListener(new ChangeListener(){
+			public void changed(ChangeEvent event, Actor actor){
+				if(editor != null)editor.tree.setAutoScale(scalebox.isChecked());
+				scaleslider.setTouchable(scalebox.isChecked() ? Touchable.disabled : Touchable.enabled);
+				scaleslider.setColor(scalebox.isChecked() ? Color.GRAY : Color.WHITE);
+			}
+		});
+		scalebox.fire(new ChangeListener.ChangeEvent());
+		
+		add(scalebox);
 
 		infodialog = new Dialog("Info", skin, "dialog").text("").button("Ok", true).key(Keys.ENTER, true).key(Keys.ESCAPE, false);
 
