@@ -1,7 +1,5 @@
 package net.pixelstatic.codetesting.modules.generator2;
 
-import net.pixelstatic.codetesting.modules.generator2.GeneratorRenderer.Material;
-import net.pixelstatic.codetesting.modules.generator2.GeneratorRenderer.Pixel;
 import net.pixelstatic.codetesting.modules.vertex.VertexObject;
 import net.pixelstatic.codetesting.modules.vertex.VertexObject.PolygonType;
 
@@ -280,6 +278,11 @@ public class TreeGenerator implements Disposable{
 	
 	void print(Object o){
 		System.out.println(o);
+	}
+	
+	static class Pixel{
+		Material material;
+		GeneratorPolygon polygon;
 	}
 
 	@Override

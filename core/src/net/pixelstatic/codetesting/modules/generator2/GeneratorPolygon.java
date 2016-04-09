@@ -1,6 +1,5 @@
 package net.pixelstatic.codetesting.modules.generator2;
 
-import net.pixelstatic.codetesting.modules.generator2.GeneratorRenderer.Material;
 import net.pixelstatic.codetesting.modules.vertex.VertexList;
 
 import com.badlogic.gdx.math.*;

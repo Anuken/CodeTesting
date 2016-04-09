@@ -1,7 +1,7 @@
 package net.pixelstatic.codetesting.modules.vertex;
 
 import net.pixelstatic.codetesting.modules.Module;
-import net.pixelstatic.codetesting.modules.generator2.GeneratorRenderer.Material;
+import net.pixelstatic.codetesting.modules.generator2.Material;
 import net.pixelstatic.codetesting.modules.generator2.TreeGenerator;
 import net.pixelstatic.codetesting.modules.vertex.VertexObject.PolygonType;
 
