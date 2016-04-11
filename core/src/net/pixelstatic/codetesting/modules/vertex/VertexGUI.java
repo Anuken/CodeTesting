@@ -4,6 +4,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
 import net.pixelstatic.codetesting.modules.Module;
+import net.pixelstatic.codetesting.modules.generator2.Filter;
 import net.pixelstatic.codetesting.modules.generator2.Material;
 import net.pixelstatic.codetesting.modules.vertex.VertexObject.PolygonType;
 
@@ -227,6 +228,86 @@ public class VertexGUI extends Module{
 			}
 		});
 
+		Dialog editdialog = new Dialog("Filters", skin, "dialog"){
+			public float getPrefWidth(){return 480f;}
+			public float getPrefHeight(){return 300f;}
+		};
+
+		TextButton closebutton = new TextButton("x", skin);
+		closebutton.addListener(new ClickListener(){
+			public void clicked(InputEvent event, float x, float y){
+				editdialog.hide();
+			}
+		});
+
+		editdialog.getTitleTable().add(closebutton).height(20);
+	//	editdialog.setResizable(true);
+		
+		Label materiallabel = new Label("Material:", skin);
+		editdialog.getContentTable().top().left().add(materiallabel).align(Align.topLeft).row();
+		
+		SelectBox<Material> materialbox = new SelectBox<Material>(skin);
+		materialbox.setItems(Material.values());
+		materialbox.addListener(new ChangeListener(){
+			public void changed(ChangeEvent event, Actor actor){
+				Filter[] filters = Filter.values();
+				for(Filter filter : filters){
+					((CheckBox)editdialog.getContentTable().findActor(filter.name() + ("check"))).setChecked(editor.tree.isFilterEnabled(materialbox.getSelected(), filter));
+				}
+				//editor.tree.setFilter(materialbox.getSelected(), filter, checkbox.isChecked());
+			}
+		});
+		editdialog.getContentTable().top().left().add(materialbox).height(30).align(Align.topLeft).row();
+		
+		Label filterlabel = new Label("Filters:", skin);
+		editdialog.getContentTable().top().left().add(filterlabel).align(Align.topLeft).row();;
+		
+		for(Filter filter : Filter.values()){
+			CheckBox checkbox = new CheckBox(filter.getName(), skin);
+			checkbox.setName(filter.name() + "check");
+			checkbox.addListener(new ChangeListener(){
+				public void changed(ChangeEvent event, Actor actor){
+					editor.tree.setFilter(materialbox.getSelected(), filter, checkbox.isChecked());
+				}
+			});
+			editdialog.getContentTable().top().left().add(checkbox).align(Align.topLeft);
+			if(filter.editable()){
+				TextButton editbutton = new TextButton("Edit", skin);
+				editbutton.addListener(new ClickListener(){
+					public void clicked(InputEvent event, float x, float y){
+			
+						
+						Dialog dialog = new Dialog("Edit Filter", skin, "dialog"){
+							public float getPrefWidth(){return 200f;}
+							public float getPrefHeight(){return 100f;}
+						};
+						TextButton editclosebutton = new TextButton("x", skin);
+						editclosebutton.addListener(new ClickListener(){
+							public void clicked(InputEvent event, float x, float y){
+								dialog.hide();
+							}
+						});
+						
+						dialog.getTitleTable().add(editclosebutton).height(20);
+						dialog.key(Keys.ENTER, true).key(Keys.ESCAPE, false);
+						dialog.show(stage);
+
+					}
+				});
+				editdialog.getContentTable().add(editbutton).width(60);
+
+			}
+			editdialog.getContentTable().row();
+		}
+
+		TextButton advancedbutton = new TextButton("Filters", skin);
+		advancedbutton.addListener(new ClickListener(){
+			public void clicked(InputEvent event, float x, float y){
+				editdialog.show(stage);
+			}
+		});
+		add(advancedbutton);
+
 		text("Segments: 10").setName("segmenttext");;
 
 		Slider segmentslider = new Slider(1, 40, 1, false, skin);
@@ -256,7 +337,7 @@ public class VertexGUI extends Module{
 
 		text("Rotation: 0").setName("rotationtext");;
 
-		Slider rotationslider = new Slider(-10, 10, 0.1f, false, skin);
+		Slider rotationslider = new Slider( -10, 10, 0.1f, false, skin);
 		rotationslider.setValue(0f);
 		rotationslider.addListener(new ChangeListener(){
 			public void changed(ChangeEvent event, Actor actor){
@@ -267,7 +348,7 @@ public class VertexGUI extends Module{
 		});
 
 		add(rotationslider);
-		
+
 		text("Scale: 1/1000").setName("scaletext");;
 
 		Slider scaleslider = new Slider(1, 3000, 10f, false, skin);
@@ -276,23 +357,23 @@ public class VertexGUI extends Module{
 			public void changed(ChangeEvent event, Actor actor){
 				float value = (scaleslider.getValue());
 				((Label)table.findActor("scaletext")).setText("Scale: 1/" + (int)value);
-				editor.tree.setCanvasScale(1f/value);
+				editor.tree.setCanvasScale(1f / value);
 			}
 		});
 
 		add(scaleslider);
-		
+
 		CheckBox scalebox = new CheckBox("Autoscale", skin);
 		scalebox.setChecked(true);
 		scalebox.addListener(new ChangeListener(){
 			public void changed(ChangeEvent event, Actor actor){
-				if(editor != null)editor.tree.setAutoScale(scalebox.isChecked());
+				if(editor != null) editor.tree.setAutoScale(scalebox.isChecked());
 				scaleslider.setTouchable(scalebox.isChecked() ? Touchable.disabled : Touchable.enabled);
 				scaleslider.setColor(scalebox.isChecked() ? Color.GRAY : Color.WHITE);
 			}
 		});
 		scalebox.fire(new ChangeListener.ChangeEvent());
-		
+
 		add(scalebox);
 
 		infodialog = new Dialog("Info", skin, "dialog").text("").button("Ok", true).key(Keys.ENTER, true).key(Keys.ESCAPE, false);

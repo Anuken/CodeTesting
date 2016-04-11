@@ -8,7 +8,7 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-		//config.samples = 10;
+		System.setProperty("org.lwjgl.opengl.Display.allowSoftwareOpenGL", "true");
 		new LwjglApplication(new CodeTester(), config);
 	}
 }

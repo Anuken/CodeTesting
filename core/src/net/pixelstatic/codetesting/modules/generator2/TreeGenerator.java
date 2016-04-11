@@ -25,6 +25,7 @@ public class TreeGenerator implements Disposable{
 	private float scale = 1 / 60f;
 	private float canvasScale = 1 / 1000f;
 	private boolean autoscale = true;
+	private ObjectMap<Material, ObjectMap<Filter, Boolean>> filters = new ObjectMap<Material, ObjectMap<Filter, Boolean>>();
 
 	private void processPolygons(){
 		drawMaterials();
@@ -84,6 +85,7 @@ public class TreeGenerator implements Disposable{
 		}
 	}
 
+	@SuppressWarnings("unused")
 	private void crystallize(){
 		int[] colors = new int[width * height];
 		//store color array
@@ -204,6 +206,12 @@ public class TreeGenerator implements Disposable{
 		pixmap = new Pixmap(width, height, Format.RGBA8888);
 		texture = new Texture(pixmap);
 		vertexgenerator = new VertexGenerator();
+		for(Material material : Material.values()){
+			filters.put(material, new ObjectMap<Filter, Boolean>());
+			for(Filter filter : Filter.values()){
+				this.filters.get(material).put(filter, false);
+			}
+		}
 	}
 
 	/** Resets the internal pixmap and generates the tree using the {@link VertexObject} provided. **/
@@ -254,6 +262,14 @@ public class TreeGenerator implements Disposable{
 
 	public void setCanvasScale(float scale){
 		this.canvasScale = scale;
+	}
+	
+	public void setFilter(Material material, Filter filter, boolean enabled){
+		filters.get(material).put(filter, enabled);
+	}
+	
+	public boolean isFilterEnabled(Material material, Filter filter){
+		return filters.get(material).get(filter);
 	}
 
 	/**Returns an integer projected to polygon coordinates.**/
