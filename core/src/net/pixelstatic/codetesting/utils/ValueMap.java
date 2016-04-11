@@ -1,21 +1,27 @@
 package net.pixelstatic.codetesting.utils;
 
+import net.pixelstatic.codetesting.utils.values.Value;
+
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ObjectMap.Keys;
 
 public class ValueMap{
-	private ObjectMap<String, Object> values;
+	private ObjectMap<String, Value<?>> values;
 	
 	public ValueMap(){
-		values = new ObjectMap<String, Object>();
+		values = new ObjectMap<String, Value<?>>();
+	}
+	
+	public Value<?> get(String name){
+		return values.get(name);
 	}
 	
 	public <T> T get(String name, Class<T> c){
 		return c.cast(values.get(name));
 	}
 	
-	public void add(String name, Object object){
-		values.put(name, object);
+	public void add(String name, Value<?> value){
+		values.put(name, value);
 	}
 	
 	public Keys<String> valueNames(){

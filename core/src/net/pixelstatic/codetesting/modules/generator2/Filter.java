@@ -2,6 +2,8 @@ package net.pixelstatic.codetesting.modules.generator2;
 
 import net.pixelstatic.codetesting.modules.generator2.TreeGenerator.Pixel;
 import net.pixelstatic.codetesting.utils.ValueMap;
+import net.pixelstatic.codetesting.utils.values.Value;
+import net.pixelstatic.codetesting.utils.values.Value.FloatValue;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -11,7 +13,8 @@ import com.badlogic.gdx.utils.ObjectMap.Keys;
 public enum Filter{
 	light{
 		{
-			values.add("source", new Vector2());
+			values.add("sourcex", new FloatValue(0, 99, 99));
+			values.add("sourcey", new FloatValue(0, 99, 99));
 		}
 		private Vector2 lightsource = new Vector2();
 
@@ -28,8 +31,8 @@ public enum Filter{
 	},
 	noise{
 		{
-			values.add("scale", 1f);
-			values.add("magnitude", 1f);
+			values.add("scale", new FloatValue(0, 99, 1f));
+			values.add("magnitude", new FloatValue(-99, 99, 1f));
 		}
 		public float applyBrightness(){
 			float scl = 1f, mag = 1f;
@@ -38,7 +41,7 @@ public enum Filter{
 	},
 	needles{
 		{
-			values.add("intensity", 0.1f);
+			values.add("intensity", new FloatValue(-5f, 5f, 0.1f));
 		}
 		public float applyBrightness(){
 			return Patterns.leaves(x + (int)(pixel.polygon.center.x * 1 / 60f), y + (int)(pixel.polygon.center.y * 1 / 60f));
@@ -47,7 +50,7 @@ public enum Filter{
 
 	shadows{
 		{
-			values.add("intensity", 0.3f);
+			values.add("intensity", new FloatValue(-5f, 5f, 0.3f));
 		}
 		public void apply(){
 			if(y == 0) return;
@@ -67,7 +70,7 @@ public enum Filter{
 	outline{
 		public void apply(){
 			{
-				values.add("intensity", 0.2f);
+				values.add("intensity", new FloatValue(-5f, 5f, 0.3f));
 			}
 			int y = height - 1 - cy;
 			Pixel pixel = materials[x][y];
@@ -133,6 +136,14 @@ public enum Filter{
 	
 	public Keys<String> valueNames(){
 		return values.valueNames();
+	}
+	
+	public ValueMap valueMap(){
+		return values;
+	}
+	
+	protected void value(String name, Value<?> value){
+		values.add(name, value);
 	}
 
 	protected float project(int i){

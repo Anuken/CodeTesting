@@ -278,8 +278,8 @@ public class VertexGUI extends Module{
 			
 						
 						Dialog dialog = new Dialog("Edit Filter", skin, "dialog"){
-							public float getPrefWidth(){return 200f;}
-							public float getPrefHeight(){return 100f;}
+							public float getPrefWidth(){return 400f;}
+							public float getPrefHeight(){return 200f;}
 						};
 						TextButton editclosebutton = new TextButton("x", skin);
 						editclosebutton.addListener(new ClickListener(){
@@ -290,6 +290,21 @@ public class VertexGUI extends Module{
 						
 						dialog.getTitleTable().add(editclosebutton).height(20);
 						dialog.key(Keys.ENTER, true).key(Keys.ESCAPE, false);
+						com.badlogic.gdx.utils.ObjectMap.Keys<String> keys = filter.valueNames();
+						for(String string : keys){
+							net.pixelstatic.codetesting.utils.values.Value<?> value = filter.valueMap().get(string);
+							Label valuelabel = new Label(string, skin);
+							dialog.getContentTable().top().left().add(valuelabel).align(Align.topLeft).row();;
+							Actor actor = value.getActor(skin);
+							actor.addListener(new ChangeListener(){
+								public void changed(ChangeEvent event, Actor actor){
+									valuelabel.setText(string + ": " + value);
+									value.onChange(actor);
+								}
+							});
+							actor.fire(new ChangeListener.ChangeEvent());
+							dialog.getContentTable().top().left().add(actor).align(Align.topLeft).row();
+						}
 						dialog.show(stage);
 
 					}
@@ -377,13 +392,11 @@ public class VertexGUI extends Module{
 		add(scalebox);
 
 		infodialog = new Dialog("Info", skin, "dialog").text("").button("Ok", true).key(Keys.ENTER, true).key(Keys.ESCAPE, false);
-
 	}
 
 	void add(Actor actor){
 		table.row().top().right();
 		table.add(actor).size(uiwidth, uiheight);
-
 	}
 
 	Label text(String text){
