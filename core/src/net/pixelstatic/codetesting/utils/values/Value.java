@@ -19,7 +19,7 @@ public abstract class Value<T>{
 		return object.toString();
 	}
 	
-	public void reset(){
+	public void reset(Actor actor){
 		this.object = defobject;
 	}
 	
@@ -29,6 +29,7 @@ public abstract class Value<T>{
 	
 	public static class FloatValue extends Value<Float>{
 		private float min, max, def;
+		
 		public FloatValue(float min, float max, float def){
 			super(def);
 			this.min = min;
@@ -46,6 +47,11 @@ public abstract class Value<T>{
 		@Override
 		public void onChange(Actor actor){
 			object = ((Slider)actor).getValue();
+		}
+		
+		public void reset(Actor actor){
+			this.object = defobject;
+			((Slider)actor).setValue(object);
 		}
 		
 		public String toString(){

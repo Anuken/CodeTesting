@@ -303,7 +303,15 @@ public class VertexGUI extends Module{
 								}
 							});
 							actor.fire(new ChangeListener.ChangeEvent());
-							dialog.getContentTable().top().left().add(actor).align(Align.topLeft).row();
+							dialog.getContentTable().top().left().add(actor).align(Align.topLeft);
+							TextButton resetbutton = new TextButton("Reset", skin);
+							resetbutton.addListener(new ClickListener(){
+								public void clicked(InputEvent event, float x, float y){
+									value.reset(actor);
+									actor.fire(new ChangeListener.ChangeEvent());
+								}
+							});
+							dialog.getContentTable().add(resetbutton).row();
 						}
 						dialog.show(stage);
 

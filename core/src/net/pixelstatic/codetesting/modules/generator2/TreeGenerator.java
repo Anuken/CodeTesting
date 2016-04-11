@@ -26,12 +26,46 @@ public class TreeGenerator implements Disposable{
 	private float canvasScale = 1 / 1000f;
 	private boolean autoscale = true;
 	private ObjectMap<Material, ObjectMap<Filter, Boolean>> filters = new ObjectMap<Material, ObjectMap<Filter, Boolean>>();
+	private float[][] shading;
 
 	private void processPolygons(){
 		drawMaterials();
+		clearShading();
+		Filter[] filters = Filter.values();
+		for(Filter filter : filters){
+			for(int x = 0; x < width; x ++){
+				for(int y = 0; y < height; y ++){
+					int cy = height-1-y;
+					Pixel pixel = materials[x][y];
+					if(pixel.material != null && this.isFilterEnabled(pixel.material, filter)){
+						shading[x][y] += filter.apply(this, pixmap, materials, pixel, x, y, cy, width, height);
+					}
+				}
+			}
+		}
+		
+		for(int x = 0; x < width; x ++){
+			for(int y = 0; y < height; y ++){
+				float f = shading[x][y];
+				Color color = brighter(new Color(pixmap.getPixel(x, y)), f);
+				pixmap.setColor(color);
+				pixmap.drawPixel(x, height-1-y);
+			}
+		}
+		
+		/*
 		generateShadingPatterns();
 		addShadows();
 		drawOutlines();
+		*/
+	}
+	
+	private void clearShading(){
+		for(int x = 0; x < width; x ++){
+			for(int y = 0; y < height; y ++){
+				shading[x][y] = 0;
+			}
+		}
 	}
 
 	private void drawOutlines(){
@@ -205,6 +239,7 @@ public class TreeGenerator implements Disposable{
 		materials = new Pixel[width][height];
 		pixmap = new Pixmap(width, height, Format.RGBA8888);
 		texture = new Texture(pixmap);
+		shading = new float[width][height];
 		vertexgenerator = new VertexGenerator();
 		for(Material material : Material.values()){
 			filters.put(material, new ObjectMap<Filter, Boolean>());
