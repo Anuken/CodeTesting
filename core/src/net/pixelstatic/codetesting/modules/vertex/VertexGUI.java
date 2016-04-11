@@ -230,7 +230,7 @@ public class VertexGUI extends Module{
 
 		Dialog editdialog = new Dialog("Filters", skin, "dialog"){
 			public float getPrefWidth(){return 480f;}
-			public float getPrefHeight(){return 300f;}
+			public float getPrefHeight(){return 480f;}
 		};
 
 		TextButton closebutton = new TextButton("x", skin);

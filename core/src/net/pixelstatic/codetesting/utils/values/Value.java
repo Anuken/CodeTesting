@@ -27,20 +27,23 @@ public abstract class Value<T>{
 		return object;
 	}
 	
+	public <N> N getValue(Class<N> n){
+		return n.cast(object);
+	}
+	
 	public static class FloatValue extends Value<Float>{
-		private float min, max, def;
+		private float min, max;
 		
 		public FloatValue(float min, float max, float def){
 			super(def);
 			this.min = min;
 			this.max = max;
-			this.def = def;
 		}
 		
 		@Override
 		public Actor getActor(Skin skin){
 			Slider slider = new Slider(min,max,0.05f,false,skin);
-			slider.setValue(def);
+			slider.setValue(object);
 			return slider;
 		}
 

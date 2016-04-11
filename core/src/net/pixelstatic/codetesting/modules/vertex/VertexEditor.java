@@ -180,8 +180,9 @@ public class VertexEditor extends Module{
 		if(Gdx.input.isKeyJustPressed(Keys.T)){
 			//loadObject(VertexLoader.read(Gdx.files.internal("vertexobjects/pinetreepart.vto")));
 		}
-
+/*
 		if(Gdx.input.isKeyJustPressed(Keys.R)){
+			System.out.println("yay");
 			int minvertices = Integer.MAX_VALUE;
 			for(VertexCanvas canvas : canvases)
 				minvertices = Math.min(canvas.list.vertices.size, minvertices);
@@ -193,6 +194,7 @@ public class VertexEditor extends Module{
 				gui.showInfo("Each polygon must have at least 3 vertices\nfor the tree to generate!");
 			}
 		}
+		*/
 
 		if(Gdx.input.isKeyPressed(Keys.W)) offsety += speed;
 		if(Gdx.input.isKeyPressed(Keys.D)) offsetx += speed;

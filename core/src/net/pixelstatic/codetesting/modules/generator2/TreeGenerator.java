@@ -30,6 +30,7 @@ public class TreeGenerator implements Disposable{
 
 	private void processPolygons(){
 		drawMaterials();
+		
 		clearShading();
 		Filter[] filters = Filter.values();
 		for(Filter filter : filters){
@@ -47,7 +48,8 @@ public class TreeGenerator implements Disposable{
 		for(int x = 0; x < width; x ++){
 			for(int y = 0; y < height; y ++){
 				float f = shading[x][y];
-				Color color = brighter(new Color(pixmap.getPixel(x, y)), f);
+				f = round(f, 0.1f);
+				Color color = brighter(new Color(pixmap.getPixel(x, height-1-y)), f);
 				pixmap.setColor(color);
 				pixmap.drawPixel(x, height-1-y);
 			}
@@ -58,6 +60,18 @@ public class TreeGenerator implements Disposable{
 		addShadows();
 		drawOutlines();
 		*/
+	}
+	
+	private void enableDefaultFilters(){
+		setFilter(Material.leaves, Filter.noise, true);
+		setFilter(Material.leaves, Filter.shadows, true);
+		setFilter(Material.leaves, Filter.outline, true);
+		setFilter(Material.leaves, Filter.needles, true);
+		setFilter(Material.leaves, Filter.light, true);
+		setFilter(Material.leaves, Filter.lines, true);
+		setFilter(Material.wood, Filter.outline, true);
+		setFilter(Material.wood, Filter.shadows, true);
+		setFilter(Material.wood, Filter.barklines, true);
 	}
 	
 	private void clearShading(){
@@ -247,6 +261,7 @@ public class TreeGenerator implements Disposable{
 				this.filters.get(material).put(filter, false);
 			}
 		}
+		enableDefaultFilters();
 	}
 
 	/** Resets the internal pixmap and generates the tree using the {@link VertexObject} provided. **/
@@ -305,6 +320,10 @@ public class TreeGenerator implements Disposable{
 	
 	public boolean isFilterEnabled(Material material, Filter filter){
 		return filters.get(material).get(filter);
+	}
+	
+	public Vector2 lightSource(){
+		return lightsource;
 	}
 
 	/**Returns an integer projected to polygon coordinates.**/

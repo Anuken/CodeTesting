@@ -20,7 +20,19 @@ public class VertexInput implements InputProcessor{
 			gui.drawing = true;
 			gui.selectedCanvas.clear();
 			return true;
+		}else if(keycode == Keys.R){
+			int minvertices = Integer.MAX_VALUE;
+			for(VertexCanvas canvas : gui.canvases)
+				minvertices = Math.min(canvas.list.vertices.size, minvertices);
+			
+			if(minvertices >= 3){
+				gui.tree.setVertexObject(new VertexObject(gui.canvases));
+				gui.tree.generate();
+			}else{
+				gui.gui.showInfo("Each polygon must have at least 3 vertices\nfor the tree to generate!");
+			}
 		}
+		
 		return false;
 	}
 

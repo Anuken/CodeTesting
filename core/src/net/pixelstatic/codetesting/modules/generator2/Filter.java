@@ -7,47 +7,76 @@ import net.pixelstatic.codetesting.utils.values.Value.FloatValue;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ObjectMap.Keys;
 
 public enum Filter{
-	light{
+	light(false){
 		{
-			values.add("sourcex", new FloatValue(0, 99, 99));
-			values.add("sourcey", new FloatValue(0, 99, 99));
+			//values.add("sourcex", new FloatValue(0, 99, 99));
+			//values.add("sourcey", new FloatValue(0, 99, 99));
+			values.add("polylightscale", new FloatValue(-2, 2, 0.13f));
+			values.add("lightscale", new FloatValue(-2, 2, 0.5f));
+	
 		}
-		private Vector2 lightsource = new Vector2();
+	//	private Vector2 lightsource = new Vector2();
 
 		public float applyBrightness(){
 			float gscl = -0.1f;
 
-			float selflightscale = 0.4f; //default is 0.7f
-			float globallightscale = 0.8f; //default is 0.6f;
+			float selflightscale = values.get("polylightscale").getValue(Float.class);//0.4f; //default is 0.7f
+			float globallightscale = values.get("lightscale").getValue(Float.class); //default is 0.6f;
 
 			float dist = pixel.polygon.height() / 3f + gscl + selflightscale * (((1.5f) - pixel.polygon.lightVertice.dst(project(x - width / 2), project(y))));
-			float lightdist = gscl + globallightscale * ((1f - lightsource.dst(project(x - width / 2), project(y))));
+			float lightdist = gscl + globallightscale * ((1f - tree.lightSource().dst(project(x - width / 2), project(y))));
 			return dist + lightdist;
 		}
 	},
-	noise{
+	distlight(false){
 		{
-			values.add("scale", new FloatValue(0, 99, 1f));
-			values.add("magnitude", new FloatValue(-99, 99, 1f));
+			values.add("intensity", new FloatValue(0, 20, 10f));
 		}
 		public float applyBrightness(){
-			float scl = 1f, mag = 1f;
+			float dist = pixel.polygon.distance(project(x - width / 2), project(y));
+			return dist * values.get("intensity").getValue(Float.class) / (pixel.polygon.dimensions() * 3.4f);
+		}
+	},
+	noise(false){
+		{
+			values.add("scale", new FloatValue(0, 15, 4f));
+			values.add("magnitude", new FloatValue(-2, 2, 0.2f));
+		}
+		public float applyBrightness(){
+			float scl = values.get("scale").getValue(Float.class), mag = values.get("magnitude").getValue(Float.class);
 			return Patterns.noise(x, y, scl, mag);
 		}
 	},
-	needles{
+	needles(false){
 		{
 			values.add("intensity", new FloatValue(-5f, 5f, 0.1f));
 		}
 		public float applyBrightness(){
-			return Patterns.leaves(x + (int)(pixel.polygon.center.x * 1 / 60f), y + (int)(pixel.polygon.center.y * 1 / 60f));
+			float intensity = values.get("intensity").getValue(Float.class);
+			return intensity*Patterns.leaves(x + (int)(pixel.polygon.center.x * 1 / 60f), y + (int)(pixel.polygon.center.y * 1 / 60f));
 		}
 	},
-
+	lines(false){
+		{
+			values.add("intensity", new FloatValue(-5f, 5f, 0.07f));
+		}
+		public float applyBrightness(){
+			float intensity = values.get("intensity").getValue(Float.class);
+			return Patterns.mod(x, y, intensity);
+		}
+	},
+	barklines(false){
+		{
+			values.add("intensity", new FloatValue(-5f, 5f, 0.1f));
+		}
+		public float applyBrightness(){
+			float intensity = values.get("intensity").getValue(Float.class);
+			return Patterns.nMod(x, y, intensity);
+		}
+	},
 	shadows{
 		{
 			values.add("intensity", new FloatValue(-5f, 5f, 0.3f));
@@ -63,7 +92,7 @@ public enum Filter{
 
 			if( !(poly.above(other))) return;
 
-			pixmap.setColor(new Color(0, 0, 0, 0.3f));
+			pixmap.setColor(new Color(0, 0, 0, values.get("intensity").getValue(Float.class)));
 			pixmap.drawPixel(x, cy);
 		}
 	},
@@ -94,6 +123,15 @@ public enum Filter{
 	protected Pixel pixel;
 	protected int x, y, cy, width, height;
 	protected TreeGenerator tree;
+	protected boolean isApplied = true;
+	
+	private Filter(){
+		
+	}
+	
+	private Filter(boolean applied){
+		this.isApplied = applied;
+	}
 
 	protected float applyBrightness(){
 		return 0f;
@@ -104,7 +142,7 @@ public enum Filter{
 	}
 
 	public boolean isApplied(){
-		return true;
+		return isApplied;
 	}
 
 	public final float apply(TreeGenerator tree, Pixmap pixmap, Pixel[][] materials, Pixel pixel, int x, int y, int cy, int width, int height){
