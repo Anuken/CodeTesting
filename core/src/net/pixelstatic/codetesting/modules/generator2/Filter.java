@@ -33,7 +33,7 @@ public enum Filter{
 	},
 	distlight(false){
 		{
-			values.add("intensity", new FloatValue(0, 20, 10f));
+			values.add("intensity", new FloatValue(0, 20, 1f));
 		}
 		public float applyBrightness(){
 			float dist = pixel.polygon.distance(project(x - width / 2), project(y));
@@ -52,16 +52,30 @@ public enum Filter{
 	},
 	needles(false){
 		{
-			values.add("intensity", new FloatValue(-5f, 5f, 0.1f));
+			values.add("intensity", new FloatValue(-5f, 5f, 0.15f));
 		}
 		public float applyBrightness(){
 			float intensity = values.get("intensity").getValue(Float.class);
 			return intensity*Patterns.leaves(x + (int)(pixel.polygon.center.x * 1 / 60f), y + (int)(pixel.polygon.center.y * 1 / 60f));
 		}
 	},
+	bark{
+		public void apply(){
+			Color color = new Color(pixmap.getPixel(x, cy));
+			float m = 0f;
+			m = (Patterns.nMod(x, y, 0.2f));
+			float dist = pixel.polygon.distance(project(x - width / 2), project(y));
+			m += dist * 10f / (pixel.polygon.dimensions() * 3.4f);
+			if(m > 1.4f) m /= 2f;
+			m = round(m, 0.4f);
+			m += 1f;
+			color.mul(m, m, m, 1f);
+			pixmap.drawPixel(x, cy, Color.rgba8888(color));
+		}
+	},
 	lines(false){
 		{
-			values.add("intensity", new FloatValue(-5f, 5f, 0.07f));
+			values.add("intensity", new FloatValue(-5f, 5f, 0.05f));
 		}
 		public float applyBrightness(){
 			float intensity = values.get("intensity").getValue(Float.class);
@@ -70,7 +84,7 @@ public enum Filter{
 	},
 	barklines(false){
 		{
-			values.add("intensity", new FloatValue(-5f, 5f, 0.1f));
+			values.add("intensity", new FloatValue(-5f, 5f, 0.05f));
 		}
 		public float applyBrightness(){
 			float intensity = values.get("intensity").getValue(Float.class);
@@ -196,5 +210,9 @@ public enum Filter{
 	protected GeneratorPolygon getPixelPolygon(int x, int y){
 		if(x < 0 || y < 0 || x >= width || y >= height) return null;
 		return materials[x][y].polygon;
+	}
+	
+	float round(float a, float b){
+		return b * (int)(a / b);
 	}
 }

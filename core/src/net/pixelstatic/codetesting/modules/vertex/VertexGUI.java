@@ -59,11 +59,13 @@ public class VertexGUI extends Module{
 	}
 
 	public void init(){
+		setupGUI();
 		InputMultiplexer plex = new InputMultiplexer();
 
 		plex.addProcessor(new VertexInput(tester.getModule(VertexEditor.class)));
 		plex.addProcessor(stage);
 		Gdx.input.setInputProcessor(plex);
+		
 	}
 
 	public VertexGUI(){
@@ -71,7 +73,6 @@ public class VertexGUI extends Module{
 		stage = new Stage();
 		stage.setViewport(new ScreenViewport());
 		ActorAlign.stage = stage;
-		setupGUI();
 	}
 
 	public void setupGUI(){
@@ -264,6 +265,7 @@ public class VertexGUI extends Module{
 		
 		for(Filter filter : Filter.values()){
 			CheckBox checkbox = new CheckBox(filter.getName(), skin);
+			checkbox.setChecked(editor.tree.isFilterEnabled(materialbox.getSelected(), filter));
 			checkbox.setName(filter.name() + "check");
 			checkbox.addListener(new ChangeListener(){
 				public void changed(ChangeEvent event, Actor actor){
@@ -400,6 +402,8 @@ public class VertexGUI extends Module{
 		add(scalebox);
 
 		infodialog = new Dialog("Info", skin, "dialog").text("").button("Ok", true).key(Keys.ENTER, true).key(Keys.ESCAPE, false);
+
+		editor.selectedCanvas.updateBoxes(this);
 	}
 
 	void add(Actor actor){

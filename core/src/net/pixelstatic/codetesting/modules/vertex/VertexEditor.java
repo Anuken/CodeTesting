@@ -219,7 +219,6 @@ public class VertexEditor extends Module{
 		selectedCanvas = new VertexCanvas("leafsegment", 0);
 		selectedCanvas.list.material = Material.leaves;
 		canvases.add(selectedCanvas);
-		selectedCanvas.updateBoxes(gui);
 
 		VertexCanvas trunk = addCanvas("trunk");
 		trunk.list.material = Material.wood;

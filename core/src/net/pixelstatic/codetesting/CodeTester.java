@@ -23,7 +23,7 @@ public class CodeTester extends ApplicationAdapter{
 			modules.put(module.getClass(), module);
 		}
 		
-		for(Module module : modules.values()){
+		for(Module module : moduleArray){
 			module.tester = this;
 			module.init();
 		}

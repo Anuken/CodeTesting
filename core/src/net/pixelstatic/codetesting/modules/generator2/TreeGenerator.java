@@ -48,7 +48,7 @@ public class TreeGenerator implements Disposable{
 		for(int x = 0; x < width; x ++){
 			for(int y = 0; y < height; y ++){
 				float f = shading[x][y];
-				f = round(f, 0.1f);
+				if(materials[x][y].material == Material.leaves)f = round(f, 0.1f);
 				Color color = brighter(new Color(pixmap.getPixel(x, height-1-y)), f);
 				pixmap.setColor(color);
 				pixmap.drawPixel(x, height-1-y);
@@ -71,7 +71,7 @@ public class TreeGenerator implements Disposable{
 		setFilter(Material.leaves, Filter.lines, true);
 		setFilter(Material.wood, Filter.outline, true);
 		setFilter(Material.wood, Filter.shadows, true);
-		setFilter(Material.wood, Filter.barklines, true);
+		setFilter(Material.wood, Filter.bark, true);
 	}
 	
 	private void clearShading(){
@@ -190,7 +190,6 @@ public class TreeGenerator implements Disposable{
 		float dist = pixel.polygon.distance(project(x - width / 2), project(y));
 		m += dist * 10f / (pixel.polygon.dimensions() * 3.4f);
 		if(m > 1.4f) m /= 2f;
-		//print(dist);
 		m = round(m, 0.4f);
 		m += 1f;
 		color.mul(m, m, m, 1f);
