@@ -229,7 +229,7 @@ public class VertexGUI extends Module{
 			}
 		});
 
-		Dialog editdialog = new Dialog("Filters", skin, "dialog"){
+		Dialog editdialog = new Dialog("Filters/Color", skin, "dialog"){
 			public float getPrefWidth(){return 480f;}
 			public float getPrefHeight(){return 480f;}
 		};
@@ -258,7 +258,11 @@ public class VertexGUI extends Module{
 				//editor.tree.setFilter(materialbox.getSelected(), filter, checkbox.isChecked());
 			}
 		});
+		
 		editdialog.getContentTable().top().left().add(materialbox).height(30).align(Align.topLeft).row();
+		
+		ColorPicker picker = new ColorPicker(skin);
+		editdialog.getContentTable().add(picker).row();;
 		
 		Label filterlabel = new Label("Filters:", skin);
 		editdialog.getContentTable().top().left().add(filterlabel).align(Align.topLeft).row();;
@@ -273,6 +277,8 @@ public class VertexGUI extends Module{
 				}
 			});
 			editdialog.getContentTable().top().left().add(checkbox).align(Align.topLeft);
+
+			
 			if(filter.editable()){
 				TextButton editbutton = new TextButton("Edit", skin);
 				editbutton.addListener(new ClickListener(){
@@ -315,7 +321,7 @@ public class VertexGUI extends Module{
 							});
 							dialog.getContentTable().add(resetbutton).row();
 						}
-						dialog.show(stage);
+
 
 					}
 				});
@@ -325,7 +331,7 @@ public class VertexGUI extends Module{
 			editdialog.getContentTable().row();
 		}
 
-		TextButton advancedbutton = new TextButton("Filters", skin);
+		TextButton advancedbutton = new TextButton("Filters/Color", skin);
 		advancedbutton.addListener(new ClickListener(){
 			public void clicked(InputEvent event, float x, float y){
 				editdialog.show(stage);

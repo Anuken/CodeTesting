@@ -42,7 +42,7 @@ public abstract class Value<T>{
 		
 		@Override
 		public Actor getActor(Skin skin){
-			Slider slider = new Slider(min,max,0.05f,false,skin);
+			Slider slider = new Slider(min,max,(max-min)/100f,false,skin);
 			slider.setValue(object);
 			return slider;
 		}

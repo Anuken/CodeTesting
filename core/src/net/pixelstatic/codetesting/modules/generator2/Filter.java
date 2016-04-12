@@ -14,8 +14,8 @@ public enum Filter{
 		{
 			//values.add("sourcex", new FloatValue(0, 99, 99));
 			//values.add("sourcey", new FloatValue(0, 99, 99));
-			values.add("polylightscale", new FloatValue(-2, 2, 0.13f));
-			values.add("lightscale", new FloatValue(-2, 2, 0.5f));
+			values.add("polylightscale", new FloatValue(-1, 1, 0.14f));
+			values.add("lightscale", new FloatValue(-1, 1, 0.5f));
 	
 		}
 	//	private Vector2 lightsource = new Vector2();
@@ -52,7 +52,7 @@ public enum Filter{
 	},
 	needles(false){
 		{
-			values.add("intensity", new FloatValue(-5f, 5f, 0.15f));
+			values.add("intensity", new FloatValue(-1f, 1f, 0.3f));
 		}
 		public float applyBrightness(){
 			float intensity = values.get("intensity").getValue(Float.class);
@@ -75,7 +75,7 @@ public enum Filter{
 	},
 	lines(false){
 		{
-			values.add("intensity", new FloatValue(-5f, 5f, 0.05f));
+			values.add("intensity", new FloatValue(-1f, 1f, 0.03f));
 		}
 		public float applyBrightness(){
 			float intensity = values.get("intensity").getValue(Float.class);
@@ -91,10 +91,11 @@ public enum Filter{
 			return Patterns.nMod(x, y, intensity);
 		}
 	},
-	shadows{
+	shadows(true){
 		{
-			values.add("intensity", new FloatValue(-5f, 5f, 0.3f));
+			values.add("intensity", new FloatValue(-1f, 1f, 0.33f));
 		}
+	
 		public void apply(){
 			if(y == 0) return;
 			int offsetx = x - 2;
@@ -105,20 +106,21 @@ public enum Filter{
 			if(poly == null) return;
 
 			if( !(poly.above(other))) return;
-
-			pixmap.setColor(new Color(0, 0, 0, values.get("intensity").getValue(Float.class)));
-			pixmap.drawPixel(x, cy);
+			
+			float i =  values.getFloat("intensity");
+			pixmap.drawPixel(x, cy, Color.rgba8888(new Color(0,0,0,i)));
 		}
 	},
 	outline{
+		{
+			values.add("intensity", new FloatValue(0f, 1f, 0.2f));
+		}
+		
 		public void apply(){
-			{
-				values.add("intensity", new FloatValue(-5f, 5f, 0.3f));
-			}
 			int y = height - 1 - cy;
 			Pixel pixel = materials[x][y];
 			if(pixel.material == null) return;
-			int color = Color.rgba8888(new Color(0, 0, 0, 0.2f));
+			int color = Color.rgba8888(new Color(0, 0, 0, values.getFloat("intensity")));
 
 			if( !same(pixel, x, y - 1)){
 				pixmap.drawPixel(x, cy, color);
@@ -129,6 +131,14 @@ public enum Filter{
 			}else if( !same(pixel, x - 1, y)){
 				pixmap.drawPixel(x, cy, color);
 			}
+		}
+	},
+	round(false){
+		{
+			values.add("amount", new FloatValue(0.01f, 1f, 0.1f));
+		}
+		public float change(float input){
+			return round(input, values.getFloat("amount"));
 		}
 	};
 	protected ValueMap values = new ValueMap();
@@ -157,6 +167,10 @@ public enum Filter{
 
 	public boolean isApplied(){
 		return isApplied;
+	}
+	
+	public float change(float input){
+		return input;
 	}
 
 	public final float apply(TreeGenerator tree, Pixmap pixmap, Pixel[][] materials, Pixel pixel, int x, int y, int cy, int width, int height){

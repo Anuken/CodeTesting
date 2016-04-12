@@ -30,13 +30,15 @@ public class TreeGenerator implements Disposable{
 
 	private void processPolygons(){
 		drawMaterials();
-		
+
 		clearShading();
+
 		Filter[] filters = Filter.values();
 		for(Filter filter : filters){
-			for(int x = 0; x < width; x ++){
-				for(int y = 0; y < height; y ++){
-					int cy = height-1-y;
+			if(filter.isApplied()) continue;
+			for(int x = 0;x < width;x ++){
+				for(int y = 0;y < height;y ++){
+					int cy = height - 1 - y;
 					Pixel pixel = materials[x][y];
 					if(pixel.material != null && this.isFilterEnabled(pixel.material, filter)){
 						shading[x][y] += filter.apply(this, pixmap, materials, pixel, x, y, cy, width, height);
@@ -44,24 +46,39 @@ public class TreeGenerator implements Disposable{
 				}
 			}
 		}
-		
-		for(int x = 0; x < width; x ++){
-			for(int y = 0; y < height; y ++){
+
+		for(int x = 0;x < width;x ++){
+			for(int y = 0;y < height;y ++){
+				Pixel pixel = materials[x][y];
+				if(pixel.material == null) continue;
 				float f = shading[x][y];
-				if(materials[x][y].material == Material.leaves)f = round(f, 0.1f);
-				Color color = brighter(new Color(pixmap.getPixel(x, height-1-y)), f);
+				if(isFilterEnabled(pixel.material, Filter.round)) f = Filter.round.change(f);
+				Color color = brighter(new Color(pixmap.getPixel(x, height - 1 - y)), f);
 				pixmap.setColor(color);
-				pixmap.drawPixel(x, height-1-y);
+				pixmap.drawPixel(x, height - 1 - y);
 			}
 		}
 		
+		for(Filter filter : filters){
+			if(!filter.isApplied()) continue;
+			for(int x = 0;x < width;x ++){
+				for(int y = 0;y < height;y ++){
+					Pixel pixel = materials[x][y];
+					if(pixel.material != null && this.isFilterEnabled(pixel.material, filter))
+					filter.apply(this, pixmap, materials, pixel, x, y, height - 1 - y, width, height);
+				}
+			}
+		}
+
 		/*
+		
 		generateShadingPatterns();
+		
 		addShadows();
 		drawOutlines();
 		*/
 	}
-	
+
 	private void enableDefaultFilters(){
 		setFilter(Material.leaves, Filter.noise, true);
 		setFilter(Material.leaves, Filter.shadows, true);
@@ -69,14 +86,15 @@ public class TreeGenerator implements Disposable{
 		setFilter(Material.leaves, Filter.needles, true);
 		setFilter(Material.leaves, Filter.light, true);
 		setFilter(Material.leaves, Filter.lines, true);
+		setFilter(Material.leaves, Filter.round, true);
 		setFilter(Material.wood, Filter.outline, true);
 		setFilter(Material.wood, Filter.shadows, true);
 		setFilter(Material.wood, Filter.bark, true);
 	}
-	
+
 	private void clearShading(){
-		for(int x = 0; x < width; x ++){
-			for(int y = 0; y < height; y ++){
+		for(int x = 0;x < width;x ++){
+			for(int y = 0;y < height;y ++){
 				shading[x][y] = 0;
 			}
 		}
@@ -312,15 +330,15 @@ public class TreeGenerator implements Disposable{
 	public void setCanvasScale(float scale){
 		this.canvasScale = scale;
 	}
-	
+
 	public void setFilter(Material material, Filter filter, boolean enabled){
 		filters.get(material).put(filter, enabled);
 	}
-	
+
 	public boolean isFilterEnabled(Material material, Filter filter){
 		return filters.get(material).get(filter);
 	}
-	
+
 	public Vector2 lightSource(){
 		return lightsource;
 	}

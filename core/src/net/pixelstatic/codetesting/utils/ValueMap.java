@@ -20,6 +20,10 @@ public class ValueMap{
 		return c.cast(values.get(name));
 	}
 	
+	public float getFloat(String name){
+		return this.get(name).getValue(Float.class);
+	}
+	
 	public void add(String name, Value<?> value){
 		values.put(name, value);
 	}
