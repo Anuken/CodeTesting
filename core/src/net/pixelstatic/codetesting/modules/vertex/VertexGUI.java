@@ -299,6 +299,12 @@ public class VertexGUI extends Module{
 					editor.tree.setFilter(materialbox.getSelected(), filter, checkbox.isChecked());
 				}
 			});
+			if(filter.alwaysEnabled()){
+				checkbox.setTouchable(Touchable.disabled);
+				checkbox.setChecked(true);
+				checkbox.getImage().setColor(Color.GRAY);
+				//checkbox.getLabel().setColor(Color.GRAY);
+			}
 			editdialog.getContentTable().top().left().add(checkbox).align(Align.topLeft);
 
 			
@@ -307,7 +313,7 @@ public class VertexGUI extends Module{
 				editbutton.addListener(new ClickListener(){
 					public void clicked(InputEvent event, float x, float y){
 
-						Dialog dialog = new Dialog("Edit Filter", skin, "dialog"){
+						Dialog dialog = new Dialog("Edit Filter", skin){
 							public float getPrefWidth(){return 400f;}
 							public float getPrefHeight(){return filter.valueMap().size()*75;}
 						};
@@ -347,6 +353,11 @@ public class VertexGUI extends Module{
 						dialog.show(stage);
 					}
 				});
+				if(filter.valueMap().size() == 0){
+					editbutton.setTouchable(Touchable.disabled);
+					editbutton.setColor(Color.GRAY);
+					editbutton.getLabel().setColor(Color.GRAY);
+				}
 				editdialog.getContentTable().add(editbutton).width(60);
 
 			}

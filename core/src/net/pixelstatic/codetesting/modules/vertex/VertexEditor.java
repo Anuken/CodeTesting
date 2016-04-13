@@ -167,6 +167,7 @@ public class VertexEditor extends Module{
 	}
 
 	void input(){
+		
 		if(vertice != null){
 			vertice.set(Gdx.input.getX() - centerx(), (Gdx.graphics.getHeight() - Gdx.input.getY()) - centery());
 		}
@@ -177,9 +178,7 @@ public class VertexEditor extends Module{
 		if(gui.stage.getKeyboardFocus() != null) return;
 		float speed = 6f;
 		float offsetx = 0, offsety = 0;
-		if(Gdx.input.isKeyJustPressed(Keys.T)){
-			loadObject(VertexLoader.read(Gdx.files.internal("vertexobjects/pinetreepart.vto")));
-		}
+		
 /*
 		if(Gdx.input.isKeyJustPressed(Keys.R)){
 			System.out.println("yay");

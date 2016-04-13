@@ -336,7 +336,7 @@ public class TreeGenerator implements Disposable{
 	}
 
 	public boolean isFilterEnabled(Material material, Filter filter){
-		return filters.get(material).get(filter);
+		return filter.alwaysEnabled() || filters.get(material).get(filter);
 	}
 
 	public Vector2 lightSource(){

@@ -146,7 +146,7 @@ public enum Filter{
 			alwaysEnabled = true;
 			values.add("rscale", new FloatValue(-3f, 3f, 1f));
 			values.add("gscale", new FloatValue(-3f, 3f, 1f));
-			values.add("bscale", new FloatValue(-3f, 3f, 1f));
+			values.add("bscale", new FloatValue(-3f, 3f, -2f));
 		}
 		
 		public void change(Color color, float amount){
