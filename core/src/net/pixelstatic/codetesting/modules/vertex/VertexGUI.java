@@ -44,6 +44,7 @@ public class VertexGUI extends Module{
 
 	public void updateButtons(){
 		boolean drawMode = editor.drawMode;
+		add.setPosition(0, Gdx.graphics.getHeight() - editor.canvases.size * 30 -30);
 		symmetry.setChecked(editor.selectedCanvas.symmetry);
 		overwrite.setChecked(drawMode);
 		overwrite.setText(drawMode ? "Draw Mode" : "Edit Mode");
@@ -227,15 +228,17 @@ public class VertexGUI extends Module{
 
 		add = new TextButton("New Canvas", skin);
 		add.align(Align.topLeft);
+		add.setSize(100, 30);
 		add.addListener(new ClickListener(){
 			public void clicked(InputEvent event, float x, float y){
 				//	addCanvas("canvas" + (editor.canvases.size + 1));
 			}
 		});
+		stage.addActor(add);
 
 		Dialog editdialog = new Dialog("Filters/Color", skin){
 			public float getPrefWidth(){return 240f;}
-			public float getPrefHeight(){return 670f;}
+			public float getPrefHeight(){return 720f;}
 		};
 
 		TextButton closebutton = new TextButton("x", skin);
@@ -334,8 +337,8 @@ public class VertexGUI extends Module{
 							Actor actor = value.getActor(skin);
 							actor.addListener(new ChangeListener(){
 								public void changed(ChangeEvent event, Actor actor){
-									valuelabel.setText(string + ": " + value);
 									value.onChange(actor);
+									valuelabel.setText(string + ": " + value);
 								}
 							});
 							actor.fire(new ChangeListener.ChangeEvent());

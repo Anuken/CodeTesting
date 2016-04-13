@@ -11,20 +11,20 @@ public class Patterns{
 	static float b = 0.15f;
 	static float[][] bark = 
 		{
-		{0, b, 0, b, 0},
-		{0, b, 0, b, 0},
-		{0, b, b, b, 0},
-		{0, 0, b, 0, 0},
-		{0, 0, b, 0, 0}
+		{0, b, 0, b},
+		{0, b, 0, b},
+		{0, b, b, b},
+		{0, 0, b, 0},
+		{0, 0, b, 0}
 		};
 	static{
 	
 		filter = new CrystallizeFilter();
-		filter.setEdgeThickness(0.5f);
-		filter.setEdgeColor(Color.rgba8888(Color.MAGENTA));
-		filter.setRandomness(0.6f);
-		filter.setGridType(CellularFilter.HEXAGONAL);
-		filter.setScale(7);
+		filter.setEdgeThickness(0f);
+		//filter.setEdgeColor(Color.rgba8888(Color.MAGENTA));
+		filter.setRandomness(0.1f);
+		filter.setGridType(CellularFilter.TRIANGULAR);
+		
 	}
 	
 	
@@ -33,7 +33,7 @@ public class Patterns{
 		int mag = 5; //noise magnitutde
 		x = Math.abs(x);
 		y = Math.abs(y);
-		return bark[bark.length-1-(y+(int)noise(x,y,nscl,mag)) % bark.length][(x+(int)noise(x,y,nscl,mag)) % bark.length];
+		return bark[bark.length-1-(y+(int)noise(x,y,nscl,mag)) % bark.length][(x+(int)noise(x,y,nscl,mag)) % bark[0].length];
 	}
 	
 	public static float nMod(int x, int y, float scl){
@@ -64,7 +64,8 @@ public class Patterns{
 		return (float)Math.abs(Noise.NormalNoise(x, y, scl, mag, 1f));
 	}
 	
-	public static int leafPattern(int x, int y, int width, int height, int[] colors, int type){
+	public static int leafPattern(int x, int y, int width, int height, int[] colors, int type, float scale){
+		filter.setScale(scale);
 		filter.setGridType(type);
 		return filter.getPixel(x, y, colors, width, height);
 	}

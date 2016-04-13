@@ -2,6 +2,7 @@ package net.pixelstatic.codetesting.modules.generator2;
 
 import net.pixelstatic.codetesting.modules.vertex.VertexObject;
 import net.pixelstatic.codetesting.modules.vertex.VertexObject.PolygonType;
+import net.pixelstatic.codetesting.utils.values.Value.CrystalValue;
 
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.Pixmap.Blending;
@@ -46,6 +47,19 @@ public class TreeGenerator implements Disposable{
 				}
 			}
 		}
+		float shademin = Float.MAX_VALUE, shademax = Float.MIN_VALUE;
+		//normalize colors
+		for(int x = 0;x < width;x ++){
+			for(int y = 0;y < height;y ++){
+				Pixel pixel = materials[x][y];
+				if(pixel.material == null) continue;
+				float f = shading[x][y];
+				shademin = Math.min(f, shademin);
+				shademax = Math.max(f, shademax);
+			}
+		}
+		
+		float normal = (shademax-shademin)/2;
 
 		for(int x = 0;x < width;x ++){
 			for(int y = 0;y < height;y ++){
@@ -53,11 +67,14 @@ public class TreeGenerator implements Disposable{
 				if(pixel.material == null) continue;
 				float f = shading[x][y];
 				if(isFilterEnabled(pixel.material, Filter.round)) f = Filter.round.change(f);
+				if(pixel.material == Material.leaves)f -= normal;
 				Color color = brighter(new Color(pixmap.getPixel(x, height - 1 - y)), f);
 				pixmap.setColor(color);
 				pixmap.drawPixel(x, height - 1 - y);
 			}
-		}
+		}	
+		if(this.isFilterEnabled(Material.leaves, Filter.crystallize))
+		crystallize();
 		
 		for(Filter filter : filters){
 			if(!filter.isApplied()) continue;
@@ -69,7 +86,7 @@ public class TreeGenerator implements Disposable{
 				}
 			}
 		}
-
+	
 		/*
 		
 		generateShadingPatterns();
@@ -151,26 +168,31 @@ public class TreeGenerator implements Disposable{
 		}
 	}
 
-	@SuppressWarnings("unused")
+	//@SuppressWarnings("unused")
 	private void crystallize(){
 		int[] colors = new int[width * height];
 		//store color array
 		for(int x = 0;x < width;x ++){
 			for(int y = 0;y < height;y ++){
+				if(materials[x][height - 1 -y].material != Material.leaves) continue;
 				colors[y * width + x] = /*toARGB*/(pixmap.getPixel(x, y));
 			}
 		}
-
+		float scale = Filter.crystallize.valueMap().getFloat("scale");
+		int type = Filter.crystallize.valueMap().get("type", CrystalValue.class).getValue().ordinal();
 		//crystallization...
 		for(int x = 0;x < width;x ++){
 			for(int cy = 0;cy < height;cy ++){
 				int y = height - 1 - cy;
 				Pixel pixel = materials[x][height - 1 - y];
-				if(pixel.material == null) continue;
+				if(pixel.material != Material.leaves) continue;
 
-				if(pixel.material.type == -1) continue;
-				int color = Patterns.leafPattern(x, y, width, height, colors, pixel.material.type);
+				//if(pixel.material.type == -1) continue;
+				int color = Patterns.leafPattern(x, y, width, height, colors, type, scale);
 				Color cc = new Color(color);
+				
+				//cc.a = 1f;
+				/*
 				float mscl = 0.8f;
 				if(cc.a < 0.5f){
 					cc.a = 0f;
@@ -178,8 +200,9 @@ public class TreeGenerator implements Disposable{
 					cc.a = 1f;
 					cc.set(pixel.material.getColor().cpy().mul(mscl, mscl, mscl, 1f));
 				}
+				*/
 				pixmap.setColor(cc);
-				if(new Color(pixmap.getPixel(x, y)).a > 0.001f) pixmap.drawPixel(x, y);
+				/*if(new Color(pixmap.getPixel(x, y)).a > 0.001f) */pixmap.drawPixel(x, y);
 			}
 		}
 	}

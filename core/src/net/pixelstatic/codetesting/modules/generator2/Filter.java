@@ -3,6 +3,7 @@ package net.pixelstatic.codetesting.modules.generator2;
 import net.pixelstatic.codetesting.modules.generator2.TreeGenerator.Pixel;
 import net.pixelstatic.codetesting.utils.ValueMap;
 import net.pixelstatic.codetesting.utils.values.Value;
+import net.pixelstatic.codetesting.utils.values.Value.CrystalValue;
 import net.pixelstatic.codetesting.utils.values.Value.FloatValue;
 
 import com.badlogic.gdx.graphics.Color;
@@ -91,6 +92,12 @@ public enum Filter{
 			return Patterns.nMod(x, y, intensity);
 		}
 	},
+	crystallize(true){
+		{
+			values.add("scale", new FloatValue(0, 20f, 5f));
+			values.add("type", new CrystalValue(Crystal.HEXAGONAL));
+		}
+	},
 	shadows(true){
 		{
 			values.add("intensity", new FloatValue(-1f, 1f, 0.33f));
@@ -146,7 +153,7 @@ public enum Filter{
 			alwaysEnabled = true;
 			values.add("rscale", new FloatValue(-3f, 3f, 1f));
 			values.add("gscale", new FloatValue(-3f, 3f, 1f));
-			values.add("bscale", new FloatValue(-3f, 3f, -2f));
+			values.add("bscale", new FloatValue(-3f, 3f, -0.8f));
 		}
 		
 		public void change(Color color, float amount){

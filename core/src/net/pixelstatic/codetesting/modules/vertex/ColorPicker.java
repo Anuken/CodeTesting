@@ -2,6 +2,8 @@ package net.pixelstatic.codetesting.modules.vertex;
 
 import net.pixelstatic.utils.Hue;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -80,6 +82,7 @@ public class ColorPicker extends Widget{
 
 	@Override
 	public void draw(Batch batch, float parentAlpha){
+		if(Gdx.input.isKeyJustPressed(Keys.U)) System.out.println(getColor().r + " " + getColor().g + " " + getColor().b);
 		float boxs = 30;
 		float border = 1f;
 		

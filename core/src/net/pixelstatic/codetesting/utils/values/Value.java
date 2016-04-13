@@ -1,6 +1,9 @@
 package net.pixelstatic.codetesting.utils.values;
 
+import net.pixelstatic.codetesting.modules.generator2.Crystal;
+
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 
@@ -29,6 +32,34 @@ public abstract class Value<T>{
 	
 	public <N> N getValue(Class<N> n){
 		return n.cast(object);
+	}
+	
+	public static class CrystalValue extends Value<Crystal>{
+
+		public CrystalValue(Crystal t){
+			super(t);
+		}
+
+		@Override
+		public Actor getActor(Skin skin){
+			SelectBox<Crystal> box = new SelectBox<Crystal>(skin);
+			box.setItems(Crystal.values());
+			box.setSelected(object);
+			return box;
+		}
+
+		@SuppressWarnings("unchecked")
+		@Override
+		public void onChange(Actor actor){
+			object = ((SelectBox<Crystal>)actor).getSelected();
+		}
+		
+		@SuppressWarnings("unchecked")
+		public void reset(Actor actor){
+			this.object = defobject;
+			((SelectBox<Crystal>)actor).setSelected(object);
+		}
+		
 	}
 	
 	public static class FloatValue extends Value<Float>{
