@@ -70,6 +70,10 @@ public class VertexGUI extends Module{
 
 	public VertexGUI(){
 		skin = new Skin(Gdx.files.internal("gui/uiskin.json"));
+		skin.add("colorbox", new Texture("gui/colorbox.png"));
+		skin.add("colorbar", new Texture("gui/colorbar.png"));
+		skin.add("darknessbar", new Texture("gui/darknessbar.png"));
+		skin.add("blank", new Texture("gui/blank.png"));
 		stage = new Stage();
 		stage.setViewport(new ScreenViewport());
 		ActorAlign.stage = stage;
@@ -230,8 +234,8 @@ public class VertexGUI extends Module{
 		});
 
 		Dialog editdialog = new Dialog("Filters/Color", skin, "dialog"){
-			public float getPrefWidth(){return 480f;}
-			public float getPrefHeight(){return 480f;}
+			public float getPrefWidth(){return 240f;}
+			public float getPrefHeight(){return 600f;}
 		};
 
 		TextButton closebutton = new TextButton("x", skin);
@@ -260,6 +264,8 @@ public class VertexGUI extends Module{
 		});
 		
 		editdialog.getContentTable().top().left().add(materialbox).height(30).align(Align.topLeft).row();
+		Label colorlabel = new Label("Color:", skin);
+		editdialog.getContentTable().top().left().add(colorlabel).align(Align.topLeft).row();;
 		
 		ColorPicker picker = new ColorPicker(skin);
 		editdialog.getContentTable().add(picker).row();;
