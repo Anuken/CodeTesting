@@ -370,7 +370,7 @@ public class TreeGenerator implements Disposable{
 	}
 
 	private Color brighter(Color color, float a){
-		color.add(a, a, -a * 2f, 0f);
+		Filter.shading.change(color, a);
 		return color;
 	}
 

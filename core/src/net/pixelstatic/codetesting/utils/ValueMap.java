@@ -28,6 +28,10 @@ public class ValueMap{
 		values.put(name, value);
 	}
 	
+	public int size(){
+		return values.size;
+	}
+	
 	public Keys<String> valueNames(){
 		return values.keys();
 	}

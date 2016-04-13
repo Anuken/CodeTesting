@@ -6,17 +6,23 @@ import com.jhlabs.image.CellularFilter;
 public enum Material{
 	wood(Color.BROWN.cpy().sub(0.1f, 0.1f, 0.1f, 0f), -1), 
 	leaves(new Color(0.0f, 0.4f, 0.3f, 1f), -1);
-
+	
+	private Color originalColor;
 	public Color color;
 	public int type = CellularFilter.TRIANGULAR;
 
 	private Material(Color color){
 		this.color = color;
+		this.originalColor = color.cpy();
 	}
 
 	private Material(Color color, int type){
-		this.color = color;
+		this(color);
 		this.type = type;
+	}
+	
+	public void resetColor(){
+		color = originalColor.cpy();
 	}
 
 	public Color getColor(){

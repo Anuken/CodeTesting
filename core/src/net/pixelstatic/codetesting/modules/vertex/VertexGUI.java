@@ -233,9 +233,9 @@ public class VertexGUI extends Module{
 			}
 		});
 
-		Dialog editdialog = new Dialog("Filters/Color", skin, "dialog"){
+		Dialog editdialog = new Dialog("Filters/Color", skin){
 			public float getPrefWidth(){return 240f;}
-			public float getPrefHeight(){return 600f;}
+			public float getPrefHeight(){return 670f;}
 		};
 
 		TextButton closebutton = new TextButton("x", skin);
@@ -255,6 +255,7 @@ public class VertexGUI extends Module{
 		materialbox.setItems(Material.values());
 		materialbox.addListener(new ChangeListener(){
 			public void changed(ChangeEvent event, Actor actor){
+				((ColorPicker)editdialog.getContentTable().findActor("colorpicker")).setColor(materialbox.getSelected().color);
 				Filter[] filters = Filter.values();
 				for(Filter filter : filters){
 					((CheckBox)editdialog.getContentTable().findActor(filter.name() + ("check"))).setChecked(editor.tree.isFilterEnabled(materialbox.getSelected(), filter));
@@ -268,7 +269,23 @@ public class VertexGUI extends Module{
 		editdialog.getContentTable().top().left().add(colorlabel).align(Align.topLeft).row();;
 		
 		ColorPicker picker = new ColorPicker(skin);
+		picker.setName("colorpicker");
+		picker.setColor(materialbox.getSelected().color);
+		picker.addListener(new ChangeListener(){
+			public void changed(ChangeEvent event, Actor actor){
+				materialbox.getSelected().color = picker.getColor();
+			}
+		});
 		editdialog.getContentTable().add(picker).row();;
+		
+		TextButton resetcolor = new TextButton("Reset Color", skin);
+		resetcolor.addListener(new ClickListener(){
+			public void clicked(InputEvent event, float x, float y){
+				materialbox.getSelected().resetColor();
+				picker.setColor(materialbox.getSelected().color);
+			}
+		});
+		editdialog.getContentTable().add(resetcolor).row();;
 		
 		Label filterlabel = new Label("Filters:", skin);
 		editdialog.getContentTable().top().left().add(filterlabel).align(Align.topLeft).row();;
@@ -289,11 +306,10 @@ public class VertexGUI extends Module{
 				TextButton editbutton = new TextButton("Edit", skin);
 				editbutton.addListener(new ClickListener(){
 					public void clicked(InputEvent event, float x, float y){
-			
-						
+
 						Dialog dialog = new Dialog("Edit Filter", skin, "dialog"){
 							public float getPrefWidth(){return 400f;}
-							public float getPrefHeight(){return 200f;}
+							public float getPrefHeight(){return filter.valueMap().size()*75;}
 						};
 						TextButton editclosebutton = new TextButton("x", skin);
 						editclosebutton.addListener(new ClickListener(){
@@ -328,7 +344,7 @@ public class VertexGUI extends Module{
 							dialog.getContentTable().add(resetbutton).row();
 						}
 
-
+						dialog.show(stage);
 					}
 				});
 				editdialog.getContentTable().add(editbutton).width(60);

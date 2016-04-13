@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Widget;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.NumberUtils;
 
 public class ColorPicker extends Widget{
@@ -18,6 +19,7 @@ public class ColorPicker extends Widget{
 	private float hue, saturation, brightness;
 	private float offset1 = 00, offset2 = 30, offset3 = 60, xoffset = 10, barwidth = 100;
 	private int selected;
+	private float[] hsbvals = new float[3];
 
 	public ColorPicker(Skin skin){
 		this.skin = skin;
@@ -50,6 +52,7 @@ public class ColorPicker extends Widget{
 				}else if(selected == 2){
 					hue = scl(rx);
 				}
+				fire(new ChangeListener.ChangeEvent());
 			}
 		});
 
@@ -119,7 +122,7 @@ public class ColorPicker extends Widget{
 		validate();
 	}
 
-	public void setAlpha(Sprite sprite, float a){
+	private void setAlpha(Sprite sprite, float a){
 		for(int colorvertice : colors){
 			int intBits = NumberUtils.floatToIntColor(sprite.getVertices()[colorvertice]);
 			int alphaBits = (int)(255 * a) << 24;
@@ -132,6 +135,13 @@ public class ColorPicker extends Widget{
 
 	public Color getColor(){
 		return Hue.fromHSB(hue, saturation, brightness);
+	}
+	
+	public void setColor(Color color){
+		java.awt.Color.RGBtoHSB((int)(color.r*255f),(int)(color.g*255f), (int)(color.b*255f), hsbvals);
+		hue = hsbvals[0];
+		saturation = hsbvals[1];
+		brightness = hsbvals[2];
 	}
 
 	private void updateHue(){

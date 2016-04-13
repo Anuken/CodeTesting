@@ -140,6 +140,18 @@ public enum Filter{
 		public float change(float input){
 			return round(input, values.getFloat("amount"));
 		}
+	},
+	shading(){
+		{
+			alwaysEnabled = true;
+			values.add("rscale", new FloatValue(-3f, 3f, 1f));
+			values.add("gscale", new FloatValue(-3f, 3f, 1f));
+			values.add("bscale", new FloatValue(-3f, 3f, 1f));
+		}
+		
+		public void change(Color color, float amount){
+			color.add(amount * values.getFloat("rscale"),amount * values.getFloat("gscale"), amount * values.getFloat("bscale"), 0f);
+		}
 	};
 	protected ValueMap values = new ValueMap();
 	protected Pixmap pixmap;
@@ -148,6 +160,7 @@ public enum Filter{
 	protected int x, y, cy, width, height;
 	protected TreeGenerator tree;
 	protected boolean isApplied = true;
+	protected boolean alwaysEnabled = false;
 	
 	private Filter(){
 		
@@ -163,6 +176,14 @@ public enum Filter{
 
 	protected void apply(){
 
+	}
+	
+	public boolean alwaysEnabled(){
+		return alwaysEnabled;
+	}
+	
+	public void change(Color color, float amount){
+		
 	}
 
 	public boolean isApplied(){
@@ -207,6 +228,7 @@ public enum Filter{
 	public ValueMap valueMap(){
 		return values;
 	}
+	
 	
 	protected void value(String name, Value<?> value){
 		values.add(name, value);
