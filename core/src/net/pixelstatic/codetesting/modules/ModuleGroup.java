@@ -2,6 +2,7 @@ package net.pixelstatic.codetesting.modules;
 
 import java.util.HashMap;
 
+import net.pixelstatic.codetesting.modules.ecstesting.EntityTester;
 import net.pixelstatic.codetesting.modules.generator.*;
 import net.pixelstatic.codetesting.modules.generator2.GeneratorRenderer;
 import net.pixelstatic.codetesting.modules.vertex.VertexEditor;
@@ -54,8 +55,7 @@ public enum ModuleGroup{
 		@Override
 		public Module[] modules(){
 			return new Module[]{
-				new VertexEditor(),
-				new VertexGUI()
+				new EntityTester(),
 			};
 		}
 	};

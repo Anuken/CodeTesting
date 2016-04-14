@@ -10,7 +10,7 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.utils.Array;
 
 public class CodeTester extends ApplicationAdapter{
-	ModuleGroup type = ModuleGroup.VERTEX_EDTIOR;
+	ModuleGroup type = ModuleGroup.ENTITY_TESTER;
 	Array<Module> moduleArray = new Array<Module>();
 	HashMap<Class<? extends Module>, Module> modules = new HashMap<Class<? extends Module>, Module>();
 
