@@ -337,6 +337,10 @@ public class TreeGenerator implements Disposable{
 	public void setVertexObject(VertexObject object){
 		this.object = object;
 	}
+	
+	public VertexObject getVertexObject(){
+		return object;
+	}
 
 	public Texture getTexture(){
 		return texture;
@@ -364,6 +368,10 @@ public class TreeGenerator implements Disposable{
 
 	public Vector2 lightSource(){
 		return lightsource;
+	}
+	
+	public Pixmap getPixmap(){
+		return pixmap;
 	}
 
 	/**Returns an integer projected to polygon coordinates.**/

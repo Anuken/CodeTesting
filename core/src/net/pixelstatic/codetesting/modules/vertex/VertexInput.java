@@ -32,7 +32,7 @@ public class VertexInput implements InputProcessor{
 				gui.gui.showInfo("Each polygon must have at least 3 vertices\nfor the tree to generate!");
 			}
 		}else if(keycode == Keys.T){
-			gui.loadObject(VertexLoader.read(Gdx.files.internal("vertexobjects/pinetreepart.vto")));
+			gui.loadObject(EditorState.readObject(Gdx.files.internal("vertexobjects/pinetreepart.vto")));
 		}
 
 		return false;

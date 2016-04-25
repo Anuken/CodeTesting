@@ -260,6 +260,10 @@ public enum Filter{
 		return values.get(material);
 	}
 	
+	public ObjectMap<Material, ValueMap> materialValueMap(){
+		return values;
+	}
+	
 	protected Value<?> get(String name){
 		if(isStatic()) material = Material.leaves;
 		return values.get(material).get(name);

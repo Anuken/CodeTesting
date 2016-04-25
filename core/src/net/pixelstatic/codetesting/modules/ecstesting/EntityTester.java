@@ -19,6 +19,7 @@ public class EntityTester extends Module{
 	
 	
 	public void init(){
+		new PathfindTest().test();
 		batch = new SpriteBatch();
 		atlas = new Atlas(Gdx.files.internal("sprites/codetesting.pack"));
 		recorder = new GifRecorder(batch);

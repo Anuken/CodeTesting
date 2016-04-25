@@ -11,7 +11,9 @@ import net.pixelstatic.codetesting.modules.vertex.VertexObject.PolygonType;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.PixmapIO;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
@@ -44,7 +46,7 @@ public class VertexGUI extends Module{
 
 	public void updateButtons(){
 		boolean drawMode = editor.drawMode;
-		add.setPosition(0, Gdx.graphics.getHeight() - editor.canvases.size * 30 -30);
+		add.setPosition(0, Gdx.graphics.getHeight() - editor.canvases.size * 30 - 30);
 		symmetry.setChecked(editor.selectedCanvas.symmetry);
 		overwrite.setChecked(drawMode);
 		overwrite.setText(drawMode ? "Draw Mode" : "Edit Mode");
@@ -66,7 +68,7 @@ public class VertexGUI extends Module{
 		plex.addProcessor(new VertexInput(tester.getModule(VertexEditor.class)));
 		plex.addProcessor(stage);
 		Gdx.input.setInputProcessor(plex);
-		
+
 	}
 
 	public VertexGUI(){
@@ -194,7 +196,8 @@ public class VertexGUI extends Module{
 				int option = chooser.showSaveDialog(null);
 				if(option == JFileChooser.APPROVE_OPTION){
 					try{
-						VertexLoader.write(new VertexObject(editor.canvases), Gdx.files.absolute(chooser.getSelectedFile().getAbsolutePath()));
+						exportImage(chooser.getSelectedFile().getAbsolutePath());
+						//	VertexLoader.write(new VertexObject(editor.canvases), Gdx.files.absolute(chooser.getSelectedFile().getAbsolutePath()));
 					}catch(Exception e){
 						JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 						e.printStackTrace();
@@ -206,15 +209,14 @@ public class VertexGUI extends Module{
 		table.row().top().right();
 		table.add(exportbutton).size(width, height);
 
-		Button importbutton = new TextButton("Import", skin);
-		importbutton.addListener(new ClickListener(){
+		Button savebutton = new TextButton("Save", skin);
+		savebutton.addListener(new ClickListener(){
 			public void clicked(InputEvent event, float x, float y){
 				JFileChooser chooser = new JFileChooser();
 				int option = chooser.showOpenDialog(null);
 				if(option == JFileChooser.APPROVE_OPTION){
 					try{
-						VertexObject object = VertexLoader.read(Gdx.files.absolute(chooser.getSelectedFile().getAbsolutePath()));
-						editor.loadObject(object);
+						save(Gdx.files.absolute(chooser.getSelectedFile().getAbsolutePath()));
 					}catch(Exception e){
 						JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 						e.printStackTrace();
@@ -224,7 +226,26 @@ public class VertexGUI extends Module{
 		});
 
 		table.row().top().right();
-		table.add(importbutton).size(width, height);
+		table.add(savebutton).size(width, height);
+
+		Button loadbutton = new TextButton("Load", skin);
+		loadbutton.addListener(new ClickListener(){
+			public void clicked(InputEvent event, float x, float y){
+				JFileChooser chooser = new JFileChooser();
+				int option = chooser.showOpenDialog(null);
+				if(option == JFileChooser.APPROVE_OPTION){
+					try{
+						load(Gdx.files.absolute(chooser.getSelectedFile().getAbsolutePath()));
+					}catch(Exception e){
+						JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+						e.printStackTrace();
+					}
+				}
+			}
+		});
+
+		table.row().top().right();
+		table.add(loadbutton).size(width, height);
 
 		add = new TextButton("New Canvas", skin);
 		add.align(Align.topLeft);
@@ -237,8 +258,13 @@ public class VertexGUI extends Module{
 		stage.addActor(add);
 
 		Dialog editdialog = new Dialog("Filters/Color", skin){
-			public float getPrefWidth(){return 240f;}
-			public float getPrefHeight(){return 720f;}
+			public float getPrefWidth(){
+				return 240f;
+			}
+
+			public float getPrefHeight(){
+				return 720f;
+			}
 		};
 
 		TextButton closebutton = new TextButton("x", skin);
@@ -249,11 +275,11 @@ public class VertexGUI extends Module{
 		});
 
 		editdialog.getTitleTable().add(closebutton).height(20);
-	//	editdialog.setResizable(true);
-		
+		//	editdialog.setResizable(true);
+
 		Label materiallabel = new Label("Material:", skin);
 		editdialog.getContentTable().top().left().add(materiallabel).align(Align.topLeft).row();
-		
+
 		SelectBox<Material> materialbox = new SelectBox<Material>(skin);
 		materialbox.setItems(Material.values());
 		materialbox.addListener(new ChangeListener(){
@@ -266,11 +292,11 @@ public class VertexGUI extends Module{
 				//editor.tree.setFilter(materialbox.getSelected(), filter, checkbox.isChecked());
 			}
 		});
-		
+
 		editdialog.getContentTable().top().left().add(materialbox).height(30).align(Align.topLeft).row();
 		Label colorlabel = new Label("Color:", skin);
 		editdialog.getContentTable().top().left().add(colorlabel).align(Align.topLeft).row();;
-		
+
 		ColorPicker picker = new ColorPicker(skin);
 		picker.setName("colorpicker");
 		picker.setColor(materialbox.getSelected().color);
@@ -280,7 +306,7 @@ public class VertexGUI extends Module{
 			}
 		});
 		editdialog.getContentTable().add(picker).row();;
-		
+
 		TextButton resetcolor = new TextButton("Reset Color", skin);
 		resetcolor.addListener(new ClickListener(){
 			public void clicked(InputEvent event, float x, float y){
@@ -289,10 +315,10 @@ public class VertexGUI extends Module{
 			}
 		});
 		editdialog.getContentTable().add(resetcolor).row();;
-		
+
 		Label filterlabel = new Label("Filters:", skin);
 		editdialog.getContentTable().top().left().add(filterlabel).align(Align.topLeft).row();;
-		
+
 		for(Filter filter : Filter.values()){
 			CheckBox checkbox = new CheckBox(filter.getName(), skin);
 			checkbox.setChecked(editor.tree.isFilterEnabled(materialbox.getSelected(), filter));
@@ -309,16 +335,21 @@ public class VertexGUI extends Module{
 				//checkbox.getLabel().setColor(Color.GRAY);
 			}
 			editdialog.getContentTable().top().left().add(checkbox).align(Align.topLeft);
-			
+
 			if(filter.editable()){
-				
+
 				TextButton editbutton = new TextButton("Edit", skin);
 				editbutton.addListener(new ClickListener(){
 					public void clicked(InputEvent event, float x, float y){
-						System.out.println(materialbox.getSelected());
+						//	System.out.println(materialbox.getSelected());
 						Dialog dialog = new Dialog("Edit Filter", skin){
-							public float getPrefWidth(){return 400f;}
-							public float getPrefHeight(){return filter.valueMap(materialbox.getSelected()).size()*75;}
+							public float getPrefWidth(){
+								return 400f;
+							}
+
+							public float getPrefHeight(){
+								return filter.valueMap(materialbox.getSelected()).size() * 80;
+							}
 						};
 						TextButton editclosebutton = new TextButton("x", skin);
 						editclosebutton.addListener(new ClickListener(){
@@ -326,7 +357,7 @@ public class VertexGUI extends Module{
 								dialog.hide();
 							}
 						});
-						
+
 						dialog.getTitleTable().add(editclosebutton).height(20);
 						dialog.key(Keys.ENTER, true).key(Keys.ESCAPE, false);
 						com.badlogic.gdx.utils.ObjectMap.Keys<String> keys = filter.valueNames(materialbox.getSelected());
@@ -340,7 +371,7 @@ public class VertexGUI extends Module{
 								public void changed(ChangeEvent event, Actor actor){
 									value.onChange(actor);
 									valuelabel.setText(string + ": " + value);
-									System.out.println("Editing value " + string + " for material " + materialbox.getSelected() + " and filter " + filter);
+									//		System.out.println("Editing value " + string + " for material " + materialbox.getSelected() + " and filter " + filter);
 								}
 							});
 							actor.fire(new ChangeListener.ChangeEvent());
@@ -448,6 +479,29 @@ public class VertexGUI extends Module{
 		infodialog = new Dialog("Info", skin, "dialog").text("").button("Ok", true).key(Keys.ENTER, true).key(Keys.ESCAPE, false);
 
 		editor.selectedCanvas.updateBoxes(this);
+	}
+
+	void load(FileHandle file){
+		EditorState save = EditorState.readState(file);
+	}
+
+	void save(FileHandle file){
+		EditorState save = new EditorState();
+		
+		for(Filter filter : Filter.values())
+			save.filtervalues.put(filter, filter.materialValueMap());
+
+		for(Material material : Material.values())
+			save.colors.put(material, material.getColor());
+
+		save.object = editor.tree.getVertexObject();
+		
+		EditorState.writeState(save, file);
+	}
+
+	void exportImage(String path){
+		if( !path.endsWith(".png")) path += ".png";
+		PixmapIO.writePNG(Gdx.files.absolute(path), editor.tree.getPixmap());
 	}
 
 	void add(Actor actor){

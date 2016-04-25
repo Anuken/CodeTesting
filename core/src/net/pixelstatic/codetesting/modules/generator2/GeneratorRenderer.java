@@ -1,7 +1,7 @@
 package net.pixelstatic.codetesting.modules.generator2;
 
 import net.pixelstatic.codetesting.modules.Module;
-import net.pixelstatic.codetesting.modules.vertex.VertexLoader;
+import net.pixelstatic.codetesting.modules.vertex.EditorState;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
@@ -40,7 +40,7 @@ public class GeneratorRenderer extends Module{
 		trees = new TreeGenerator[10];
 		float maxrot = 4f;
 		for(int i = 0; i < trees.length; i ++){
-			TreeGenerator tree = new TreeGenerator(VertexLoader.read(Gdx.files.internal(filename)));
+			TreeGenerator tree = new TreeGenerator(EditorState.readObject(Gdx.files.internal(filename)));
 			trees[i] = tree;
 			tree.getVertexGenerator().segmentRotation = (float)(i) / trees.length * maxrot;
 			tree.generate();
