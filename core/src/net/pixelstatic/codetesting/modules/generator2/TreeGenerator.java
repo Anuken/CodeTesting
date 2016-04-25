@@ -178,8 +178,8 @@ public class TreeGenerator implements Disposable{
 				colors[y * width + x] = /*toARGB*/(pixmap.getPixel(x, y));
 			}
 		}
-		float scale = Filter.crystallize.valueMap().getFloat("scale");
-		int type = Filter.crystallize.valueMap().get("type", CrystalValue.class).getValue().ordinal();
+		float scale = Filter.crystallize.valueMap(Material.leaves).getFloat("scale");
+		int type = Filter.crystallize.valueMap(Material.leaves).get("type", CrystalValue.class).getValue().ordinal();
 		//crystallization...
 		for(int x = 0;x < width;x ++){
 			for(int cy = 0;cy < height;cy ++){

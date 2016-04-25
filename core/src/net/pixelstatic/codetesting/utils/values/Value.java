@@ -60,6 +60,9 @@ public abstract class Value<T>{
 			((SelectBox<Crystal>)actor).setSelected(object);
 		}
 		
+		public CrystalValue clone(){
+			return new CrystalValue(object);
+		}
 	}
 	
 	public static class FloatValue extends Value<Float>{
@@ -93,5 +96,10 @@ public abstract class Value<T>{
 			return string.length() > 3 ? string.substring(0, 4) : string;
 		}
 		
+		public FloatValue clone(){
+			return new FloatValue(min, max, object);
+		}
 	}
+	
+	public abstract Value<?> clone();
 }

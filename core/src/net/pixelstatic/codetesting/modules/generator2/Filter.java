@@ -8,15 +8,16 @@ import net.pixelstatic.codetesting.utils.values.Value.FloatValue;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ObjectMap.Keys;
 
 public enum Filter{
 	light(false){
 		{
-			//values.add("sourcex", new FloatValue(0, 99, 99));
-			//values.add("sourcey", new FloatValue(0, 99, 99));
-			values.add("polylightscale", new FloatValue(-1, 1, 0.14f));
-			values.add("lightscale", new FloatValue(-1, 1, 0.5f));
+			//value("sourcex", new FloatValue(0, 99, 99));
+			//value("sourcey", new FloatValue(0, 99, 99));
+			value("polylightscale", new FloatValue(-1, 1, 0.14f));
+			value("lightscale", new FloatValue(-1, 1, 0.5f));
 	
 		}
 	//	private Vector2 lightsource = new Vector2();
@@ -24,8 +25,8 @@ public enum Filter{
 		public float applyBrightness(){
 			float gscl = -0.1f;
 
-			float selflightscale = values.get("polylightscale").getValue(Float.class);//0.4f; //default is 0.7f
-			float globallightscale = values.get("lightscale").getValue(Float.class); //default is 0.6f;
+			float selflightscale = get("polylightscale").getValue(Float.class);//0.4f; //default is 0.7f
+			float globallightscale = get("lightscale").getValue(Float.class); //default is 0.6f;
 
 			float dist = pixel.polygon.height() / 3f + gscl + selflightscale * (((1.5f) - pixel.polygon.lightVertice.dst(project(x - width / 2), project(y))));
 			float lightdist = gscl + globallightscale * ((1f - tree.lightSource().dst(project(x - width / 2), project(y))));
@@ -34,29 +35,29 @@ public enum Filter{
 	},
 	distlight(false){
 		{
-			values.add("intensity", new FloatValue(0, 20, 1f));
+			value("intensity", new FloatValue(0, 20, 1f));
 		}
 		public float applyBrightness(){
 			float dist = pixel.polygon.distance(project(x - width / 2), project(y));
-			return dist * values.get("intensity").getValue(Float.class) / (pixel.polygon.dimensions() * 3.4f);
+			return dist * get("intensity").getValue(Float.class) / (pixel.polygon.dimensions() * 3.4f);
 		}
 	},
 	noise(false){
 		{
-			values.add("scale", new FloatValue(0, 15, 4f));
-			values.add("magnitude", new FloatValue(-2, 2, 0.2f));
+			value("scale", new FloatValue(0, 15, 4f));
+			value("magnitude", new FloatValue(-2, 2, 0.2f));
 		}
 		public float applyBrightness(){
-			float scl = values.get("scale").getValue(Float.class), mag = values.get("magnitude").getValue(Float.class);
+			float scl = get("scale").getValue(Float.class), mag = get("magnitude").getValue(Float.class);
 			return Patterns.noise(x, y, scl, mag);
 		}
 	},
 	needles(false){
 		{
-			values.add("intensity", new FloatValue(-1f, 1f, 0.3f));
+			value("intensity", new FloatValue(-1f, 1f, 0.3f));
 		}
 		public float applyBrightness(){
-			float intensity = values.get("intensity").getValue(Float.class);
+			float intensity = get("intensity").getValue(Float.class);
 			return intensity*Patterns.leaves(x + (int)(pixel.polygon.center.x * 1 / 60f), y + (int)(pixel.polygon.center.y * 1 / 60f));
 		}
 	},
@@ -76,31 +77,31 @@ public enum Filter{
 	},
 	lines(false){
 		{
-			values.add("intensity", new FloatValue(-1f, 1f, 0.03f));
+			value("intensity", new FloatValue(-1f, 1f, 0.03f));
 		}
 		public float applyBrightness(){
-			float intensity = values.get("intensity").getValue(Float.class);
+			float intensity = get("intensity").getValue(Float.class);
 			return Patterns.mod(x, y, intensity);
 		}
 	},
 	barklines(false){
 		{
-			values.add("intensity", new FloatValue(-5f, 5f, 0.05f));
+			value("intensity", new FloatValue(-5f, 5f, 0.05f));
 		}
 		public float applyBrightness(){
-			float intensity = values.get("intensity").getValue(Float.class);
+			float intensity = get("intensity").getValue(Float.class);
 			return Patterns.nMod(x, y, intensity);
 		}
 	},
 	crystallize(true){
 		{
-			values.add("scale", new FloatValue(0, 20f, 5f));
-			values.add("type", new CrystalValue(Crystal.HEXAGONAL));
+			value("scale", new FloatValue(0, 20f, 5f));
+			value("type", new CrystalValue(Crystal.HEXAGONAL));
 		}
 	},
 	shadows(true){
 		{
-			values.add("intensity", new FloatValue(-1f, 1f, 0.33f));
+			value("intensity", new FloatValue(-1f, 1f, 0.33f));
 		}
 	
 		public void apply(){
@@ -114,20 +115,20 @@ public enum Filter{
 
 			if( !(poly.above(other))) return;
 			
-			float i =  values.getFloat("intensity");
+			float i =  getFloat("intensity");
 			pixmap.drawPixel(x, cy, Color.rgba8888(new Color(0,0,0,i)));
 		}
 	},
 	outline{
 		{
-			values.add("intensity", new FloatValue(0f, 1f, 0.2f));
+			value("intensity", new FloatValue(0f, 1f, 0.2f));
 		}
 		
 		public void apply(){
 			int y = height - 1 - cy;
 			Pixel pixel = materials[x][y];
 			if(pixel.material == null) return;
-			int color = Color.rgba8888(new Color(0, 0, 0, values.getFloat("intensity")));
+			int color = Color.rgba8888(new Color(0, 0, 0, getFloat("intensity")));
 
 			if( !same(pixel, x, y - 1)){
 				pixmap.drawPixel(x, cy, color);
@@ -142,25 +143,30 @@ public enum Filter{
 	},
 	round(false){
 		{
-			values.add("amount", new FloatValue(0.01f, 1f, 0.1f));
+			value("amount", new FloatValue(0.01f, 1f, 0.1f));
 		}
 		public float change(float input){
-			return round(input, values.getFloat("amount"));
+			return round(input, getFloat("amount"));
 		}
 	},
 	shading(){
 		{
 			alwaysEnabled = true;
-			values.add("rscale", new FloatValue(-3f, 3f, 1f));
-			values.add("gscale", new FloatValue(-3f, 3f, 1f));
-			values.add("bscale", new FloatValue(-3f, 3f, -0.8f));
+			value("rscale", new FloatValue(-3f, 3f, 1f));
+			value("gscale", new FloatValue(-3f, 3f, 1f));
+			value("bscale", new FloatValue(-3f, 3f, -0.8f));
 		}
 		
 		public void change(Color color, float amount){
-			color.add(amount * values.getFloat("rscale"),amount * values.getFloat("gscale"), amount * values.getFloat("bscale"), 0f);
+			color.add(amount * getFloat("rscale"),amount * getFloat("gscale"), amount * getFloat("bscale"), 0f);
+		}
+		
+		public boolean isStatic(){
+			return true;
 		}
 	};
-	protected ValueMap values = new ValueMap();
+	//protected ValueMap values = new ValueMap();
+	protected ObjectMap<Material, ValueMap> values = new ObjectMap<Material, ValueMap>();
 	protected Pixmap pixmap;
 	protected Pixel[][] materials;
 	protected Pixel pixel;
@@ -168,12 +174,22 @@ public enum Filter{
 	protected TreeGenerator tree;
 	protected boolean isApplied = true;
 	protected boolean alwaysEnabled = false;
+	protected Material material;
+	
+	protected void value(String name, Value<?> value){
+		for(ValueMap map : values.values()){
+			map.add(name, value.clone());
+		}
+	}
 	
 	private Filter(){
-		
+		for(Material material : Material.values()){
+			values.put(material, new ValueMap());
+		}
 	}
 	
 	private Filter(boolean applied){
+		this();
 		this.isApplied = applied;
 	}
 
@@ -200,6 +216,10 @@ public enum Filter{
 	public float change(float input){
 		return input;
 	}
+	
+	public boolean isStatic(){
+		return false;
+	}
 
 	public final float apply(TreeGenerator tree, Pixmap pixmap, Pixel[][] materials, Pixel pixel, int x, int y, int cy, int width, int height){
 		this.pixel = pixel;
@@ -211,6 +231,8 @@ public enum Filter{
 		this.width = width;
 		this.height = height;
 		this.cy = cy;
+		this.material = pixel.material;
+		//if(material == null) return 0f;
 		if(isApplied()){
 			apply();
 			return 0f;
@@ -228,18 +250,31 @@ public enum Filter{
 		return name.substring(0, 1).toUpperCase() + name.substring(1);
 	}
 	
-	public Keys<String> valueNames(){
-		return values.valueNames();
+	public Keys<String> valueNames(Material material){
+		if(isStatic()) material = Material.leaves;
+		return values.get(material).valueNames();
 	}
 	
-	public ValueMap valueMap(){
-		return values;
+	public ValueMap valueMap(Material material){
+		if(isStatic()) material = Material.leaves;
+		return values.get(material);
+	}
+	
+	protected Value<?> get(String name){
+		if(isStatic()) material = Material.leaves;
+		return values.get(material).get(name);
+	}
+	
+	protected float getFloat(String name){
+		if(isStatic()) material = Material.leaves;
+		System.out.println(material);
+		return values.get(material).getFloat(name);
 	}
 	
 	
-	protected void value(String name, Value<?> value){
-		values.add(name, value);
-	}
+	//protected void value(String name, Value<?> value){
+	//	value(name, value);
+	//}
 
 	protected float project(int i){
 		return tree.project(i);

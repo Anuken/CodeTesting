@@ -3,6 +3,7 @@ package net.pixelstatic.codetesting.modules.ecstesting;
 import net.pixelstatic.codetesting.modules.Module;
 import net.pixelstatic.codetesting.utils.Atlas;
 import net.pixelstatic.utils.GifRecorder;
+import net.pixelstatic.utils.ShadowGenerator;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
@@ -24,6 +25,7 @@ public class EntityTester extends Module{
 		recorder.setFPS(30);
 		for(int i = 0; i < 9999*3; i ++)
 		entities.put((long)i, new TestEntity());
+		new ShadowGenerator(null).generateImages();
 	}
 
 	@Override

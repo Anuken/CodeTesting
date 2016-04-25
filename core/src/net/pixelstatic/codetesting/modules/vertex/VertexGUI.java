@@ -309,16 +309,16 @@ public class VertexGUI extends Module{
 				//checkbox.getLabel().setColor(Color.GRAY);
 			}
 			editdialog.getContentTable().top().left().add(checkbox).align(Align.topLeft);
-
 			
 			if(filter.editable()){
+				
 				TextButton editbutton = new TextButton("Edit", skin);
 				editbutton.addListener(new ClickListener(){
 					public void clicked(InputEvent event, float x, float y){
-
+						System.out.println(materialbox.getSelected());
 						Dialog dialog = new Dialog("Edit Filter", skin){
 							public float getPrefWidth(){return 400f;}
-							public float getPrefHeight(){return filter.valueMap().size()*75;}
+							public float getPrefHeight(){return filter.valueMap(materialbox.getSelected()).size()*75;}
 						};
 						TextButton editclosebutton = new TextButton("x", skin);
 						editclosebutton.addListener(new ClickListener(){
@@ -329,9 +329,10 @@ public class VertexGUI extends Module{
 						
 						dialog.getTitleTable().add(editclosebutton).height(20);
 						dialog.key(Keys.ENTER, true).key(Keys.ESCAPE, false);
-						com.badlogic.gdx.utils.ObjectMap.Keys<String> keys = filter.valueNames();
+						com.badlogic.gdx.utils.ObjectMap.Keys<String> keys = filter.valueNames(materialbox.getSelected());
+
 						for(String string : keys){
-							net.pixelstatic.codetesting.utils.values.Value<?> value = filter.valueMap().get(string);
+							net.pixelstatic.codetesting.utils.values.Value<?> value = filter.valueMap(materialbox.getSelected()).get(string);
 							Label valuelabel = new Label(string, skin);
 							dialog.getContentTable().top().left().add(valuelabel).align(Align.topLeft).row();;
 							Actor actor = value.getActor(skin);
@@ -339,6 +340,7 @@ public class VertexGUI extends Module{
 								public void changed(ChangeEvent event, Actor actor){
 									value.onChange(actor);
 									valuelabel.setText(string + ": " + value);
+									System.out.println("Editing value " + string + " for material " + materialbox.getSelected() + " and filter " + filter);
 								}
 							});
 							actor.fire(new ChangeListener.ChangeEvent());
@@ -356,7 +358,7 @@ public class VertexGUI extends Module{
 						dialog.show(stage);
 					}
 				});
-				if(filter.valueMap().size() == 0){
+				if(filter.valueMap(materialbox.getSelected()).size() == 0){
 					editbutton.setTouchable(Touchable.disabled);
 					editbutton.setColor(Color.GRAY);
 					editbutton.getLabel().setColor(Color.GRAY);
