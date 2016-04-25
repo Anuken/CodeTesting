@@ -264,6 +264,10 @@ public enum Filter{
 		return values;
 	}
 	
+	public void setMaterialValueMap(ObjectMap<Material, ValueMap> values){
+		this.values = values;
+	}
+	
 	protected Value<?> get(String name){
 		if(isStatic()) material = Material.leaves;
 		return values.get(material).get(name);
@@ -271,7 +275,6 @@ public enum Filter{
 	
 	protected float getFloat(String name){
 		if(isStatic()) material = Material.leaves;
-		System.out.println(material);
 		return values.get(material).getFloat(name);
 	}
 	

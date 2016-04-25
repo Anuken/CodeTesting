@@ -12,7 +12,7 @@ import com.badlogic.gdx.utils.ObjectMap;
 
 public class EditorState{
 	static Json json = new Json();
-	public VertexObject object;
+	public VertexObject vertexobject;
 	public ObjectMap<Filter, ObjectMap<Material, ValueMap>> filtervalues = new ObjectMap<Filter, ObjectMap<Material, ValueMap>>();
 	public ObjectMap<Material, Color> colors = new ObjectMap<Material, Color>();
 

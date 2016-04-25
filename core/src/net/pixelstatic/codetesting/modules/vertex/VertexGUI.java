@@ -11,9 +11,7 @@ import net.pixelstatic.codetesting.modules.vertex.VertexObject.PolygonType;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.PixmapIO;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
@@ -196,7 +194,7 @@ public class VertexGUI extends Module{
 				int option = chooser.showSaveDialog(null);
 				if(option == JFileChooser.APPROVE_OPTION){
 					try{
-						exportImage(chooser.getSelectedFile().getAbsolutePath());
+						editor.exportImage(chooser.getSelectedFile().getAbsolutePath());
 						//	VertexLoader.write(new VertexObject(editor.canvases), Gdx.files.absolute(chooser.getSelectedFile().getAbsolutePath()));
 					}catch(Exception e){
 						JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -213,10 +211,10 @@ public class VertexGUI extends Module{
 		savebutton.addListener(new ClickListener(){
 			public void clicked(InputEvent event, float x, float y){
 				JFileChooser chooser = new JFileChooser();
-				int option = chooser.showOpenDialog(null);
+				int option = chooser.showSaveDialog(null);
 				if(option == JFileChooser.APPROVE_OPTION){
 					try{
-						save(Gdx.files.absolute(chooser.getSelectedFile().getAbsolutePath()));
+						editor.saveState(Gdx.files.absolute(chooser.getSelectedFile().getAbsolutePath()));
 					}catch(Exception e){
 						JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 						e.printStackTrace();
@@ -235,7 +233,7 @@ public class VertexGUI extends Module{
 				int option = chooser.showOpenDialog(null);
 				if(option == JFileChooser.APPROVE_OPTION){
 					try{
-						load(Gdx.files.absolute(chooser.getSelectedFile().getAbsolutePath()));
+						editor.loadState(Gdx.files.absolute(chooser.getSelectedFile().getAbsolutePath()));
 					}catch(Exception e){
 						JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 						e.printStackTrace();
@@ -481,28 +479,6 @@ public class VertexGUI extends Module{
 		editor.selectedCanvas.updateBoxes(this);
 	}
 
-	void load(FileHandle file){
-		EditorState save = EditorState.readState(file);
-	}
-
-	void save(FileHandle file){
-		EditorState save = new EditorState();
-		
-		for(Filter filter : Filter.values())
-			save.filtervalues.put(filter, filter.materialValueMap());
-
-		for(Material material : Material.values())
-			save.colors.put(material, material.getColor());
-
-		save.object = editor.tree.getVertexObject();
-		
-		EditorState.writeState(save, file);
-	}
-
-	void exportImage(String path){
-		if( !path.endsWith(".png")) path += ".png";
-		PixmapIO.writePNG(Gdx.files.absolute(path), editor.tree.getPixmap());
-	}
 
 	void add(Actor actor){
 		table.row().top().right();

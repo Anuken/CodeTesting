@@ -337,10 +337,6 @@ public class TreeGenerator implements Disposable{
 	public void setVertexObject(VertexObject object){
 		this.object = object;
 	}
-	
-	public VertexObject getVertexObject(){
-		return object;
-	}
 
 	public Texture getTexture(){
 		return texture;

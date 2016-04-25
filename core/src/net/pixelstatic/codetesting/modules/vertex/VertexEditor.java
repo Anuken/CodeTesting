@@ -1,20 +1,26 @@
 package net.pixelstatic.codetesting.modules.vertex;
 
 import net.pixelstatic.codetesting.modules.Module;
+import net.pixelstatic.codetesting.modules.generator2.Filter;
 import net.pixelstatic.codetesting.modules.generator2.Material;
 import net.pixelstatic.codetesting.modules.generator2.TreeGenerator;
 import net.pixelstatic.codetesting.modules.vertex.VertexObject.PolygonType;
+import net.pixelstatic.codetesting.utils.ValueMap;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.PixmapIO;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.ObjectMap;
+
 
 public class VertexEditor extends Module{
 	final Color otherVerticeColor = Color.BLUE;
@@ -222,6 +228,51 @@ public class VertexEditor extends Module{
 		VertexCanvas trunk = addCanvas("trunk");
 		trunk.list.material = Material.wood;
 		
+	}
+	
+	@SuppressWarnings("unchecked")
+	void loadState(FileHandle file){
+		EditorState save = EditorState.readState(file);
+		//note: this random casting is needed because JSON serializes enums as strings?
+		ObjectMap<String, ObjectMap<String, ValueMap>> fmap = (ObjectMap<String, ObjectMap<String, ValueMap>>)((Object)save.filtervalues);
+		
+		for(Filter filter : Filter.values()){
+			for(Material material : Material.values()){
+				ValueMap values = fmap.get(filter.toString()).get(material.toString());
+				
+				for(String key : values.valueNames()){
+					filter.materialValueMap().get(material).add(key, values.get(key));
+				}
+			}
+		}
+		ObjectMap<String, Color> map = (ObjectMap<String, Color>)((Object)save.colors);
+		for(Material material : Material.values()){
+			material.color = map.get(material.toString());
+		}
+			//save.colors.put(material, material.getColor());
+		
+		loadObject(save.vertexobject);
+	}
+
+	void saveState(FileHandle file){
+		EditorState save = new EditorState();
+		
+		for(Filter filter : Filter.values())
+			save.filtervalues.put(filter, filter.materialValueMap());
+
+		for(Material material : Material.values()){
+			save.colors.put(material, material.getColor());
+			System.out.println(material.getColor());
+		}
+
+		save.vertexobject = new VertexObject(canvases);
+		
+		EditorState.writeState(save, file);
+	}
+
+	void exportImage(String path){
+		if( !path.endsWith(".png")) path += ".png";
+		PixmapIO.writePNG(Gdx.files.absolute(path), tree.getPixmap());
 	}
 
 	void loadObject(VertexObject object){

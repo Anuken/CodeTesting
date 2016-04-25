@@ -34,7 +34,11 @@ public abstract class Value<T>{
 		return n.cast(object);
 	}
 	
+		
+	
 	public static class CrystalValue extends Value<Crystal>{
+		
+		protected CrystalValue(){super(null);}
 
 		public CrystalValue(Crystal t){
 			super(t);
@@ -67,6 +71,8 @@ public abstract class Value<T>{
 	
 	public static class FloatValue extends Value<Float>{
 		private float min, max;
+		
+		protected FloatValue(){super(null);}
 		
 		public FloatValue(float min, float max, float def){
 			super(def);
