@@ -33,9 +33,7 @@ public abstract class Value<T>{
 	public <N> N getValue(Class<N> n){
 		return n.cast(object);
 	}
-	
 		
-	
 	public static class CrystalValue extends Value<Crystal>{
 		
 		protected CrystalValue(){super(null);}

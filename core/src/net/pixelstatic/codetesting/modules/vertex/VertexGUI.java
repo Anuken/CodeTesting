@@ -195,7 +195,6 @@ public class VertexGUI extends Module{
 				if(option == JFileChooser.APPROVE_OPTION){
 					try{
 						editor.exportImage(chooser.getSelectedFile().getAbsolutePath());
-						//	VertexLoader.write(new VertexObject(editor.canvases), Gdx.files.absolute(chooser.getSelectedFile().getAbsolutePath()));
 					}catch(Exception e){
 						JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 						e.printStackTrace();

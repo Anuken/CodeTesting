@@ -15,6 +15,8 @@ public class EditorState{
 	public VertexObject vertexobject;
 	public ObjectMap<Filter, ObjectMap<Material, ValueMap>> filtervalues = new ObjectMap<Filter, ObjectMap<Material, ValueMap>>();
 	public ObjectMap<Material, Color> colors = new ObjectMap<Material, Color>();
+	public ObjectMap<String, ObjectMap<String, Boolean>> filters = new ObjectMap<String, ObjectMap<String, Boolean>>();
+
 
 	static public void writeObject(VertexObject object, FileHandle file){
 		String string = json.toJson(object);

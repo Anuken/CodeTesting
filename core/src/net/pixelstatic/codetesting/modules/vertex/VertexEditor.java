@@ -233,6 +233,7 @@ public class VertexEditor extends Module{
 	@SuppressWarnings("unchecked")
 	void loadState(FileHandle file){
 		EditorState save = EditorState.readState(file);
+		
 		//note: this random casting is needed because JSON serializes enums as strings?
 		ObjectMap<String, ObjectMap<String, ValueMap>> fmap = (ObjectMap<String, ObjectMap<String, ValueMap>>)((Object)save.filtervalues);
 		
@@ -245,11 +246,17 @@ public class VertexEditor extends Module{
 				}
 			}
 		}
+		
+		for(Material material : Material.values()){
+			for(Filter filter : Filter.values()){
+				tree.setFilter(material, filter, save.filters.get(material.toString()).get(filter.toString()));
+			}
+		}
+		
 		ObjectMap<String, Color> map = (ObjectMap<String, Color>)((Object)save.colors);
 		for(Material material : Material.values()){
 			material.color = map.get(material.toString());
 		}
-			//save.colors.put(material, material.getColor());
 		
 		loadObject(save.vertexobject);
 	}
@@ -263,6 +270,13 @@ public class VertexEditor extends Module{
 		for(Material material : Material.values()){
 			save.colors.put(material, material.getColor());
 			System.out.println(material.getColor());
+		}
+		
+		for(Material material : Material.values()){
+			save.filters.put(material.toString(), new ObjectMap<String, Boolean>());
+			for(Filter filter : Filter.values()){
+				save.filters.get(material.toString()).put(filter.toString(), tree.isFilterEnabled(material, filter));
+			}
 		}
 
 		save.vertexobject = new VertexObject(canvases);

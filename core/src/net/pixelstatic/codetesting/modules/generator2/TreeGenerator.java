@@ -369,6 +369,10 @@ public class TreeGenerator implements Disposable{
 	public Pixmap getPixmap(){
 		return pixmap;
 	}
+	
+	public ObjectMap<Material, ObjectMap<Filter, Boolean>> getFilters(){
+		return filters;
+	}
 
 	/**Returns an integer projected to polygon coordinates.**/
 	public float project(int i){
