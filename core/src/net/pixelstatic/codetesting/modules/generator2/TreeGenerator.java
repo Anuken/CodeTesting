@@ -14,6 +14,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.ObjectMap;
 
+@SuppressWarnings("unused")
 public class TreeGenerator implements Disposable{
 	public final int width = 60, height = 80;
 	private Pixel[][] materials;
@@ -52,7 +53,7 @@ public class TreeGenerator implements Disposable{
 		for(int x = 0;x < width;x ++){
 			for(int y = 0;y < height;y ++){
 				Pixel pixel = materials[x][y];
-				if(pixel.material == null) continue;
+				if(pixel.material != Material.leaves) continue;
 				float f = shading[x][y];
 				shademin = Math.min(f, shademin);
 				shademax = Math.max(f, shademax);

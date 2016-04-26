@@ -77,7 +77,7 @@ public enum Filter{
 	},
 	lines(false){
 		{
-			value("intensity", new FloatValue(-1f, 1f, 0.03f));
+			value("intensity", new FloatValue(-0.5f, 0.5f, 0.03f));
 		}
 		public float applyBrightness(){
 			float intensity = get("intensity").getValue(Float.class);
@@ -102,12 +102,14 @@ public enum Filter{
 	shadows(true){
 		{
 			value("intensity", new FloatValue(-1f, 1f, 0.33f));
+			value("offsetx", new FloatValue(-8f, 8f, -2));
+			value("offsety", new FloatValue(-8f, 8f, 3));
 		}
 	
 		public void apply(){
 			if(y == 0) return;
-			int offsetx = x - 2;
-			int offsety = y + 3;
+			int offsetx = x + (int)getFloat("offsetx");//- 2;
+			int offsety = y + (int)getFloat("offsety");;
 
 			GeneratorPolygon poly = getPixelPolygon(offsetx, offsety);
 			GeneratorPolygon other = getPixelPolygon(x, y);

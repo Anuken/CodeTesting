@@ -32,6 +32,8 @@ public class VertexGUI extends Module{
 	SelectBox<PolygonType> typebox;
 	Texture colorbox;
 	TextField field;
+	Dialog editdialog;
+	SelectBox<Material> materialbox;
 	float uiwidth = 130, uiheight = 30;
 
 	@Override
@@ -233,6 +235,7 @@ public class VertexGUI extends Module{
 				if(option == JFileChooser.APPROVE_OPTION){
 					try{
 						editor.loadState(Gdx.files.absolute(chooser.getSelectedFile().getAbsolutePath()));
+						((ColorPicker)editdialog.getContentTable().findActor("colorpicker")).setColor(materialbox.getSelected().color);
 					}catch(Exception e){
 						JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 						e.printStackTrace();
@@ -254,7 +257,7 @@ public class VertexGUI extends Module{
 		});
 		stage.addActor(add);
 
-		Dialog editdialog = new Dialog("Filters/Color", skin){
+		editdialog = new Dialog("Filters/Color", skin){
 			public float getPrefWidth(){
 				return 240f;
 			}
@@ -277,7 +280,7 @@ public class VertexGUI extends Module{
 		Label materiallabel = new Label("Material:", skin);
 		editdialog.getContentTable().top().left().add(materiallabel).align(Align.topLeft).row();
 
-		SelectBox<Material> materialbox = new SelectBox<Material>(skin);
+		materialbox = new SelectBox<Material>(skin);
 		materialbox.setItems(Material.values());
 		materialbox.addListener(new ChangeListener(){
 			public void changed(ChangeEvent event, Actor actor){
