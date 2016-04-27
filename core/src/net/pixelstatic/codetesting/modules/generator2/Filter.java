@@ -109,7 +109,7 @@ public enum Filter{
 		public void apply(){
 			if(y == 0) return;
 			int offsetx = x + (int)getFloat("offsetx");//- 2;
-			int offsety = y + (int)getFloat("offsety");;
+			int offsety = y + (int)(getFloat("offsety")* ( 1.2f-(float)(y)/height));
 
 			GeneratorPolygon poly = getPixelPolygon(offsetx, offsety);
 			GeneratorPolygon other = getPixelPolygon(x, y);
