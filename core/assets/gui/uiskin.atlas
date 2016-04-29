@@ -6,24 +6,38 @@ filter: Linear,Linear
 repeat: none
 check-off
   rotate: false
-  xy: 11, 5
-  size: 14, 14
-  orig: 14, 14
+  xy: 42, 11
+  size: 14, 17
+  orig: 14, 17
+  offset: 0, 0
+  index: -1
+check-over
+  rotate: false
+  xy: 72, 11
+  size: 14, 17
+  orig: 14, 17
+  offset: 0, 0
+  index: -1
+check-on-over
+  rotate: false
+  xy: 87, 11
+  size: 14, 17
+  orig: 14, 17
   offset: 0, 0
   index: -1
 textfield
   rotate: false
-  xy: 11, 5
-  size: 14, 14
+  xy: 42, 11
+  size: 14, 17
   split: 3, 3, 3, 3
-  orig: 14, 14
+  orig: 14, 17
   offset: 0, 0
   index: -1
 check-on
   rotate: false
-  xy: 125, 35
-  size: 14, 14
-  orig: 14, 14
+  xy: 57, 11
+  size: 14, 17
+  orig: 14, 17
   offset: 0, 0
   index: -1
 cursor
@@ -83,7 +97,7 @@ default-rect-down
   index: -1
 default-round-over
   rotate: false
-  xy: 99, 7
+  xy: 112, 8
   size: 12, 20
   split: 5, 5, 5, 4
   pad: 4, 4, 1, 1

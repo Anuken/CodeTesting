@@ -79,6 +79,8 @@ public class VertexGUI extends Module{
 		skin.add("blank", new Texture("gui/blank.png"));
 		stage = new Stage();
 		stage.setViewport(new ScreenViewport());
+		skin.getFont("default-font").setUseIntegerPositions(false);
+		skin.getFont("default-font").getData().setScale(0.5f);
 		ActorAlign.stage = stage;
 	}
 
@@ -345,7 +347,7 @@ public class VertexGUI extends Module{
 						//	System.out.println(materialbox.getSelected());
 						Dialog dialog = new Dialog("Edit Filter", skin){
 							public float getPrefWidth(){
-								return 400f;
+								return 250f;
 							}
 
 							public float getPrefHeight(){
@@ -359,7 +361,7 @@ public class VertexGUI extends Module{
 							}
 						});
 
-						dialog.getTitleTable().add(editclosebutton).height(20);
+						dialog.getTitleTable().add(editclosebutton).height(17);
 						dialog.key(Keys.ENTER, true).key(Keys.ESCAPE, false);
 						com.badlogic.gdx.utils.ObjectMap.Keys<String> keys = filter.valueNames(materialbox.getSelected());
 
