@@ -79,8 +79,8 @@ public class VertexGUI extends Module{
 		skin.add("blank", new Texture("gui/blank.png"));
 		stage = new Stage();
 		stage.setViewport(new ScreenViewport());
-		skin.getFont("default-font").setUseIntegerPositions(false);
-		skin.getFont("default-font").getData().setScale(0.5f);
+		//skin.getFont("default-font").setUseIntegerPositions(false);
+		//skin.getFont("default-font").getData().setScale(0.5f);
 		ActorAlign.stage = stage;
 	}
 
