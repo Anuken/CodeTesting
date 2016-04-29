@@ -6,6 +6,7 @@ import net.pixelstatic.codetesting.modules.generator2.Material;
 import net.pixelstatic.codetesting.modules.generator2.TreeGenerator;
 import net.pixelstatic.codetesting.modules.vertex.VertexObject.PolygonType;
 import net.pixelstatic.codetesting.utils.ValueMap;
+import net.pixelstatic.utils.Hue;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Buttons;
@@ -65,7 +66,7 @@ public class VertexEditor extends Module{
 	void draw(){
 		//draw center of coords
 		shape.set(ShapeType.Line);
-		shape.setColor(Color.BLUE);
+		shape.setColor(Hue.rgb(106, 162, 246));
 		shape.line(Gdx.graphics.getWidth() / 2 + offsetx, 0, Gdx.graphics.getWidth() / 2 + offsetx, Gdx.graphics.getHeight());
 		shape.line(0, Gdx.graphics.getHeight() / 2 + offsety, Gdx.graphics.getWidth(), Gdx.graphics.getHeight() / 2 + offsety);
 
@@ -79,11 +80,11 @@ public class VertexEditor extends Module{
 
 
 		shape.set(ShapeType.Line);
-		shape.setColor(Color.MAGENTA);
+		shape.setColor(Hue.rgb(130, 52, 180));
 		if(selectedCanvas.symmetry && drawing) shape.line(centerx(), 0, centerx(), Gdx.graphics.getHeight());
 
 		float lineoffset = 1f;
-		shape.setColor(Color.RED);
+		shape.setColor(Hue.rgb(76, 52, 255));
 		shape.rect(lineoffset, lineoffset, tree.width * treeScale, tree.height * treeScale);
 	}
 

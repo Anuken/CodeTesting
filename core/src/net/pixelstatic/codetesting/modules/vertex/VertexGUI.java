@@ -40,6 +40,7 @@ public class VertexGUI extends Module{
 	public void update(){
 		if(Gdx.input.isKeyPressed(Keys.ESCAPE)) Gdx.app.exit();
 		updateButtons();
+		Gdx.gl.glClearColor(20/255f, 33/255f, 52/255f, 1);
 		stage.act(Gdx.graphics.getDeltaTime());
 		stage.draw();
 	}
