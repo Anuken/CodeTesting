@@ -1,18 +1,17 @@
 package net.pixelstatic.codetesting;
 
-import java.util.HashMap;
-
 import net.pixelstatic.codetesting.entities.Entity;
 import net.pixelstatic.codetesting.modules.Module;
 import net.pixelstatic.codetesting.modules.ModuleGroup;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.ObjectMap;
 
 public class CodeTester extends ApplicationAdapter{
 	ModuleGroup type = ModuleGroup.VERTEX_EDTIOR;
 	Array<Module> moduleArray = new Array<Module>();
-	HashMap<Class<? extends Module>, Module> modules = new HashMap<Class<? extends Module>, Module>();
+	ObjectMap<Class<? extends Module>, Module> modules = new ObjectMap<Class<? extends Module>, Module>();
 
 	@Override
 	public void create(){
