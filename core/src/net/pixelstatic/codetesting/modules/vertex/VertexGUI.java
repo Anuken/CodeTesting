@@ -268,13 +268,14 @@ public class VertexGUI extends Module{
 		};
 
 		TextButton closebutton = new TextButton("x", skin);
+		
 		closebutton.addListener(new ClickListener(){
 			public void clicked(InputEvent event, float x, float y){
 				editdialog.hide();
 			}
 		});
 
-		editdialog.getTitleTable().add(closebutton).height(20);
+		editdialog.getTitleTable().add(closebutton).height(17);
 		//	editdialog.setResizable(true);
 
 		Label materiallabel = new Label("Material:", skin);
