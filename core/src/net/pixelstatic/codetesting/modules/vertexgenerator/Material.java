@@ -1,4 +1,4 @@
-package net.pixelstatic.codetesting.modules.generator2;
+package net.pixelstatic.codetesting.modules.vertexgenerator;
 
 import com.badlogic.gdx.graphics.Color;
 import com.jhlabs.image.CellularFilter;

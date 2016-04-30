@@ -1,6 +1,7 @@
-package net.pixelstatic.codetesting.modules.generator2;
+package net.pixelstatic.codetesting.modules.vertexgenerator;
 
-import net.pixelstatic.codetesting.utils.Noise;
+
+import net.pixelstatic.utils.Noise;
 
 import com.badlogic.gdx.graphics.Color;
 import com.jhlabs.image.CellularFilter;
@@ -61,7 +62,7 @@ public class Patterns{
 	}
 	
 	public static float noise(int x, int y, float scl, float mag){
-		return (float)Math.abs(Noise.NormalNoise(x, y, scl, mag, 1f));
+		return (float)Math.abs(Noise.normalNoise(x, y, scl, mag, 1f));
 	}
 	
 	public static int leafPattern(int x, int y, int width, int height, int[] colors, int type, float scale){

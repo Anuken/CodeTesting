@@ -1,4 +1,6 @@
-package net.pixelstatic.codetesting.modules.vertex;
+package net.pixelstatic.codetesting.modules.vertexgui;
+
+import net.pixelstatic.codetesting.modules.vertexgenerator.VertexObject;
 
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.Input.Buttons;

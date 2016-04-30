@@ -1,7 +1,7 @@
 package net.pixelstatic.codetesting.modules.ecstesting;
 
 import net.pixelstatic.codetesting.modules.Module;
-import net.pixelstatic.codetesting.utils.Atlas;
+import net.pixelstatic.utils.Atlas;
 import net.pixelstatic.utils.GifRecorder;
 import net.pixelstatic.utils.ShadowGenerator;
 

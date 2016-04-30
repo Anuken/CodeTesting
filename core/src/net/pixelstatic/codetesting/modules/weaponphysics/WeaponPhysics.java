@@ -1,12 +1,17 @@
 package net.pixelstatic.codetesting.modules.weaponphysics;
 
-import net.pixelstatic.codetesting.entities.*;
+import net.pixelstatic.codetesting.entities.Entity;
+import net.pixelstatic.codetesting.entities.SolidEntity;
 import net.pixelstatic.codetesting.modules.Module;
-import net.pixelstatic.codetesting.utils.Atlas;
+import net.pixelstatic.utils.Atlas;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.*;
-import com.badlogic.gdx.graphics.g2d.*;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Matrix4;
 
 public class WeaponPhysics extends Module{

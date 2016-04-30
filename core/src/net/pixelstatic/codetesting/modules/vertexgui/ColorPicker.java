@@ -1,4 +1,4 @@
-package net.pixelstatic.codetesting.modules.vertex;
+package net.pixelstatic.codetesting.modules.vertexgui;
 
 import net.pixelstatic.utils.Hue;
 

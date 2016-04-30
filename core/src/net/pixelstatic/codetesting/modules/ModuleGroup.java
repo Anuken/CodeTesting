@@ -4,9 +4,9 @@ import java.util.HashMap;
 
 import net.pixelstatic.codetesting.modules.ecstesting.EntityTester;
 import net.pixelstatic.codetesting.modules.generator.*;
-import net.pixelstatic.codetesting.modules.generator2.GeneratorRenderer;
-import net.pixelstatic.codetesting.modules.vertex.VertexEditor;
-import net.pixelstatic.codetesting.modules.vertex.VertexGUI;
+import net.pixelstatic.codetesting.modules.vertexgenerator.GeneratorRenderer;
+import net.pixelstatic.codetesting.modules.vertexgui.VertexEditor;
+import net.pixelstatic.codetesting.modules.vertexgui.VertexGUI;
 import net.pixelstatic.codetesting.modules.weaponphysics.WeaponInput;
 import net.pixelstatic.codetesting.modules.weaponphysics.WeaponPhysics;
 import net.pixelstatic.codetesting.modules.weaponphysics.WeaponWorld;

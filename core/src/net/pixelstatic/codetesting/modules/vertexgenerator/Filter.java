@@ -1,6 +1,6 @@
-package net.pixelstatic.codetesting.modules.generator2;
+package net.pixelstatic.codetesting.modules.vertexgenerator;
 
-import net.pixelstatic.codetesting.modules.generator2.TreeGenerator.Pixel;
+import net.pixelstatic.codetesting.modules.vertexgenerator.TreeGenerator.Pixel;
 import net.pixelstatic.codetesting.utils.ValueMap;
 import net.pixelstatic.codetesting.utils.values.Value;
 import net.pixelstatic.codetesting.utils.values.Value.CrystalValue;

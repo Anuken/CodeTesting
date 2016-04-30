@@ -1,4 +1,4 @@
-package net.pixelstatic.codetesting.modules.generator2;
+package net.pixelstatic.codetesting.modules.vertexgenerator;
 
 public enum Crystal{
 	RANDOM, SQUARE, HEXAGONAL, OCTAGONAL, TRIANGULAR;

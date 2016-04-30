@@ -1,7 +1,8 @@
-package net.pixelstatic.codetesting.modules.vertex;
+package net.pixelstatic.codetesting.modules.vertexgui;
 
-import net.pixelstatic.codetesting.modules.generator2.Filter;
-import net.pixelstatic.codetesting.modules.generator2.Material;
+import net.pixelstatic.codetesting.modules.vertexgenerator.Filter;
+import net.pixelstatic.codetesting.modules.vertexgenerator.Material;
+import net.pixelstatic.codetesting.modules.vertexgenerator.VertexObject;
 import net.pixelstatic.codetesting.utils.ValueMap;
 
 import com.badlogic.gdx.Gdx;

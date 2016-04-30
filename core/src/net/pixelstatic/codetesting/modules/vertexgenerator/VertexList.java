@@ -1,7 +1,6 @@
-package net.pixelstatic.codetesting.modules.vertex;
+package net.pixelstatic.codetesting.modules.vertexgenerator;
 
-import net.pixelstatic.codetesting.modules.generator2.Material;
-import net.pixelstatic.codetesting.modules.vertex.VertexObject.PolygonType;
+import net.pixelstatic.codetesting.modules.vertexgenerator.VertexObject.PolygonType;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;

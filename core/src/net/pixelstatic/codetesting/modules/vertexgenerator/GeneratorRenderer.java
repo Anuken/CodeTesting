@@ -1,7 +1,7 @@
-package net.pixelstatic.codetesting.modules.generator2;
+package net.pixelstatic.codetesting.modules.vertexgenerator;
 
 import net.pixelstatic.codetesting.modules.Module;
-import net.pixelstatic.codetesting.modules.vertex.EditorState;
+import net.pixelstatic.codetesting.modules.vertexgui.EditorState;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;

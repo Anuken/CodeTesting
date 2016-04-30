@@ -1,4 +1,6 @@
-package net.pixelstatic.codetesting.modules.vertex;
+package net.pixelstatic.codetesting.modules.vertexgenerator;
+
+import net.pixelstatic.codetesting.modules.vertexgui.VertexCanvas;
 
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;

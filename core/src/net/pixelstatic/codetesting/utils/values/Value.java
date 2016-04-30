@@ -1,6 +1,6 @@
 package net.pixelstatic.codetesting.utils.values;
 
-import net.pixelstatic.codetesting.modules.generator2.Crystal;
+import net.pixelstatic.codetesting.modules.vertexgenerator.Crystal;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;

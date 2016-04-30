@@ -1,12 +1,12 @@
-package net.pixelstatic.codetesting.modules.vertex;
+package net.pixelstatic.codetesting.modules.vertexgui;
 
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
 import net.pixelstatic.codetesting.modules.Module;
-import net.pixelstatic.codetesting.modules.generator2.Filter;
-import net.pixelstatic.codetesting.modules.generator2.Material;
-import net.pixelstatic.codetesting.modules.vertex.VertexObject.PolygonType;
+import net.pixelstatic.codetesting.modules.vertexgenerator.Filter;
+import net.pixelstatic.codetesting.modules.vertexgenerator.Material;
+import net.pixelstatic.codetesting.modules.vertexgenerator.VertexObject.PolygonType;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;

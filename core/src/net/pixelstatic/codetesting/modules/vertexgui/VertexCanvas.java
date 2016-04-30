@@ -1,8 +1,9 @@
-package net.pixelstatic.codetesting.modules.vertex;
+package net.pixelstatic.codetesting.modules.vertexgui;
 
 import net.pixelstatic.codetesting.entities.Entity;
-import net.pixelstatic.codetesting.modules.generator2.Material;
-import net.pixelstatic.codetesting.modules.vertex.VertexObject.PolygonType;
+import net.pixelstatic.codetesting.modules.vertexgenerator.Material;
+import net.pixelstatic.codetesting.modules.vertexgenerator.VertexList;
+import net.pixelstatic.codetesting.modules.vertexgenerator.VertexObject.PolygonType;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -13,9 +14,9 @@ import com.badlogic.gdx.utils.Array;
 
 public class VertexCanvas{
 	int index;
-	VertexList list;
+	public VertexList list;
 	TextButton button;
-	String name;
+	public String name;
 	ActorAlign align;
 	boolean symmetry;
 
