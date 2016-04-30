@@ -106,13 +106,12 @@ public class ColorPicker extends Widget{
 		batch.draw(skin.getRegion("colorbar"), xoffset + getX(), getY() + offset3, barwidth, 20);
 		
 			//batch.draw(patch, getX()-border, getY()-border + offset1,barwidth+ border*2,20+ border*2);
-	
 
 		TextureRegion region = skin.getAtlas().findRegion("default-slider-knob");
 		int width = region.getRegionWidth() + 4, height = region.getRegionHeight() + 8;
-		batch.draw(region, xoffset + getX() + barwidth * hue - width / 2, getY() + offset3 - 4, width, height);
-		batch.draw(region, xoffset + getX() + barwidth * saturation - width / 2, getY() + offset2 - 4, width, height);
-		batch.draw(region, xoffset + getX() + barwidth * brightness - width / 2, getY() + offset1 - 4, width, height);
+		batch.draw(region, xoffset + getX() + barwidth * hue - width / 2, getY() + offset3 - 2, width, height);
+		batch.draw(region, xoffset + getX() + barwidth * saturation - width / 2, getY() + offset2 - 2, width, height);
+		batch.draw(region, xoffset + getX() + barwidth * brightness - width / 2, getY() + offset1 - 2, width, height);
 
 		
 		Color color = getColor();

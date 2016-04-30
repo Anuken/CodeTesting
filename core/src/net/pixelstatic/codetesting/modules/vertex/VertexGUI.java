@@ -65,11 +65,9 @@ public class VertexGUI extends Module{
 	public void init(){
 		setupGUI();
 		InputMultiplexer plex = new InputMultiplexer();
-
 		plex.addProcessor(new VertexInput(tester.getModule(VertexEditor.class)));
 		plex.addProcessor(stage);
 		Gdx.input.setInputProcessor(plex);
-
 	}
 
 	public VertexGUI(){
