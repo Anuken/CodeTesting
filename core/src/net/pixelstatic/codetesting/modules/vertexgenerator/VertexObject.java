@@ -17,7 +17,7 @@ public class VertexObject{
 	}
 
 	public VertexObject(){
-
+		
 	}
 
 	public VertexObject(Array<VertexCanvas> canvases){

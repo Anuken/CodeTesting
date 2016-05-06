@@ -68,4 +68,13 @@ com.badlogic.gdx.scenes.scene2d.ui.TextTooltip$TextTooltipStyle: {
 		background: default-pane
 	}
 },
+"net.dermetfan.gdx.scenes.scene2d.ui.ListFileChooser$Style": {
+    "default": {
+        "pathFieldStyle": "default",
+        "contentsStyle": "default",
+        "buttonStyles": "default",
+        "space": 10,
+        "contentsPaneStyle": "default"
+    }
+},
 }
