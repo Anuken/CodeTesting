@@ -4,9 +4,6 @@ import java.util.HashMap;
 
 import net.pixelstatic.codetesting.modules.ecstesting.EntityTester;
 import net.pixelstatic.codetesting.modules.generator.*;
-import net.pixelstatic.codetesting.modules.vertexgenerator.GeneratorRenderer;
-import net.pixelstatic.codetesting.modules.vertexgui.VertexEditor;
-import net.pixelstatic.codetesting.modules.vertexgui.VertexGUI;
 import net.pixelstatic.codetesting.modules.weaponphysics.WeaponInput;
 import net.pixelstatic.codetesting.modules.weaponphysics.WeaponPhysics;
 import net.pixelstatic.codetesting.modules.weaponphysics.WeaponWorld;
@@ -31,23 +28,6 @@ public enum ModuleGroup{
 				new PlantGenerator(),
 				new GeneratorInput(),
 				new Renderer()
-			};
-		}
-	},
-	GENERATOR2{
-		@Override
-		public Module[] modules(){
-			return new Module[]{
-				new GeneratorRenderer(),
-			};
-		}
-	},
-	VERTEX_EDTIOR{
-		@Override
-		public Module[] modules(){
-			return new Module[]{
-				new VertexEditor(),
-				new VertexGUI()
 			};
 		}
 	},	

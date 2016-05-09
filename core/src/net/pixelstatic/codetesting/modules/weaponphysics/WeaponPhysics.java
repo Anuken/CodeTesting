@@ -3,7 +3,7 @@ package net.pixelstatic.codetesting.modules.weaponphysics;
 import net.pixelstatic.codetesting.entities.Entity;
 import net.pixelstatic.codetesting.entities.SolidEntity;
 import net.pixelstatic.codetesting.modules.Module;
-import net.pixelstatic.utils.Atlas;
+import net.pixelstatic.utils.graphics.Atlas;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -141,15 +141,15 @@ public class WeaponPhysics extends Module{
 	}
 	
 	public void draw(String region, int x, int y){
-		batch.draw(atlas.findRegion(region), x * pixsize + pixsize/2 - atlas.RegionWidth(region)/2, y * pixsize + pixsize/2 - atlas.RegionHeight(region)/2);
+		batch.draw(atlas.findRegion(region), x * pixsize + pixsize/2 - atlas.regionWidth(region)/2, y * pixsize + pixsize/2 - atlas.regionHeight(region)/2);
 	}
 	
 	public void draw(String region, int x, int y, int rotation){
-		batch.draw(atlas.findRegion(region), x * pixsize + pixsize/2 - atlas.RegionWidth(region)/2, y * pixsize + pixsize/2 - atlas.RegionHeight(region)/2, atlas.RegionWidth(region)/2, atlas.RegionHeight(region)/2,  atlas.RegionWidth(region),  atlas.RegionHeight(region), 1, 1, rotation * 90);
+		batch.draw(atlas.findRegion(region), x * pixsize + pixsize/2 - atlas.regionWidth(region)/2, y * pixsize + pixsize/2 - atlas.regionHeight(region)/2, atlas.regionWidth(region)/2, atlas.regionHeight(region)/2,  atlas.regionWidth(region),  atlas.regionHeight(region), 1, 1, rotation * 90);
 	}
 	
 	public void draw(String region, float x, float y){
-		batch.draw(atlas.findRegion(region), x- atlas.RegionWidth(region)/2, y - atlas.RegionHeight(region)/2);
+		batch.draw(atlas.findRegion(region), x- atlas.regionWidth(region)/2, y - atlas.regionHeight(region)/2);
 	}
 	
 	public void draw(String region, float x, float y, float size){

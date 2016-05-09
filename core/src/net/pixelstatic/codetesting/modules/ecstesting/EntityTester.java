@@ -1,9 +1,9 @@
 package net.pixelstatic.codetesting.modules.ecstesting;
 
 import net.pixelstatic.codetesting.modules.Module;
-import net.pixelstatic.utils.Atlas;
-import net.pixelstatic.utils.GifRecorder;
-import net.pixelstatic.utils.ShadowGenerator;
+import net.pixelstatic.utils.graphics.Atlas;
+import net.pixelstatic.utils.graphics.GifRecorder;
+import net.pixelstatic.utils.graphics.ShadowGenerator;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
