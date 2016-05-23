@@ -57,17 +57,17 @@ void main() {
 		vec3 Diffuse = (light.color.rgb * light.color.a) * max(dot(N, L), 0.0);
 
 		//pre-multiply ambient color with intensity
-		vec3 Ambient = AmbientColor.rgb * AmbientColor.a;
+		//vec3 Ambient = AmbientColor.rgb * AmbientColor.a;
 	
 		//calculate attenuation
 		float Attenuation = 1.0 / ( Falloff.x + (Falloff.y*D) + (Falloff.z*D*D) );
 	
 		//the calculation which brings it all together
-		vec3 Intensity = Ambient + Diffuse * Attenuation;
+		vec3 Intensity = Diffuse * Attenuation;
 		vec3 FinalColor = DiffuseColor.rgb * Intensity;
-
+		
 		sum += FinalColor;
 	}
-
-	gl_FragColor = vColor * vec4(sum, DiffuseColor.a);
+	
+	gl_FragColor = vColor * vec4(sum + (AmbientColor.rgb * AmbientColor.a)*DiffuseColor.rgb, DiffuseColor.a);
 }
