@@ -1,9 +1,8 @@
 package net.pixelstatic.codetesting.modules.ecstesting;
 
 import net.pixelstatic.codetesting.modules.Module;
-import net.pixelstatic.utils.graphics.Atlas;
-import net.pixelstatic.utils.graphics.GifRecorder;
-import net.pixelstatic.utils.graphics.ShadowGenerator;
+import net.pixelstatic.gdxutils.graphics.Atlas;
+import net.pixelstatic.utils.io.GifRecorder;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
@@ -19,14 +18,38 @@ public class EntityTester extends Module{
 	
 	
 	public void init(){
-		new PathfindTest().test();
+		//TextureSplitter splitter = new TextureSplitter(Gdx.files.absolute("/home/cobalt/Downloads/kag-emotes-transparent.png"), 32);
+		//splitter.split(Gdx.files.absolute("/home/cobalt/Downloads/kagemotes"), 16, 2);
+		
+		/*
+		FileHandle directory = Gdx.files.absolute("/home/cobalt/Documents/removal");
+		
+		Color color = new Color();
+		Pixmap.setBlending(Blending.None);
+		for(FileHandle file : directory.list()){
+			System.out.println("Processing file: " + file.name() + "...");
+			Pixmap pixmap = new Pixmap(file);
+			for(int x = 0; x < pixmap.getWidth(); x ++){
+				for(int y = 0; y < pixmap.getHeight(); y ++){
+					color.set(pixmap.getPixel(x, y));
+					
+					if(color.a <= 0.99f)
+					pixmap.drawPixel(x,y, 0);
+				}
+			}
+			PixmapIO.writePNG(file, pixmap);
+			pixmap.dispose();
+		}
+		
+		System.out.println("Done.");
+		*/
 		batch = new SpriteBatch();
 		atlas = new Atlas(Gdx.files.internal("sprites/codetesting.pack"));
 		recorder = new GifRecorder(batch);
 		recorder.setFPS(30);
 		for(int i = 0; i < 9999*3; i ++)
 		entities.put((long)i, new TestEntity());
-		new ShadowGenerator(null).generateImages();
+		
 	}
 
 	@Override
@@ -37,7 +60,7 @@ public class EntityTester extends Module{
 				recorder.startRecording();
 			}else{
 				recorder.finishRecording();
-				recorder.writeGIF(Gdx.files.local("gifimages"), Gdx.files.local("gifexport"));
+				recorder.writeGIF();
 			}
 		}
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);

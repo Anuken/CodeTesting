@@ -5,6 +5,7 @@ import java.util.HashMap;
 import net.pixelstatic.codetesting.modules.ecstesting.EntityTester;
 import net.pixelstatic.codetesting.modules.generator.*;
 import net.pixelstatic.codetesting.modules.shaders.LightTest;
+import net.pixelstatic.codetesting.modules.testing.TestModule;
 import net.pixelstatic.codetesting.modules.weaponphysics.WeaponInput;
 import net.pixelstatic.codetesting.modules.weaponphysics.WeaponPhysics;
 import net.pixelstatic.codetesting.modules.weaponphysics.WeaponWorld;
@@ -37,6 +38,14 @@ public enum ModuleGroup{
 		public Module[] modules(){
 			return new Module[]{
 				new EntityTester(),
+			};
+		}
+	},
+	TESTING{
+		@Override
+		public Module[] modules(){
+			return new Module[]{
+				new TestModule()
 			};
 		}
 	},

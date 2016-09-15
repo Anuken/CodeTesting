@@ -28,8 +28,8 @@ public class LightTest extends Module{
 
 	@Override
 	public void init(){
-		rock = new Texture(Gdx.files.internal("textures/rock.png"));
-		rockNormals = new Texture(Gdx.files.internal("textures/rock_n.png"));
+		rock = new Texture(Gdx.files.internal("textures/s.png"));
+		rockNormals = new Texture(Gdx.files.internal("textures/s_n.png"));
 		
 		
 		ShaderProgram.pedantic = false;

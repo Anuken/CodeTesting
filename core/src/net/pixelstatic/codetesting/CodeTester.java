@@ -9,7 +9,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 
 public class CodeTester extends ApplicationAdapter{
-	ModuleGroup type = ModuleGroup.SHADERS;
+	ModuleGroup type = ModuleGroup.TESTING;
 	Array<Module> moduleArray = new Array<Module>();
 	ObjectMap<Class<? extends Module>, Module> modules = new ObjectMap<Class<? extends Module>, Module>();
 
