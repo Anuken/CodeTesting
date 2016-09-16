@@ -1,9 +1,9 @@
 package net.pixelstatic.codetesting.modules.weaponphysics;
 
+import io.anuke.gdxutils.graphics.Atlas;
 import net.pixelstatic.codetesting.entities.Entity;
 import net.pixelstatic.codetesting.entities.SolidEntity;
 import net.pixelstatic.codetesting.modules.Module;
-import net.pixelstatic.gdxutils.graphics.Atlas;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;

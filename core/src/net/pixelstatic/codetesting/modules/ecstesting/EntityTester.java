@@ -1,8 +1,8 @@
 package net.pixelstatic.codetesting.modules.ecstesting;
 
+import io.anuke.gdxutils.graphics.Atlas;
+import io.anuke.utils.io.GifRecorder;
 import net.pixelstatic.codetesting.modules.Module;
-import net.pixelstatic.gdxutils.graphics.Atlas;
-import net.pixelstatic.utils.io.GifRecorder;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;

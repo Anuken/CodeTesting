@@ -1,10 +1,13 @@
 package net.pixelstatic.codetesting;
 
+import io.anuke.utils.MiscUtils;
 import net.pixelstatic.codetesting.entities.Entity;
 import net.pixelstatic.codetesting.modules.Module;
 import net.pixelstatic.codetesting.modules.ModuleGroup;
 
 import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 
@@ -15,6 +18,7 @@ public class CodeTester extends ApplicationAdapter{
 
 	@Override
 	public void create(){
+		MiscUtils.maximizeWindow();
 		Entity.tester = this;
 		Module[] array = type.modules();
 		for(Module module : array){
@@ -30,6 +34,7 @@ public class CodeTester extends ApplicationAdapter{
 
 	@Override
 	public void render(){
+		if(Gdx.input.isKeyJustPressed(Keys.ESCAPE)) Gdx.app.exit();
 		for(Module module : moduleArray)
 			module.update();
 	}
