@@ -1,9 +1,11 @@
 package net.pixelstatic.codetesting.modules;
 
+import com.badlogic.gdx.InputAdapter;
+
 import net.pixelstatic.codetesting.CodeTester;
 
 
-public abstract class Module{
+public abstract class Module extends InputAdapter{
 	public CodeTester tester;
 
 	public void init(){}

@@ -9,10 +9,10 @@ import com.badlogic.gdx.utils.ObjectMap;
 import io.anuke.ucore.UCore;
 import net.pixelstatic.codetesting.entities.Entity;
 import net.pixelstatic.codetesting.modules.Module;
-import net.pixelstatic.codetesting.modules.ModuleGroup;
+import net.pixelstatic.codetesting.modules.workbench.CraftRenderer;
 
 public class CodeTester extends ApplicationAdapter{
-	ModuleGroup type = ModuleGroup.TESTING;
+	//ModuleGroup type = ModuleGroup.WORKBENCH;
 	Array<Module> moduleArray = new Array<Module>();
 	ObjectMap<Class<? extends Module>, Module> modules = new ObjectMap<Class<? extends Module>, Module>();
 
@@ -20,7 +20,8 @@ public class CodeTester extends ApplicationAdapter{
 	public void create(){
 		UCore.maximizeWindow();
 		Entity.tester = this;
-		Module[] array = type.modules();
+		Module[] array = {new CraftRenderer()};
+		
 		for(Module module : array){
 			moduleArray.add(module);
 			modules.put(module.getClass(), module);

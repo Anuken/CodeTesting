@@ -40,7 +40,7 @@ public abstract class Entity{
 	}
 	
 	public void incrementValue(String name, float amount){
-		values.put(name, (float)values.get(name) + amount);
+		values.put(name, (float)(Float)values.get(name) + amount);
 	}
 	
 	public <T> T getValue(String name, Class<T> c){

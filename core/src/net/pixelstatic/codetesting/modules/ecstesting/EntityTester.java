@@ -1,14 +1,14 @@
 package net.pixelstatic.codetesting.modules.ecstesting;
 
-import io.anuke.gdxutils.graphics.Atlas;
-import io.anuke.utils.io.GifRecorder;
-import net.pixelstatic.codetesting.modules.Module;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ObjectMap;
+
+import io.anuke.ucore.graphics.Atlas;
+import io.anuke.utils.io.GifRecorder;
+import net.pixelstatic.codetesting.modules.Module;
 
 public class EntityTester extends Module{
 	ObjectMap<Long, Entity> entities = new ObjectMap<Long, Entity>();

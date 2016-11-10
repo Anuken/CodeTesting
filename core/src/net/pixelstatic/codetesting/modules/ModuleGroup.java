@@ -2,68 +2,28 @@ package net.pixelstatic.codetesting.modules;
 
 import java.util.HashMap;
 
-import net.pixelstatic.codetesting.modules.ecstesting.EntityTester;
-import net.pixelstatic.codetesting.modules.generator.*;
-import net.pixelstatic.codetesting.modules.shaders.LightTest;
-import net.pixelstatic.codetesting.modules.testing.TestModule;
-import net.pixelstatic.codetesting.modules.weaponphysics.WeaponInput;
-import net.pixelstatic.codetesting.modules.weaponphysics.WeaponPhysics;
-import net.pixelstatic.codetesting.modules.weaponphysics.WeaponWorld;
-
 
 public enum ModuleGroup{
-	WEAPON_PHYSICS{
-		@Override
-		public Module[] modules(){
-			return new Module[]{
-				new WeaponPhysics(),
-				new WeaponWorld(),
-				new WeaponInput()
-			};
-		}
-	},
-	GENERATOR{
-		@Override
-		public Module[] modules(){
-			return new Module[]{
-				new Generator(),
-				new PlantGenerator(),
-				new GeneratorInput(),
-				new Renderer()
-			};
-		}
-	},	
-	ENTITY_TESTER{
-		@Override
-		public Module[] modules(){
-			return new Module[]{
-				new EntityTester(),
-			};
-		}
-	},
-	TESTING{
-		@Override
-		public Module[] modules(){
-			return new Module[]{
-				new TestModule()
-			};
-		}
-	},
-	SHADERS{
-		@Override
-		public Module[] modules(){
-			return new Module[]{
-				new LightTest(),
-			};
-		}
-	};;
+	/*
+	WEAPON_PHYSICS(new WeaponPhysics(),  new WeaponWorld(), new WeaponInput()),
+	GENERATOR(new Generator(),new PlantGenerator(),new GeneratorInput(),new Renderer()),	
+	WORKBENCH(new net.pixelstatic.codetesting.modules.workbench.Renderer()),
+	ENTITY_TESTER(new EntityTester()),
+	TESTING(new TestModule()),
+	TESTING2(new TestModule2()),
+	SHADERS(new LightTest());*/
+	;
+	private Module[] modules;
 	
-	abstract public Module[] modules();
-		
+	private ModuleGroup(Module...modules ){
+		this.modules = modules;
+	}
 	
+	public Module[] modules(){
+		return modules;
+	}
 	
 	public final HashMap<Class<? extends Module>, Module> getModules(){
-		Module[] modules = modules();
 		HashMap<Class<? extends Module>, Module> map = new HashMap<Class<? extends Module>, Module>();
 		for(Module m : modules){
 			map.put(m.getClass(), m);
