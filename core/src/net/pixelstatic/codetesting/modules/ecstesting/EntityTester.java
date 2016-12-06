@@ -68,7 +68,7 @@ public class EntityTester extends Module{
 		for(Entity entity : entities.values()){
 			entity.updateComponents(this);
 		}
-		recorder.update(atlas.findRegion("pixel"), Gdx.graphics.getDeltaTime()*60f);
+		recorder.update();
 		batch.end();
 	}
 	

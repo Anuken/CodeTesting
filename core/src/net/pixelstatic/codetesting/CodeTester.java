@@ -9,7 +9,7 @@ import com.badlogic.gdx.utils.ObjectMap;
 import io.anuke.ucore.UCore;
 import net.pixelstatic.codetesting.entities.Entity;
 import net.pixelstatic.codetesting.modules.Module;
-import net.pixelstatic.codetesting.modules.workbench.CraftRenderer;
+import net.pixelstatic.codetesting.modules.testing.TestModule4;
 
 public class CodeTester extends ApplicationAdapter{
 	//ModuleGroup type = ModuleGroup.WORKBENCH;
@@ -20,7 +20,7 @@ public class CodeTester extends ApplicationAdapter{
 	public void create(){
 		UCore.maximizeWindow();
 		Entity.tester = this;
-		Module[] array = {new CraftRenderer()};
+		Module[] array = {new TestModule4()};
 		
 		for(Module module : array){
 			moduleArray.add(module);

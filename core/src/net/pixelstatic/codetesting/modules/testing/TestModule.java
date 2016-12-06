@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import io.anuke.layer3d.LayeredObject;
 import io.anuke.layer3d.LayeredRenderer;
 import io.anuke.ucore.UCore;
+import io.anuke.utils.io.ShadowGenerator;
 import net.pixelstatic.codetesting.modules.Module;
 import net.pixelstatic.codetesting.utils.BloomShader;
 
@@ -23,6 +24,10 @@ public class TestModule extends Module{
 	
 
 	public void init(){
+		
+		ShadowGenerator gen = new ShadowGenerator();
+		gen.generateImages();
+		
 		batch = new SpriteBatch();
 		camera = new OrthographicCamera(Gdx.graphics.getWidth()/scale, Gdx.graphics.getHeight()/scale);
 		bloom = new BloomShader();
