@@ -3,6 +3,7 @@ package net.pixelstatic.codetesting.modules.testing;
 import static java.lang.Math.cos;
 import static java.lang.Math.pow;
 import static java.lang.Math.sin;
+import static java.lang.Math.tan;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -12,11 +13,13 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
 import io.anuke.ucore.UCore;
 import io.anuke.ucore.graphics.Hue;
+import io.anuke.utils.io.GifRecorder;
 import net.pixelstatic.codetesting.modules.Module;
 
 public class TestModule4 extends Module{
 	SpriteBatch batch;
 	ShapeRenderer shape;
+	GifRecorder recorder;
 	double s = 0.01;
 	double max = Math.PI*10;
 	double scale = 100;
@@ -27,6 +30,7 @@ public class TestModule4 extends Module{
 	public void init(){
 		batch = new SpriteBatch();
 		shape = new ShapeRenderer();
+		recorder = new GifRecorder(batch);
 	}
 	
 	@Override
@@ -53,10 +57,16 @@ public class TestModule4 extends Module{
 		}
 		
 		shape.end();
+		
+		
+		batch.begin();
+		recorder.update();
+		batch.end();
 	}
 	
 	void draw(double r1, double r2, double a){
-		shape.setColor(Hue.fromHSB(((float)sin(a/100f)*360f+180f), 1f, 1f));
+		shape.setColor(Hue.fromHSB(((float)sin(a/500f)*360f+180f), 1f, 1f));
+		shape.setColor(Color.WHITE);
 		
 		float x1 = (float)(r2*scale*cos(a-s))+offsetx;
 		float y1 = (float)(r2*scale*sin(a-s))+offsety;
@@ -67,8 +77,9 @@ public class TestModule4 extends Module{
 	}
 	
 	double formula(double a){
-		//a += frameid/20.0;
-		return pow(sin(1.2*a), 2) + pow(cos(6*a), 3);// + pow(tan(a*2*tan(frameid/200)), 1)/2;
+		tan(0);
+		a += pow(sin(1.2*a+(frameid/10)), 1.2);
+		return pow(sin(1.2*a), 2) + pow(cos(6*a), 3);
 	}
 	
 	public void resize(int width, int height){
