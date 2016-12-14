@@ -2,10 +2,10 @@ package net.pixelstatic.codetesting.desktop;
 
 import java.awt.Toolkit;
 
-import net.pixelstatic.codetesting.CodeTester;
-
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
+
+import io.anuke.codetesting.CodeTester;
 
 public class DesktopLauncher {
 	public static void main (String[] arg) {
