@@ -26,13 +26,14 @@ public class PhysicsTester extends Module{
 	Array<Entity> entities = new Array<Entity>();
 	ArraySpatialHash<Entity> hash = new ArraySpatialHash<Entity>();
 	ObjectSet<Entity> iterated = new ObjectSet<Entity>();
+	Entity player = new Entity(0,0);
 	long placetime = 0, locatetime, collidetime;
-	float esize = 1;
+	float esize = 10;
 
-	float range = 500;
+	float range = 400;
 	float crange = esize*2;
-	float cellsize = 3;
-	int num = 2000;
+	float cellsize = esize*2;
+	int num = 1500;
 	GifRecorder record;
 
 	public void init(){
@@ -41,23 +42,25 @@ public class PhysicsTester extends Module{
 		font.getData().markupEnabled = true;
 		tex = PixmapUtils.blankTexture();
 		record = new GifRecorder(batch);
+		entities.add(player);
 
 		hash.gridsize = cellsize;
 
-		//for(int i = 0; i < num; i++)
-		//	entities.add(new Entity(MathUtils.random(-range, range), MathUtils.random(-range, range)));
+		for(int i = 0; i < num; i++)
+			entities.add(new Entity(MathUtils.random(-range, range), MathUtils.random(-range, range)));
 	}
 
 	@Override
 	public void update(){
+		float s = 1f;
 		
-		if(Gdx.input.isKeyJustPressed(Keys.SPACE))
-			for(int i = 0; i < num; i++){
-				//float x = (float)Math.cos(i/num*Math.PI*2)*100;
-				//float y = (float)Math.sin(i/num*Math.PI*2)*100;
-				Entity entity = new Entity(0,0);
-				entities.add(entity);
-			}
+		if(Gdx.input.isKeyPressed(Keys.W)) player.velocity.y += s;
+		if(Gdx.input.isKeyPressed(Keys.A)) player.velocity.x -= s;
+		if(Gdx.input.isKeyPressed(Keys.S)) player.velocity.y -= s;
+		if(Gdx.input.isKeyPressed(Keys.D)) player.velocity.x += s;
+		
+		player.velocity.limit(3f);
+		
 		
 		UCore.clearScreen(Color.BLACK);
 
@@ -84,15 +87,15 @@ public class PhysicsTester extends Module{
 
 		iterated.clear();
 		
-		if(false)
+
 		for(Entity entity : entities){
 			hash.getNearbyEntities(entity.x, entity.y, crange, (other) -> {
 				if(other == entity || iterated.contains(other))
 					return;
 
-				CollisionParams p = collide(entity, other);
-				if(p != null)
-					resolveCollision(entity, other, p.normal);
+				if(Math.abs(entity.x - other.x) < esize && Math.abs(entity.y - other.y) < esize){
+					collide(entity, other);
+				}
 
 			});
 
@@ -103,7 +106,7 @@ public class PhysicsTester extends Module{
 
 		if(Gdx.graphics.getFrameId() % 20 == 0)
 			collidetime = TimeUtils.timeSinceMillis(t);
-		if(false)
+
 		if(Gdx.graphics.getFrameId() % 20 == 0){
 			long ptime = TimeUtils.millis();
 
@@ -119,84 +122,15 @@ public class PhysicsTester extends Module{
 			locatetime = TimeUtils.timeSinceMillis(ptime + placetime);
 		}
 	}
-
-	void resolveCollision(Entity a, Entity b, Vector2 normal){
-
-		// Calculate relative velocity
-		Vector2 rv = b.velocity.cpy().sub(a.velocity);
-
-		// Calculate relative velocity in terms of the normal direction
-		float velAlongNormal = Vector2.dot(rv.x, rv.y, normal.x, normal.y);
-
-		// Do not resolve if velocities are separating
-		if(velAlongNormal > 0)
-			return;
-
-		// Calculate restitution
-		float e = 0.1f;
-
-		float massa = 1f;
-		float massb = 1f;
-
-		// Calculate impulse scalar
-		float j = -(1 + e) * velAlongNormal;
-		j /= 1 / massa + 1 / massb;
-
-		// Apply impulse
-		Vector2 impulse = normal.scl(j);
-
-		a.velocity.sub(impulse.cpy().scl(1f / massa));
-		b.velocity.add(impulse.cpy().scl(1f / massb));
-
-		// a.velocity.set(0,0);
-		// b.velocity.set(0,0);
-	}
-
-	CollisionParams collide(Entity a, Entity b){
-		// Setup a couple pointers to each object
-
-		// Vector from A to B
-		Vector2 n = new Vector2(b.x - a.x, b.y - a.y);// B->pos - A->pos
-
-		// Calculate half extents along x axis for each object
-		float a_extent = esize;
-		float b_extent = esize;
-
-		Vector2 normal = null;
-		float penetration = 0;
-
-		// Calculate overlap on x axis
-		float x_overlap = a_extent + b_extent - Math.abs(n.x);
-
-		// SAT test on x axis
-		if(x_overlap > 0){
-
-			// Calculate overlap on y axis
-			float y_overlap = a_extent + b_extent - Math.abs(n.y);
-
-			// SAT test on y axis
-			if(y_overlap > 0){
-				// Find out which axis is axis of least penetration
-				if(x_overlap > y_overlap){
-					// Point towards B knowing that n points from A to B
-					if(n.x < 0)
-						normal = new Vector2(-1, 0);
-					else
-						normal = new Vector2(0, 0);
-					penetration = x_overlap;
-					return new CollisionParams(normal, penetration);
-				}else{
-					// Point toward B knowing that n points from A to B
-					if(n.y < 0)
-						normal = new Vector2(0, -1);
-					else
-						normal = new Vector2(0, 1);
-					penetration = y_overlap;
-					return new CollisionParams(normal, penetration);
-				}
-			}
-		}
-		return null;
+	
+	void collide(Entity a, Entity b){
+		Vector2 vector = new Vector2(a.x-b.x, a.y-b.y).nor();
+		
+		//vector.setAngle((int)(vector.angle()/90)*90);
+		
+		a.velocity.add(vector.scl(1f));
+		b.velocity.add(vector.scl(-1f));
+		
 	}
 
 	class CollisionParams{
@@ -211,15 +145,18 @@ public class PhysicsTester extends Module{
 
 	class Entity implements Spatial{
 		float x, y;
-		Vector2 velocity = new Vector2().setToRandomDirection().scl(3f);
-		Color color = new Color(MathUtils.random(), MathUtils.random(), MathUtils.random(), 1f);
+		Vector2 velocity = new Vector2();//.setToRandomDirection().scl(3f);
+		Color color;
 
 		public Entity(float x, float y) {
 			this.x = x;
 			this.y = y;
+			this.color = new Color(MathUtils.random(), MathUtils.random(), MathUtils.random(), 1f);;
 		}
 
 		public void update(){
+			//velocity.add(new Vector2(Gdx.input.getX() - (x+Gdx.graphics.getWidth()/2), (Gdx.graphics.getHeight() - Gdx.input.getY()) - (y+Gdx.graphics.getHeight()/2)).nor().scl(1f)).limit(3f);
+			velocity.scl(0.9f);
 			x += velocity.x;
 			y += velocity.y;
 
