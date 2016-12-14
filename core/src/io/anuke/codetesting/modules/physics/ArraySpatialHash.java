@@ -4,36 +4,28 @@ import static io.anuke.ucore.UCore.scl;
 
 import java.util.function.Consumer;
 
-import com.badlogic.gdx.utils.ObjectSet;
+import com.badlogic.gdx.utils.Array;
 
 import io.anuke.ucore.util.GridMap;
 
-public class SpatialHash<T extends Spatial> {
-	private GridMap<ObjectSet<T>> map = new GridMap<ObjectSet<T>>();
-	private float gridsize = 100;
-
-	public SpatialHash() {
-
-	}
-
-	public SpatialHash(float gridsize) {
-		this.gridsize = gridsize;
-	}
+public class ArraySpatialHash<T extends Spatial> {
+	private GridMap<Array<T>> map = new GridMap<Array<T>>();
+	float gridsize = 100;
 
 	void addEntity(T entity){
 		int x = (int) (entity.getX() / gridsize), y = (int) (entity.getY() / gridsize);
 
-		ObjectSet<T> set = map.get(x, y);
+		Array<T> set = map.get(x, y);
 
 		if(set == null){
-			map.put(x, y, (set = new ObjectSet<T>()));
+			map.put(x, y, (set = new Array<T>()));
 		}
 
 		set.add(entity);
 	}
 
 	public void clear(){
-		for(ObjectSet<T> set : map.values()){
+		for(Array<T> set : map.values()){
 			set.clear();
 		}
 	}
@@ -48,7 +40,7 @@ public class SpatialHash<T extends Spatial> {
 
 		for(int x = minx; x < maxx + 1; x++){
 			for(int y = miny; y < maxy + 1; y++){
-				ObjectSet<T> set = map.get(x, y);
+				Array<T> set = map.get(x, y);
 				if(set != null){
 					for(T e : set){
 						if(Math.abs(e.getX() - cx) < range && Math.abs(e.getY() - cy) < range){
