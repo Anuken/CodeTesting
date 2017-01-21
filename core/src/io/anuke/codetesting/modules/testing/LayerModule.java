@@ -97,7 +97,7 @@ public class LayerModule extends Module{
 		batch.setProjectionMatrix(camera.combined);
 		
 		batch.begin();
-		RenderableHandler.getInstance().renderAll(batch);
+		RenderableHandler.instance().renderAll(batch);
 		batch.end();
 	}
 	

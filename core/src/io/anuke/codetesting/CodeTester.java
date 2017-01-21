@@ -8,8 +8,7 @@ import com.badlogic.gdx.utils.ObjectMap;
 
 import io.anuke.codetesting.entities.Entity;
 import io.anuke.codetesting.modules.Module;
-import io.anuke.codetesting.modules.physics.PhysicsTester;
-import io.anuke.ucore.UCore;
+import io.anuke.codetesting.modules.voxel.VoxelRenderer;
 
 public class CodeTester extends ApplicationAdapter{
 	//ModuleGroup type = ModuleGroup.WORKBENCH;
@@ -18,9 +17,8 @@ public class CodeTester extends ApplicationAdapter{
 
 	@Override
 	public void create(){
-		UCore.maximizeWindow();
 		Entity.tester = this;
-		Module[] array = {new PhysicsTester()};
+		Module[] array = {new VoxelRenderer()};
 		
 		for(Module module : array){
 			moduleArray.add(module);
