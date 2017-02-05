@@ -4,7 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
-import io.anuke.codetesting.entities.*;
+import io.anuke.codetesting.entities.DestructibleEntity;
+import io.anuke.codetesting.entities.Entity;
+import io.anuke.codetesting.entities.IronCube;
 
 public enum Material{
 	iron{
@@ -66,6 +68,19 @@ public enum Material{
 			return PowerType.source;
 		}
 	},
+	blockdetector{
+		public void draw(WeaponPhysics render, int x, int y, Block block){
+			render.draw( !block.sourcepower ? "magnet" : "magnetlight", x, y,  world.world[x][y].rotation - 1);
+		}
+
+		public void update(int x, int y, Block[][] blocks, Block block){
+			block.sourcepower = !world.vacant(x + block.rotationX(), y + block.rotationY());
+		}
+
+		public PowerType getPowerType(){
+			return PowerType.source;
+		}
+	},
 	massmaker{
 		public void draw(WeaponPhysics render, int x, int y){
 			render.draw("massmaker", x, y, world.world[x][y].rotation - 1);
@@ -74,6 +89,27 @@ public enum Material{
 		public void powerEvent(int x, int y, Block[][] blocks, Block block){
 			if(world.vacant(x + block.rotationX(), y + block.rotationY())){
 				new IronCube().setVelocity(0, 0).setBlockPosition(x + block.rotationX(), y + block.rotationY()).AddSelf();
+			}
+		}
+
+		public PowerType getPowerType(){
+			return PowerType.acceptor;
+		}
+
+		public boolean isRotateable(){
+			return true;
+		}
+	},
+	pusher{
+		public void draw(WeaponPhysics render, int x, int y){
+			render.draw("massmaker", x, y, world.world[x][y].rotation - 1);
+		}
+
+		public void powerEvent(int x, int y, Block[][] blocks, Block block){
+			if(world.vacant(x + block.rotationX()*2, y + block.rotationY()*2)){
+				//new IronCube().setVelocity(0, 0).setBlockPosition(x + block.rotationX(), y + block.rotationY()).AddSelf();
+				blocks[x + block.rotationX()*2][y + block.rotationY()*2].material = blocks[x + block.rotationX()][y + block.rotationY()].material;
+				blocks[x + block.rotationX()][y + block.rotationY()].material = null;
 			}
 		}
 

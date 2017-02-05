@@ -4,7 +4,9 @@ import java.util.*;
 
 import com.badlogic.gdx.math.Vector2;
 
-import io.anuke.codetesting.entities.*;
+import io.anuke.codetesting.entities.Entity;
+import io.anuke.codetesting.entities.FlyingEntity;
+import io.anuke.codetesting.entities.ShieldEffect;
 import io.anuke.codetesting.modules.Module;
 
 public class WeaponWorld extends Module{
@@ -165,7 +167,9 @@ public class WeaponWorld extends Module{
 	public void update(){
 		for(int x = 0;x < size;x ++){
 			for(int y = 0;y < size;y ++){
-				if( !world[x][y].empty()) world[x][y].update(x, y, world);
+				if( !world[x][y].empty()){
+					world[x][y].update(x, y, world);
+				}
 			}
 		}
 	}

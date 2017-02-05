@@ -20,8 +20,7 @@ public class TestModule extends Module{
 	float scale = 12;
 	OrthographicCamera camera;
 	BloomShader bloom;
-
-	
+	LayeredObject object;
 
 	public void init(){
 		
@@ -41,10 +40,10 @@ public class TestModule extends Module{
 		TextureRegion region = new TextureRegion(new Texture("layers/char.png"));
 		TextureRegion[] regions = region.split(20, 20)[0];
 		
-		new LayeredObject(regions).setPosition(0, 0, 0).add();
-		LayeredRenderer.steps = 8;
+		(object = new LayeredObject(regions)).setPosition(0, 0, 0).add();
+		LayeredRenderer.instance().steps = 8;
 		LayeredRenderer.instance().drawShadows = true;
-		LayeredRenderer.spacing = 1f;
+		LayeredRenderer.instance().spacing = 1f;
 		
 		LayeredRenderer.instance().camera = camera;
 		bloom.setTreshold(0.7f);
@@ -76,5 +75,13 @@ public class TestModule extends Module{
 		LayeredRenderer.instance().render(batch);
 		batch.end();
 		bloom.render();
+	}
+	
+	public void resize(int width, int height){
+		camera.setToOrtho(false, width/scale, height/scale);
+		camera.update();
+		object.setPosition(width/12/2, height/12/2);
+		bloom.dispose();
+		bloom = new BloomShader();
 	}
 }

@@ -7,8 +7,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ObjectMap;
 
 import io.anuke.codetesting.modules.Module;
+import io.anuke.codetesting.modules.benchmark.EntityTest;
+import io.anuke.gif.GifRecorder;
 import io.anuke.ucore.graphics.Atlas;
-import io.anuke.utils.io.GifRecorder;
 
 public class EntityTester extends Module{
 	ObjectMap<Long, Entity> entities = new ObjectMap<Long, Entity>();
@@ -18,6 +19,9 @@ public class EntityTester extends Module{
 	
 	
 	public void init(){
+		
+		EntityTest.test();
+		
 		//TextureSplitter splitter = new TextureSplitter(Gdx.files.absolute("/home/cobalt/Downloads/kag-emotes-transparent.png"), 32);
 		//splitter.split(Gdx.files.absolute("/home/cobalt/Downloads/kagemotes"), 16, 2);
 		

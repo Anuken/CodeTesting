@@ -13,9 +13,9 @@ import com.badlogic.gdx.utils.ObjectSet;
 import com.badlogic.gdx.utils.TimeUtils;
 
 import io.anuke.codetesting.modules.Module;
+import io.anuke.gif.GifRecorder;
 import io.anuke.ucore.UCore;
 import io.anuke.ucore.graphics.PixmapUtils;
-import io.anuke.utils.io.GifRecorder;
 
 //Results:
 //Array spatial hash is about 2x faster.

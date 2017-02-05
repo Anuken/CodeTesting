@@ -68,7 +68,7 @@ public class LayerModule extends Module{
 						sprite.add();
 						//if(block(x,y+1,z+1) && !block(x,y+1,z))sprite.setColor(Color.LIGHT_GRAY);
 						
-						sprite.setColor(Hue.blend(Hue.blend(new Color(0.1f, 0.1f, 0.4f, 1), Color.ORANGE, y/6f), Color.WHITE, 0.5f));
+						sprite.setColor(Hue.mix(Hue.mix(new Color(0.1f, 0.1f, 0.4f, 1), Color.ORANGE, y/6f), Color.WHITE, 0.5f));
 						
 						
 						SpriteRenderable shadow = new SpriteRenderable(atlas.findRegion("blank"));

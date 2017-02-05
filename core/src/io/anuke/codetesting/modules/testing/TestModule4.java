@@ -1,9 +1,6 @@
 package io.anuke.codetesting.modules.testing;
 
-import static java.lang.Math.cos;
-import static java.lang.Math.pow;
-import static java.lang.Math.sin;
-import static java.lang.Math.tan;
+import static java.lang.Math.*;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -12,9 +9,9 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
 import io.anuke.codetesting.modules.Module;
+import io.anuke.gif.GifRecorder;
 import io.anuke.ucore.UCore;
 import io.anuke.ucore.graphics.Hue;
-import io.anuke.utils.io.GifRecorder;
 
 public class TestModule4 extends Module{
 	SpriteBatch batch;
@@ -58,10 +55,7 @@ public class TestModule4 extends Module{
 		
 		shape.end();
 		
-		
-		batch.begin();
 		recorder.update();
-		batch.end();
 	}
 	
 	void draw(double r1, double r2, double a){
