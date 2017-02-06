@@ -9,10 +9,13 @@ import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.utils.MeshBuilder;
 import com.badlogic.gdx.graphics.g3d.utils.MeshPartBuilder.VertexInfo;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.TimeUtils;
 
 import io.anuke.ucore.UCore;
+import io.anuke.ucore.graphics.Hue;
 
 public class MeshManager{
 	private final static Color color = new Color(1, 0, 0, 1);
@@ -29,6 +32,53 @@ public class MeshManager{
 	static{
 		for(int i = 0;i < vectors.length;i ++)
 			vectors[i] = new Vector3();
+	}
+	
+	private static Model endBuild(){
+		if(builder.getAttributes() != null)
+			endMesh();
+		
+		modelBuilder.begin();
+		for(int i = 0; i < meshes.size; i ++)
+			modelBuilder.part("mesh" + i, meshes.get(i), GL20.GL_TRIANGLES, new Material());
+		
+		meshes.clear();
+		
+		System.out.println("Done.");
+		
+		return modelBuilder.end();
+	}
+	
+	public static Array<Mesh> getMeshes(float[][] heights, float scl){
+		
+		long begin = TimeUtils.millis();
+		
+		builder.begin(Usage.Position | Usage.Normal | Usage.ColorPacked, GL20.GL_TRIANGLES);
+		
+		for(int x = 0; x < heights.length-1; x ++){
+			for(int z = 0; z < heights.length-1; z ++){
+				color.set(Hue.mix(Color.FOREST, Color.WHITE, heights[x][z] / 40f, color));
+				
+				checkMesh();
+				
+				builder.ensureVertices(4);
+				builder.ensureRectangleIndices(1);
+				
+				rect(vectors[0].set(x*scl, heights[x][z]*scl, z*scl),
+					 vectors[1].set(x*scl, heights[x][z+1]*scl, (z+1)*scl),
+					 vectors[2].set((x+1)*scl, heights[x+1][z+1]*scl, (z+1)*scl),
+					 vectors[3].set((x+1)*scl, heights[x+1][z]*scl, z*scl));
+			}
+		}
+		
+		if(builder.getAttributes() != null)
+			endMesh();
+		
+		long end = TimeUtils.timeSinceMillis(begin);
+		
+		System.out.println("Model build time: " + end);
+		
+		return meshes;
 	}
 	
 	public static Model getModel(int[][][] voxels, float offsetx, float offsetz, float scl){
@@ -60,8 +110,6 @@ public class MeshManager{
 		
 		if(builder.getAttributes() != null)
 			endMesh();
-		
-		
 		
 		modelBuilder.begin();
 		for(int i = 0; i < meshes.size; i ++)
@@ -127,7 +175,23 @@ public class MeshManager{
 		if(back) rect(vectors[3], vectors[0], vectors[4], vectors[7], Normals.back); //back
 	}
 	
+	private static Vector3 tempa = new Vector3();
+	private static Vector3 tempb = new Vector3();
+	
+	static private void rect(Vector3 a, Vector3 b, Vector3 c, Vector3 d){
+		tempa.set(c).sub(b);
+		tempb.set(a).sub(b);
+		
+		rect(a, b, c, d, tempa.crs(tempb));
+	}
+	
 	static private void rect(Vector3 a, Vector3 b, Vector3 c, Vector3 d, Vector3 normal){
+
 		builder.rect(vertTmp1.set(a, normal, color, null).setUV(0f, 1f), vertTmp2.set(b, normal, color, null).setUV(1f, 1f), vertTmp3.set(c, normal, color, null).setUV(1f, 0f), vertTmp4.set(d, normal, color, null).setUV(0f, 0f));
+	}
+	
+	static void r(Vector3 v){
+		float r = 50;
+		v.add(MathUtils.random(-r, r), MathUtils.random(-r, r), MathUtils.random(-r, r));
 	}
 }
