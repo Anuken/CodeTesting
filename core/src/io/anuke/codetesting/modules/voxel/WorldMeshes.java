@@ -9,10 +9,10 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool;
 
 public class WorldMeshes implements RenderableProvider{
-	private final Iterable<Mesh> meshes;
+	private final Array<Mesh> meshes;
 	private final Material material = new Material();
 	
-	public WorldMeshes(Iterable<Mesh> meshes){
+	public WorldMeshes(Array<Mesh> meshes){
 		this.meshes = meshes;
 	}
 	
@@ -23,7 +23,7 @@ public class WorldMeshes implements RenderableProvider{
 			renderable.material = material;
 			renderable.meshPart.mesh = mesh;
 			renderable.meshPart.offset = 0;
-			renderable.meshPart.size = mesh.getNumVertices();
+			renderable.meshPart.size = mesh.getNumVertices()*2;
 			renderable.meshPart.primitiveType = GL20.GL_TRIANGLES;
 			renderables.add(renderable);
 		}

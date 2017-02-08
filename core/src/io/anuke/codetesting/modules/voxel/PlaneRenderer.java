@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalShadowLight;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.utils.TimeUtils;
 
 import io.anuke.codetesting.modules.Module;
 import io.anuke.ucore.UCore;
@@ -29,9 +28,7 @@ public class PlaneRenderer extends Module{
 	public PlaneRenderer() {
 		Noise.seed = MathUtils.random(100000);
 		
-		long begin = TimeUtils.millis();
-		
-		int size = 80;
+		int size = 100;
 		
 		float[][] heights = new float[size][size];
 		
@@ -45,13 +42,8 @@ public class PlaneRenderer extends Module{
 		//float offsetx = 0, offsetz = 0;
 		float scl = 10;
 
-		meshes = new WorldMeshes(MeshManager.getMeshes(heights, scl));
+		meshes = MeshManager.getMeshes(heights, scl);
 		
-		long end = TimeUtils.timeSinceMillis(begin);
-		
-		System.out.println("time taken: " + end);
-		
-
 		batch = new ModelBatch();
 		
 		environment = new Environment();
@@ -68,7 +60,7 @@ public class PlaneRenderer extends Module{
 
 		cam = new PerspectiveCamera(67, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
-		cam.position.set(size * 4*scl, size * 3, size * 4*scl);
+		cam.position.set(size *scl, size * 3, size *scl);
 		cam.lookAt(-size * 2, size * 2, -size * 2);
 		//cam.
 		cam.near = 1f;

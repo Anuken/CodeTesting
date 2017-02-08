@@ -3,7 +3,8 @@ package io.anuke.codetesting.modules.voxel;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
-import com.badlogic.gdx.graphics.g3d.*;
+import com.badlogic.gdx.graphics.g3d.Environment;
+import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalShadowLight;
@@ -22,8 +23,7 @@ public class VoxelRenderer extends Module{
 	PerspectiveCamera cam;
 	Controller controller;
 	ModelBatch batch;
-	Model model;
-	ModelInstance instance;
+	WorldMeshes meshes;
 	int[][][] voxels;
 	Color color = new Color();
 	Color[] elcolors = {Color.FOREST, new Color(0.3f, 0.5f, 0.3f, 1f), Color.GRAY, Color.WHITE};
@@ -32,8 +32,8 @@ public class VoxelRenderer extends Module{
 	RidgedPerlin cave2 = new RidgedPerlin(MathUtils.random(100000), 1, 0.4f);
 
 	public VoxelRenderer() {
-		int size = 16;
-		int height = 5;
+		int size = 512;
+		int height = 256;
 		voxels = new int[size][height][size];
 		
 		/*
@@ -71,8 +71,7 @@ public class VoxelRenderer extends Module{
 		float offsetx = 0, offsetz = 0;
 		float scl = 3;
 
-		model = MeshManager.getModel(voxels, offsetx, offsetz, scl);
-		instance = new ModelInstance(model);
+		meshes = MeshManager.getModel(voxels, offsetx, offsetz, scl);
 
 		batch = new ModelBatch();
 		
@@ -110,7 +109,7 @@ public class VoxelRenderer extends Module{
 		UCore.clearScreen(Color.SKY);
 		
 		batch.begin(cam);
-		batch.render(instance, environment);
+		batch.render(meshes, environment);
 		batch.end();
 
 		controller.update();

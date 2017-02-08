@@ -4,8 +4,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Mesh;
 import com.badlogic.gdx.graphics.VertexAttributes.Usage;
-import com.badlogic.gdx.graphics.g3d.Material;
-import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.utils.MeshBuilder;
 import com.badlogic.gdx.graphics.g3d.utils.MeshPartBuilder.VertexInfo;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
@@ -34,24 +32,11 @@ public class MeshManager{
 			vectors[i] = new Vector3();
 	}
 	
-	private static Model endBuild(){
-		if(builder.getAttributes() != null)
-			endMesh();
-		
-		modelBuilder.begin();
-		for(int i = 0; i < meshes.size; i ++)
-			modelBuilder.part("mesh" + i, meshes.get(i), GL20.GL_TRIANGLES, new Material());
-		
-		meshes.clear();
-		
-		System.out.println("Done.");
-		
-		return modelBuilder.end();
-	}
-	
-	public static Array<Mesh> getMeshes(float[][] heights, float scl){
+	public static WorldMeshes getMeshes(float[][] heights, float scl){
 		
 		long begin = TimeUtils.millis();
+		
+		//meshes.clear();
 		
 		builder.begin(Usage.Position | Usage.Normal | Usage.ColorPacked, GL20.GL_TRIANGLES);
 		
@@ -78,12 +63,14 @@ public class MeshManager{
 		
 		System.out.println("Model build time: " + end);
 		
-		return meshes;
+		return new WorldMeshes(meshes);
 	}
 	
-	public static Model getModel(int[][][] voxels, float offsetx, float offsetz, float scl){
+	public static WorldMeshes getModel(int[][][] voxels, float offsetx, float offsetz, float scl){
 		int size = voxels.length;
 		MeshManager.voxels = voxels;
+		
+		//meshes.clear();
 		
 		builder.begin(Usage.Position | Usage.Normal | Usage.ColorPacked, GL20.GL_TRIANGLES);
 		
@@ -92,8 +79,6 @@ public class MeshManager{
 				for(int z = 0; z < size; z ++){
 					if(voxels[x][y][z] != 0){
 						color.set(voxels[x][y][z]);
-						
-						//System.out.println("building " + x +" " + y + " " + z);
 						
 						if(voxels[x][y][z] != 0) cube(offsetx + x * scl, y * scl, offsetz + z * scl, scl,
 								!exists(x, y + 1, z), //top
@@ -111,15 +96,7 @@ public class MeshManager{
 		if(builder.getAttributes() != null)
 			endMesh();
 		
-		modelBuilder.begin();
-		for(int i = 0; i < meshes.size; i ++)
-			modelBuilder.part("mesh" + i, meshes.get(i), GL20.GL_TRIANGLES, new Material());
-		
-		meshes.clear();
-		
-		System.out.println("Done.");
-		
-		return modelBuilder.end();
+		return new WorldMeshes(meshes);
 	}
 	
 	private static boolean exists(int x, int y, int z){
@@ -186,7 +163,6 @@ public class MeshManager{
 	}
 	
 	static private void rect(Vector3 a, Vector3 b, Vector3 c, Vector3 d, Vector3 normal){
-
 		builder.rect(vertTmp1.set(a, normal, color, null).setUV(0f, 1f), vertTmp2.set(b, normal, color, null).setUV(1f, 1f), vertTmp3.set(c, normal, color, null).setUV(1f, 0f), vertTmp4.set(d, normal, color, null).setUV(0f, 0f));
 	}
 	
