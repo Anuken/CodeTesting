@@ -11,6 +11,7 @@ import io.anuke.codetesting.modules.Module;
 import io.anuke.ucore.graphics.Hue;
 import io.anuke.ucore.graphics.PixmapUtils;
 
+/**Testing ANT sprites*/
 public class TestModule2 extends Module{
 	
 	public void init(){

@@ -8,7 +8,7 @@ import com.badlogic.gdx.utils.Array;
 
 import io.anuke.codetesting.modules.Module;
 import io.anuke.layer3d.LayeredObject;
-import io.anuke.layer3d.LayeredRenderer;
+import io.anuke.layer3d.SortRenderer;
 import io.anuke.ucore.UCore;
 import io.anuke.ucore.noise.Noise;
 import io.anuke.ucore.noise.RidgedPerlin;
@@ -66,14 +66,14 @@ public class TestModule5 extends Module{
 			textures.add(new Texture(pixmap));
 		}
 		
-		LayeredRenderer.instance().camera = camera;
-		LayeredRenderer.instance().steps = 8;
-		LayeredRenderer.instance().drawShadows = true;
-		LayeredRenderer.instance().spacing = 1;
+		SortRenderer.instance().camera = camera;
+		SortRenderer.instance().steps = 8;
+		SortRenderer.instance().drawShadows = true;
+		SortRenderer.instance().spacing = 1;
 		object = new LayeredObject((Texture[])textures.toArray(Texture.class));
 		
 		
-		object.add();
+		SortRenderer.instance().add(object);
 	}
 
 	@Override
@@ -86,7 +86,7 @@ public class TestModule5 extends Module{
 		UCore.clearScreen(Color.BLACK);
 		
 		batch.begin();
-		LayeredRenderer.instance().render(batch);
+		SortRenderer.instance().render(batch);
 		batch.end();
 	}
 	

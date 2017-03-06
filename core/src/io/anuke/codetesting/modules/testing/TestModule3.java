@@ -18,6 +18,7 @@ import io.anuke.codetesting.utils.BloomShader;
 import io.anuke.ucore.UCore;
 import io.anuke.ucore.graphics.Textures;
 
+/**Testing polyterrain*/
 public class TestModule3 extends Module{
 	PolygonSpriteBatch batch = new PolygonSpriteBatch();
 	PolyTerrain terrain1;

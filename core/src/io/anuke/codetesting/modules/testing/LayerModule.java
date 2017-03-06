@@ -11,9 +11,10 @@ import io.anuke.ucore.graphics.Atlas;
 import io.anuke.ucore.graphics.Hue;
 import io.anuke.ucore.noise.Noise;
 import io.anuke.ucore.spritesystem.RenderableHandler;
-import io.anuke.ucore.spritesystem.SortProviders;
+import io.anuke.ucore.spritesystem.Sorter;
 import io.anuke.ucore.spritesystem.SpriteRenderable;
 
+/**Testing fake blocky 3D rendering with renderables*/
 public class LayerModule extends Module{
 	SpriteBatch batch;
 	OrthographicCamera camera;
@@ -37,7 +38,7 @@ public class LayerModule extends Module{
 				for(int z = 0; z < size; z ++){
 					//if(y <= 1) blocks[x][y][z] = 1;
 					
-					int noise = (int)Noise.normalNoise(x, z, 5, 5)+3;
+					int noise = (int)Noise.snoise(x, z, 5, 5)+3;
 					if(y + 1 < noise){
 						blocks[x][y][z] = 1;
 					}else if(y < noise){
@@ -63,7 +64,7 @@ public class LayerModule extends Module{
 						
 						SpriteRenderable sprite = new SpriteRenderable(atlas.findRegion(i == 1 ? "dirtblock" : "grassblock"));
 						sprite.setPosition(x*sp-s/2, z*sp-s/2 + step*y);
-						sprite.setLayer(z*sp-s/2 - y *0.01f).setProvider(SortProviders.object);
+						sprite.setLayer(z*sp-s/2 - y *0.01f).setProvider(Sorter.object);
 						sprite.centerX();
 						sprite.add();
 						//if(block(x,y+1,z+1) && !block(x,y+1,z))sprite.setColor(Color.LIGHT_GRAY);
@@ -74,7 +75,7 @@ public class LayerModule extends Module{
 						SpriteRenderable shadow = new SpriteRenderable(atlas.findRegion("blank"));
 						shadow.sprite.setSize(16, 16);
 						shadow.setPosition(x*sp-s/2 - 8, z*sp-s/2 + step*y - 4);
-						shadow.setLayer(z*(sp)-s/2 - y *0.01f + 0.005f).setProvider(SortProviders.object);
+						shadow.setLayer(z*(sp)-s/2 - y *0.01f + 0.005f).setProvider(Sorter.object);
 						shadow.setColor(new Color(0,0,0,0.14f));
 						shadow.add();
 						

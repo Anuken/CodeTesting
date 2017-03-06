@@ -13,6 +13,7 @@ import io.anuke.gif.GifRecorder;
 import io.anuke.ucore.UCore;
 import io.anuke.ucore.graphics.Hue;
 
+/**polar grapher*/
 public class TestModule4 extends Module{
 	SpriteBatch batch;
 	ShapeRenderer shape;
