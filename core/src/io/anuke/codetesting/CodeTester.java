@@ -8,7 +8,7 @@ import com.badlogic.gdx.utils.ObjectMap;
 
 import io.anuke.codetesting.entities.Entity;
 import io.anuke.codetesting.modules.Module;
-import io.anuke.codetesting.modules.testing.TestModule8;
+import io.anuke.codetesting.modules.voxel.PlaneRenderer;
 
 public class CodeTester extends ApplicationAdapter{
 	//ModuleGroup type = ModuleGroup.WORKBENCH;
@@ -18,7 +18,7 @@ public class CodeTester extends ApplicationAdapter{
 	@Override
 	public void create(){
 		Entity.tester = this;
-		Module[] array = {new TestModule8()};
+		Module[] array = {new PlaneRenderer()};
 		
 		for(Module module : array){
 			moduleArray.add(module);

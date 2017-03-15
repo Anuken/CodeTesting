@@ -28,19 +28,23 @@ public class PlaneRenderer extends Module{
 	public PlaneRenderer() {
 		Noise.seed = MathUtils.random(100000);
 		
-		int size = 100;
+		int size = 500;
 		
 		float[][] heights = new float[size][size];
 		
 		for(int x = 0; x < size; x ++){
 			for(int z = 0; z < size; z ++){
-				heights[x][z] = (float)Noise.nnoise(x, z, 30f, 70f) + Noise.nnoise(x, z, 5f, 8f);
+				heights[x][z] = (float)Noise.nnoise(x, z, 80f, 100f) + 
+						Noise.nnoise(x, z, 7f, 8f) + 
+						Noise.nnoise(x, z, 4f, 3f) + 
+						Noise.nnoise(x, z, 100f, 200f) +
+						Noise.nnoise(x, z, 40, 40f);
 			}
 		}
 		
 		
 		//float offsetx = 0, offsetz = 0;
-		float scl = 10;
+		float scl = 3;
 
 		meshes = MeshManager.getMeshes(heights, scl);
 		

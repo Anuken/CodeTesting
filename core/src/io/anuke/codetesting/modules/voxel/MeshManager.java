@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.VertexAttributes.Usage;
 import com.badlogic.gdx.graphics.g3d.utils.MeshBuilder;
 import com.badlogic.gdx.graphics.g3d.utils.MeshPartBuilder.VertexInfo;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
@@ -24,6 +23,9 @@ public class MeshManager{
 	private final static VertexInfo vertTmp2 = new VertexInfo();
 	private final static VertexInfo vertTmp3 = new VertexInfo();
 	private final static VertexInfo vertTmp4 = new VertexInfo();
+	private final static Vector3 tempa = new Vector3();
+	private final static Vector3 tempb = new Vector3();
+	
 	private static int[][][] voxels;
 	private static Array<Mesh> meshes = new Array<Mesh>();
 	
@@ -36,13 +38,11 @@ public class MeshManager{
 		
 		long begin = TimeUtils.millis();
 		
-		//meshes.clear();
-		
 		builder.begin(Usage.Position | Usage.Normal | Usage.ColorPacked, GL20.GL_TRIANGLES);
 		
 		for(int x = 0; x < heights.length-1; x ++){
 			for(int z = 0; z < heights.length-1; z ++){
-				color.set(Hue.mix(Color.FOREST, Color.WHITE, heights[x][z] / 40f, color));
+				color.set(Hue.mix(Color.OLIVE, Color.LIGHT_GRAY, heights[x][z] / 40f, color));
 				
 				checkMesh();
 				
@@ -152,9 +152,6 @@ public class MeshManager{
 		if(back) rect(vectors[3], vectors[0], vectors[4], vectors[7], Normals.back); //back
 	}
 	
-	private static Vector3 tempa = new Vector3();
-	private static Vector3 tempb = new Vector3();
-	
 	static private void rect(Vector3 a, Vector3 b, Vector3 c, Vector3 d){
 		tempa.set(c).sub(b);
 		tempb.set(a).sub(b);
@@ -164,10 +161,5 @@ public class MeshManager{
 	
 	static private void rect(Vector3 a, Vector3 b, Vector3 c, Vector3 d, Vector3 normal){
 		builder.rect(vertTmp1.set(a, normal, color, null).setUV(0f, 1f), vertTmp2.set(b, normal, color, null).setUV(1f, 1f), vertTmp3.set(c, normal, color, null).setUV(1f, 0f), vertTmp4.set(d, normal, color, null).setUV(0f, 0f));
-	}
-	
-	static void r(Vector3 v){
-		float r = 50;
-		v.add(MathUtils.random(-r, r), MathUtils.random(-r, r), MathUtils.random(-r, r));
 	}
 }
