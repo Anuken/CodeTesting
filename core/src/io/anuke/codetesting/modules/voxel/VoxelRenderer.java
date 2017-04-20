@@ -64,7 +64,7 @@ public class VoxelRenderer extends Module{
 		}
 
 		float offsetx = 0, offsetz = 0;
-		float scl = 3;
+		float scl = 5;
 
 		meshes = MeshManager.getModel(voxels, offsetx, offsetz, scl);
 

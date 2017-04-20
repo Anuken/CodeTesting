@@ -1,0 +1,71 @@
+{
+com.badlogic.gdx.graphics.g2d.BitmapFont: { default-font: { file: smoothfont.fnt } },
+com.badlogic.gdx.graphics.Color: {
+	green: { a: 1, b: 0, g: 1, r: 0 },
+	white: { a: 1, b: 1, g: 1, r: 1 },
+	red: { a: 1, b: 0, g: 0, r: 1 },
+	black: { a: 1, b: 0, g: 0, r: 0 },
+	text: { a: 1, b: 1, g: 1, r: 1 },
+},
+io.anuke.scene.style.Styles$TintedDrawable: {
+	dialogDim: { name: white, color: { r: 0, g: 0, b: 0, a: 0.45 } },
+},
+io.anuke.scene.ui.Button$ButtonStyle: {
+	default: { down: default-round-down, up: default-round, over: default-round-over, disabled: default-round-disabled},
+	toggle: { down: default-round-down, checked: default-round-down, up: default-round, disabled: default-round-disabled}
+},
+io.anuke.scene.ui.TextButton$TextButtonStyle: {
+	default: { down: default-round-down, up: default-round, over: default-round-over, font: default-font, fontColor: text, disabled: default-round-disabled},
+	toggle: { down: default-round-down, up: default-round, over: default-round-over, checked: default-round-down, font: default-font, fontColor: text, downFontColor: white, disabled: default-round-disabled }
+},
+io.anuke.scene.ui.ScrollPane$ScrollPaneStyle: {
+	default: { vScroll: default-scroll, hScrollKnob: default-round-large, background: default-rect, hScroll: default-scroll, vScrollKnob: default-round-large }
+},
+io.anuke.scene.ui.SelectBox$SelectBoxStyle: {
+	default: {
+		font: default-font, fontColor: white, background: default-select,
+		scrollStyle: default,
+		listStyle: { font: default-font, selection: default-select-selection }
+	}
+},
+io.anuke.scene.ui.SplitPane$SplitPaneStyle: {
+	default-vertical: { handle: default-splitpane-vertical },
+	default-horizontal: { handle: default-splitpane }
+},
+io.anuke.scene.ui.Window$WindowStyle: {
+	default: { titleFont: default-font, background: default-window, titleFontColor: white },
+	dialog: { titleFont: default-font, background: default-window, titleFontColor: white, stageBackground: dialogDim }
+},
+io.anuke.scene.ui.ProgressBar$ProgressBarStyle: {
+	default-horizontal: { background: default-slider, knob: default-slider-knob },
+	default-vertical: { background: default-slider, knob: default-round-large }
+},
+io.anuke.scene.ui.Slider$SliderStyle: {
+	default-horizontal: { background: default-slider, knob: default-slider-knob },
+	default-vertical: { background: default-slider, knob: default-round-large }
+},
+io.anuke.scene.ui.Label$LabelStyle: {
+	default: { font: default-font, fontColor: white }
+},
+io.anuke.scene.ui.TextField$TextFieldStyle: {
+	default: { selection: selection, background: textfield, font: default-font, fontColor: white, cursor: cursor }
+},
+io.anuke.scene.ui.CheckBox$CheckBoxStyle: {
+	default: { checkboxOn: check-on, checkboxOff: check-off, checkboxOnDisabled: check-on-disabled, checkboxOffDisabled: check-off-disabled, checkboxOver: check-over, font: default-font, fontColor: white }
+},
+io.anuke.scene.ui.List$ListStyle: {
+	default: { fontColorUnselected: white, selection: selection, fontColorSelected: white, font: default-font }
+},
+io.anuke.scene.ui.Touchpad$TouchpadStyle: {
+	default: { background: default-pane, knob: default-round-large }
+},
+io.anuke.scene.ui.Tree$TreeStyle: {
+	default: { minus: tree-minus, plus: tree-plus, selection: default-select-selection }
+},
+io.anuke.scene.ui.TextTooltip$TextTooltipStyle: {
+	default: {
+		label: { font: default-font, fontColor: white },
+		background: default-pane
+	}
+}
+}

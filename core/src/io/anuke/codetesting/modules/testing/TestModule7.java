@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
 
 import io.anuke.aabb.Collider;
 import io.anuke.aabb.ColliderEngine;
@@ -23,6 +24,8 @@ public class TestModule7 extends Module{
 	Collider player, wall;
 	boolean playercolliding = false;
 	GifRecorder recorder = new GifRecorder(batch);
+	Vector2 begin;
+	
 	
 	@Override
 	public void init(){
@@ -32,12 +35,13 @@ public class TestModule7 extends Module{
 		Collider.defaultRestitution = 0f;
 		
 		player = new Collider(600, 700, 50, 50, 1);
+		player.drag = 0.73f;
 		
 		engine.setContactListener((a, b)->{
 			if(a == player) playercolliding = true;
 		});
 		
-		engine.gravity.set(0, -1);
+		//engine.gravity.set(0, -1);
 		
 		engine.addCollider(player);
 		
@@ -56,25 +60,31 @@ public class TestModule7 extends Module{
 	public void update(){
 		playercolliding = false;
 		
-		float speed = 1.3f;
+		float speed = 6f;
 		
-		if(Gdx.input.isKeyPressed(Keys.W)){
-			player.applyForce(0, speed*2);
+		if(Gdx.input.isKeyJustPressed(Keys.W)){
+			player.applyImpulse(0, speed*2);
 		}
 		
-		if(Gdx.input.isKeyPressed(Keys.A)){
-			player.applyForce(-speed, 0);
+		if(Gdx.input.isKeyJustPressed(Keys.A)){
+			player.applyImpulse(-speed, 0);
 		}
 		
-		if(Gdx.input.isKeyPressed(Keys.S)){
-			player.applyForce(0, -speed);
+		if(Gdx.input.isKeyJustPressed(Keys.S)){
+			player.applyImpulse(0, -speed);
 		}
 		
-		if(Gdx.input.isKeyPressed(Keys.D)){
-			player.applyForce(speed, 0);
+		if(Gdx.input.isKeyJustPressed(Keys.D)){
+			player.applyImpulse(speed, 0);
+			begin = new Vector2(player.x, player.y);
 		}
 		
 		engine.update(Gdx.graphics.getDeltaTime());
+		
+		if(player.getVelocity().len() > 0.001f){
+			System.out.println(player.getVelocity());
+			System.out.println(begin.dst(player.x, player.y));
+		}
 		
 		UCore.clearScreen(Color.BLACK);
 		

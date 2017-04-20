@@ -100,7 +100,7 @@ public class MeshManager{
 	}
 	
 	private static boolean exists(int x, int y, int z){
-		return UCore.inBounds(x, y, z, voxels) && voxels[x][y][z] != 0;
+		return !UCore.inBounds(x, y, z, voxels) || voxels[x][y][z] != 0;
 	}
 	
 	private static void checkMesh(){
