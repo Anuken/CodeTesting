@@ -6,9 +6,9 @@ import com.badlogic.gdx.graphics.Color;
 
 import io.anuke.codetesting.modules.DrawModule;
 import io.anuke.ucore.UCore;
-import io.anuke.ucore.drawsort.DrawHandler;
-import io.anuke.ucore.drawsort.DrawLayer;
-import io.anuke.ucore.drawsort.DrawPointerList;
+import io.anuke.ucore.drawpointers.DrawHandler;
+import io.anuke.ucore.drawpointers.DrawLayer;
+import io.anuke.ucore.drawpointers.DrawPointerList;
 import io.anuke.ucore.graphics.Textures;
 
 public class TestModule6 extends DrawModule{

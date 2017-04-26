@@ -10,9 +10,9 @@ import io.anuke.ucore.UCore;
 import io.anuke.ucore.graphics.Atlas;
 import io.anuke.ucore.graphics.Hue;
 import io.anuke.ucore.noise.Noise;
-import io.anuke.ucore.spritesystem.RenderableHandler;
-import io.anuke.ucore.spritesystem.Sorter;
-import io.anuke.ucore.spritesystem.SpriteRenderable;
+import io.anuke.ucore.renderables.RenderableHandler;
+import io.anuke.ucore.renderables.Sorter;
+import io.anuke.ucore.renderables.SpriteRenderable;
 
 /**Testing fake blocky 3D rendering with renderables*/
 public class LayerModule extends Module{

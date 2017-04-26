@@ -9,7 +9,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
 import io.anuke.aabb.Collider;
-import io.anuke.aabb.ColliderEngine;
+import io.anuke.aabb.CollisionEngine;
 import io.anuke.codetesting.modules.Module;
 import io.anuke.gif.GifRecorder;
 import io.anuke.ucore.UCore;
@@ -20,7 +20,7 @@ import io.anuke.ucore.graphics.ShapeUtils;
 public class TestModule7 extends Module{
 	SpriteBatch batch = new SpriteBatch();
 	Texture tex = PixmapUtils.blankTexture();
-	ColliderEngine engine;
+	CollisionEngine engine;
 	Collider player, wall;
 	boolean playercolliding = false;
 	GifRecorder recorder = new GifRecorder(batch);
@@ -29,7 +29,7 @@ public class TestModule7 extends Module{
 	
 	@Override
 	public void init(){
-		engine = new ColliderEngine();
+		engine = new CollisionEngine();
 		//engine.iterations = 20;
 		
 		Collider.defaultRestitution = 0f;

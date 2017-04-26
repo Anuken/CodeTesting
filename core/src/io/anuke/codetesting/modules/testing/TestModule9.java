@@ -6,6 +6,6 @@ public class TestModule9 extends ModuleController<TestModule9>{
 
 	@Override
 	public void init(){
-		addModule(TestModule11.class);
+		addModule(TestModule10.class);
 	}
 }
