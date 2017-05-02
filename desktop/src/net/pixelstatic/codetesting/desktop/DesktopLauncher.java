@@ -3,7 +3,7 @@ package net.pixelstatic.codetesting.desktop;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 
-import io.anuke.codetesting.examplesetup.ExampleMain;
+import io.anuke.codetesting.exampleuni.UniCore;
 
 public class DesktopLauncher {
 	public static void main (String[] arg) {
@@ -11,6 +11,6 @@ public class DesktopLauncher {
 		config.setTitle("CodeTesting");
 		config.setMaximized(true);
 		//config.useVsync(false);
-		new Lwjgl3Application(new ExampleMain(), config);
+		new Lwjgl3Application(new UniCore(), config);
 	}
 }

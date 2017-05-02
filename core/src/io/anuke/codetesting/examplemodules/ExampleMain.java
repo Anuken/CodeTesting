@@ -1,9 +1,9 @@
-package io.anuke.codetesting.examplesetup;
+package io.anuke.codetesting.examplemodules;
 
 import com.badlogic.gdx.Input.Keys;
 
-import io.anuke.codetesting.examplesetup.entities.ExampleEnemy;
-import io.anuke.codetesting.examplesetup.entities.ExamplePlayer;
+import io.anuke.codetesting.examplemodules.entities.ExampleEnemy;
+import io.anuke.codetesting.examplemodules.entities.ExamplePlayer;
 import io.anuke.ucore.core.KeyBinds;
 import io.anuke.ucore.core.Settings;
 import io.anuke.ucore.modules.ModuleController;
@@ -25,7 +25,7 @@ public class ExampleMain extends ModuleController<ExampleMain>{
 	}
 	
 	@Override
-	public void setup(){
+	public void preInit(){
 		
 		KeyBinds.defaults(
 			"up", Keys.W,

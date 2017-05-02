@@ -1,7 +1,8 @@
-package io.anuke.codetesting.examplesetup.entities;
+package io.anuke.codetesting.examplemodules.entities;
 
-import io.anuke.codetesting.examplesetup.ExampleMain;
+import io.anuke.codetesting.examplemodules.ExampleMain;
 import io.anuke.ucore.core.Draw;
+import io.anuke.ucore.core.Effects;
 import io.anuke.ucore.entities.DestructibleEntity;
 import io.anuke.ucore.util.Mathf;
 
@@ -10,7 +11,7 @@ public class ExampleEnemy extends DestructibleEntity{
 	@Override
 	public void update(){
 		if(Mathf.chance(0.05))
-			new ExampleBullet(this, angleTo(ExampleMain.i.player)).add();
+			new ExampleBullet(ExampleBulletType.test, this, angleTo(ExampleMain.i.player)).add();
 	}
 	
 	@Override
@@ -19,5 +20,9 @@ public class ExampleEnemy extends DestructibleEntity{
 		Draw.color("orange");
 		Draw.circle(x, y, 10);
 		Draw.clear();
+	}
+	
+	public void doSomething(){
+		Effects.effect("hit", this);
 	}
 }
