@@ -1,0 +1,17 @@
+#ifdef GL_ES
+precision lowp float;
+#define MED mediump
+#else
+#define MED 
+#endif
+varying vec4 v_color;
+
+float round(float f){
+	float r = 0.2;
+	return float(int(f/r))*r;
+}
+
+void main()
+{
+  gl_FragColor = vec4(v_color.rgb, round(v_color.a));
+}

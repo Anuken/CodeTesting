@@ -1,0 +1,24 @@
+#ifdef GL_ES
+precision lowp float;
+#define MED mediump
+#else
+#define MED 
+#endif
+varying MED vec2 v_texCoords;
+uniform sampler2D u_texture;
+uniform vec4 ambient;
+
+float round(float f){
+	float r = 0.1;
+	return float(int(f/r))*r;
+}
+
+
+void main(){
+	vec4 c = texture2D(u_texture, v_texCoords);
+	
+	c.a = round(c.a);
+	
+	gl_FragColor.rgb = c.rgb * c.a + ambient.rgb;
+	gl_FragColor.a = ambient.a - c.a;
+}
