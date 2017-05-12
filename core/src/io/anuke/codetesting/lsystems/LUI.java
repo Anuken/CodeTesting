@@ -5,6 +5,7 @@ import java.util.HashMap;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 
+import io.anuke.ucore.core.Draw;
 import io.anuke.ucore.modules.SceneModule;
 import io.anuke.ucore.scene.builders.*;
 import io.anuke.ucore.scene.ui.TextField;
@@ -95,7 +96,17 @@ public class LUI extends SceneModule{
 					if(out != Float.NaN){
 						rend.setLength(out);
 					}
-				}).padBottom(10);
+				});
+				
+				row();
+				
+				new label("Thickness: ").padBottom(20);
+				get().addField("1.0", s->{
+					float out = Strings.parseFloat(s);
+					if(out != Float.NaN){
+						Draw.thick(out);
+					}
+				}).padBottom(20);
 				
 				row();
 				
@@ -164,9 +175,10 @@ public class LUI extends SceneModule{
 				rules.remove(c);
 				updateRules();
 				rend.generate();
-			});
+			}).grow();
 			
 			ruletable.row();
 		}
+		ruletable.pack();
 	}
 }

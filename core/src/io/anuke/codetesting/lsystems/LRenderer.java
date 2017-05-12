@@ -7,14 +7,16 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 
 import io.anuke.gif.GifRecorder;
-import io.anuke.ucore.core.*;
+import io.anuke.ucore.core.Draw;
+import io.anuke.ucore.core.Graphics;
+import io.anuke.ucore.core.Inputs;
 import io.anuke.ucore.modules.RendererModule;
 import io.anuke.ucore.scene.utils.Cursors;
+import io.anuke.ucore.util.Mathf;
 import io.anuke.ucore.util.Timers;
 
 public class LRenderer extends RendererModule{
@@ -47,9 +49,6 @@ public class LRenderer extends RendererModule{
 		cameraScale = 1f;
 		
 		//setPixelation();
-		
-		DrawContext.font = new BitmapFont(Gdx.files.internal("ui/prose.fnt"));
-		Draw.tscl(0.5f);
 	}
 	
 	public void init(){
@@ -102,7 +101,7 @@ public class LRenderer extends RendererModule{
 		
 		new Thread(()->{
 			out = LSystem.get(axiom, iterations, rules);
-		}).start();
+		}){{setDaemon(true);}}.start();
 	}
 	
 	private void clear(){
@@ -166,12 +165,17 @@ public class LRenderer extends RendererModule{
 			if(Inputs.buttonDown(Buttons.LEFT) && moving){
 				float dx = Graphics.mouse().x-lastx;
 				float dy = Graphics.mouse().y-lasty;
-				camera.position.sub(dx, dy, 0);
+				camera.position.sub(dx*camera.zoom, dy*camera.zoom, 0);
 				camera.update();
 				
 				lastx = Graphics.mouse().x;
 				lasty = Graphics.mouse().y;
 			}
+		}
+		
+		if(Inputs.scrolled()){
+			camera.zoom = Mathf.clamp(camera.zoom-Inputs.scroll()/10f, 0.1f, 10f);
+			camera.update();
 		}
 		
 		if(Inputs.keyDown(Keys.ESCAPE))
