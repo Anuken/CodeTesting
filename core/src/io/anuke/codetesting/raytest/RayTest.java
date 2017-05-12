@@ -65,8 +65,6 @@ public class RayTest extends RendererModule{
 		
 		recorder.update();
 		
-		
-		
 		/*
 		batch.begin();
 		Draw.color(Color.PURPLE);
