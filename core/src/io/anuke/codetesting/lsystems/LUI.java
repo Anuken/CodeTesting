@@ -12,12 +12,14 @@ import io.anuke.ucore.scene.ui.TextField;
 import io.anuke.ucore.scene.ui.TextField.TextFieldStyle;
 import io.anuke.ucore.scene.ui.layout.Table;
 import io.anuke.ucore.util.Strings;
+import io.anuke.ucore.util.Timers;
 
 public class LUI extends SceneModule{
 	Table ruletable;
 	LRenderer rend;
 	
 	public void init(){
+		
 		rend = (LRenderer)get(LRenderer.class);
 		
 		build.begin();
@@ -36,6 +38,12 @@ public class LUI extends SceneModule{
 			}).left();
 			
 		}}.end();
+		
+		new table(){{
+			new label(()->{
+				return rend.isLoading() ? "Loading."+new String(new char[(int)(Timers.time()/12)%4]).replace('\u0000', '.') : "";
+			});
+		}}.end();;
 		
 		new table(){{
 			atop();
@@ -79,6 +87,16 @@ public class LUI extends SceneModule{
 			new table(){{
 				get().pad(20);
 				get().background("button");
+				
+				new label("Iterations: ");
+				get().addField("6", s->{
+					int out = Strings.parseInt(s);
+					if(out != Integer.MIN_VALUE){
+						rend.setIterations(out);
+					}
+				});
+				
+				row();
 				
 				new label("Angle: ");
 				get().addField("25", s->{

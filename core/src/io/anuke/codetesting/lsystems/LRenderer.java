@@ -30,7 +30,9 @@ public class LRenderer extends RendererModule{
 	
 	private boolean moving = false;
 	private float lastx, lasty;
+	private boolean loading = false;
 	
+	private Thread thread;
 	private float swayscl = 2f;
 	private float swayphase = 20f;
 	private float swayspace = 1f;
@@ -78,6 +80,11 @@ public class LRenderer extends RendererModule{
 		generate();
 	}
 	
+	public void setIterations(int i){
+		iterations = i;
+		generate();
+	}
+	
 	public void setAngle(float angle){
 		space = angle;
 		generate();
@@ -96,12 +103,19 @@ public class LRenderer extends RendererModule{
 		return out.length();
 	}
 	
+	public boolean isLoading(){
+		return loading;
+	}
+	
 	public void generate(){
 		clear();
 		
-		new Thread(()->{
+		loading = true;
+		
+		(thread = new Thread(()->{
 			out = LSystem.get(axiom, iterations, rules);
-		}){{setDaemon(true);}}.start();
+			loading = false;
+		}){{setDaemon(true);}}).start();
 	}
 	
 	private void clear(){
