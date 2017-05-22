@@ -4,7 +4,6 @@ import io.anuke.ucore.modules.SceneModule;
 import io.anuke.ucore.scene.builders.build;
 import io.anuke.ucore.scene.builders.button;
 import io.anuke.ucore.scene.builders.table;
-import io.anuke.ucore.scene.style.Styles;
 import io.anuke.ucore.scene.ui.KeybindDialog;
 import io.anuke.ucore.scene.ui.ListDialog;
 import io.anuke.ucore.scene.ui.SettingsDialog;
@@ -14,7 +13,7 @@ public class ExampleUI extends SceneModule<ExampleMain>{
 	public SettingsDialog graphics, game;
 	
 	public ExampleUI(){
-		Styles.styles.font().setUseIntegerPositions(false);
+		skin.font().setUseIntegerPositions(false);
 	}
 	
 	@Override

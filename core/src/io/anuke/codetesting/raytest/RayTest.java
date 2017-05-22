@@ -11,11 +11,9 @@ import io.anuke.ucore.core.Draw;
 import io.anuke.ucore.core.DrawContext;
 import io.anuke.ucore.core.Graphics;
 import io.anuke.ucore.graphics.Atlas;
-import io.anuke.ucore.graphics.Hue;
 import io.anuke.ucore.lights.PointLight;
 import io.anuke.ucore.lights.RayHandler;
 import io.anuke.ucore.modules.RendererModule;
-import io.anuke.ucore.util.Mathf;
 
 public class RayTest extends RendererModule{
 	RayHandler rays;
@@ -24,7 +22,7 @@ public class RayTest extends RendererModule{
 	
 	public RayTest(){
 		
-		cameraScale = 4f;
+		cameraScale = 4;
 		
 		atlas = new Atlas("codetesting.pack");
 		DrawContext.font = new BitmapFont(Gdx.files.internal("fonts/font.fnt"));
@@ -33,25 +31,24 @@ public class RayTest extends RendererModule{
 		
 		RayHandler.useDiffuseLight(true);
 		rays = new RayHandler();
-		rays.pixelate();
-		rays.setBlur(true);
+		//rays.pixelate();
 		
-		rays.setTint(Hue.rgb(0.65, 0.5, 0.3).mul(1.3f));
+		//rays.setTint(Hue.rgb(0.65, 0.5, 0.3).mul(1.3f));
 		
 		MathUtils.random.setSeed(0);
-	
-		//for(int i = 0; i < 1; i ++)
-		//	new PointLight(rays, 200, Color.WHITE, 500, Mathf.range(700), Mathf.range(700));
 		
-		for(int i = 0; i < 160; i ++)
-			rays.addRect(new Rectangle().setSize(Mathf.random(10)).setCenter(Mathf.range(200), Mathf.range(200)));
+		//for(int i = 0; i < 160; i ++)
+		//	rays.addRect(new Rectangle().setSize(Mathf.random(10)).setCenter(Mathf.range(200), Mathf.range(200)));
 		
-		new PointLight(rays, 200, Color.WHITE, 500, 0, 0);
+		PointLight light = new PointLight(rays, 400, Color.WHITE, 500, 0, 0);
+		light.setNoise(1, 0, 0);
+		//light.setSoftnessLength(0f);
+		//light.setSoft(false);
 		
-		rect = new Rectangle().setSize(20).setCenter(0, 0);
+		rect = new Rectangle().setSize(10).setCenter(0, 0);
 		rays.addRect(rect);
 		
-		setPixelation();
+		pixelate();
 	}
 	
 	public void update(){
@@ -84,12 +81,12 @@ public class RayTest extends RendererModule{
 			Draw.rect("heater", rect.x+rect.width/2, rect.y+rect.height/2, rect.width, rect.height);
 		
 		Draw.tcolor(Color.PURPLE);
-		Draw.text(Gdx.graphics.getFramesPerSecond()+"FPS", 0, 0);
+		//Draw.text(Gdx.graphics.getFramesPerSecond()+"FPS", 0, 0);
 		
 	}
 	
 	public void resize(){
-		rays.resizeFBO(gwidth()/4, gheight()/4);
-		rays.pixelate();
+		rays.resizeFBO((int)(screen.x/4), (int)(screen.y/4));
+		//rays.pixelate();
 	}
 }

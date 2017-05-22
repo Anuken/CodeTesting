@@ -21,7 +21,7 @@ public class UniEnemy extends DestructibleEntity{
 		Draw.thickness(4);
 		Draw.color("orange");
 		Draw.circle(x, y, 10);
-		Draw.clear();
+		Draw.reset();
 	}
 	
 	public void doSomething(){

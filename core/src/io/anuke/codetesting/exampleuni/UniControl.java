@@ -36,7 +36,7 @@ public class UniControl extends RendererModule{
 			Draw.thickness(3f);
 			Draw.color(Hue.mix(Color.WHITE, Color.ORANGE, e.ifract()));
 			Draw.spikes(e.x, e.y, 5+e.ifract()*40f, 10, 8);
-			Draw.clear();
+			Draw.reset();
 		});
 	}
 	

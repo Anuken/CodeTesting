@@ -31,7 +31,7 @@ public class ExamplePlayer extends DestructibleEntity{
 		Draw.thickness(4);
 		Draw.color("royal");
 		Draw.circle(x, y, 10);
-		Draw.clear();
+		Draw.reset();
 	}
 	
 	@Override

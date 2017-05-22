@@ -48,7 +48,7 @@ public class LRenderer extends RendererModule{
 	private float x, y;
 	
 	public LRenderer(){
-		cameraScale = 1f;
+		cameraScale = 1;
 		
 		//setPixelation();
 	}

@@ -17,7 +17,7 @@ public abstract class ExampleBulletType extends BaseBulletType<ExampleBullet>{
 			Draw.color("red");
 			Draw.thickness(5f);
 			Draw.circle(b.x, b.y, 5);
-			Draw.clear();
+			Draw.reset();
 		}
 	};
 }
