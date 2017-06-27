@@ -2,9 +2,11 @@ package io.anuke.codetesting.draw;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Pixmap.Filter;
+import com.badlogic.gdx.graphics.PixmapIO;
 
 import io.anuke.codetesting.CodeTester;
-import io.anuke.ucore.UCore;
 import io.anuke.ucore.modules.Module;
 
 public class Drawer extends Module<CodeTester>{
@@ -15,26 +17,6 @@ public class Drawer extends Module<CodeTester>{
 	FileHandle img = Gdx.files.absolute("/home/anuke/Documents/NovixIcons/pixelicon-out.png");
 	
 	public void init(){
-		long max = 2000;
-		
-		for(int a = 1; a < max; a ++){
-			for(int b = 1; b < max; b ++){
-				for(int c = 1; c < max; c ++){
-					double i = (double)a/(b+c) + (double)b/(a+c) + (double)c/(a+b);
-					if(Math.abs(i-4) < 0.0000001){
-						UCore.log("values", a, b, c);
-						UCore.log("out", i);
-						Gdx.app.exit();
-						return;
-					}
-				}
-			}
-			log("Done with permutation  " + a);
-		}
-		
-		log("Failed.");
-		Gdx.app.exit();
-		/*
 		
 		Pixmap pixmap = new Pixmap(img);
 		
@@ -54,6 +36,7 @@ public class Drawer extends Module<CodeTester>{
 		
 		log("Done.");
 		Gdx.app.exit();
-		*/
+		
 	}
+	
 }
