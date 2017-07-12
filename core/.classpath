@@ -11,5 +11,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/GDXLayered3D"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/GDXGifRecorder"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/GDXAABB"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/LSystems-core"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

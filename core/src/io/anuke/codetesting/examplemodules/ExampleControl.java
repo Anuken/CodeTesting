@@ -5,7 +5,6 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 
 import io.anuke.ucore.core.*;
-import io.anuke.ucore.cui.Stylesheet;
 import io.anuke.ucore.entities.Effect;
 import io.anuke.ucore.entities.Entities;
 import io.anuke.ucore.graphics.Atlas;
@@ -33,8 +32,6 @@ public class ExampleControl extends RendererModule<ExampleMain>{
 		});
 		
 		Entities.initPhysics();
-		
-		Stylesheet sheet = new Stylesheet(Gdx.files.internal("cui/sheet.json"));
 	}
 	
 	@Override
