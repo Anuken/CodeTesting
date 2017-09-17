@@ -5,13 +5,12 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 
 import io.anuke.ucore.core.*;
-import io.anuke.ucore.entities.Effect;
 import io.anuke.ucore.entities.Entities;
 import io.anuke.ucore.graphics.Atlas;
 import io.anuke.ucore.graphics.Hue;
-import io.anuke.ucore.modules.RendererModule;
+import io.anuke.ucore.modules.ControlModule;
 
-public class ExampleControl extends RendererModule<ExampleMain>{
+public class ExampleControl extends ControlModule<ExampleMain>{
 	
 	public ExampleControl(){
 		atlas = new Atlas("codetesting.pack");
@@ -24,7 +23,7 @@ public class ExampleControl extends RendererModule<ExampleMain>{
 		Musics.createTracks("boss", "shoot", "pickup");
 		Musics.createTracks("menu", "flame");
 		
-		Effect.create("hit", 10, e->{
+		Effects.create("hit", 10, e->{
 			Draw.thickness(3f);
 			Draw.color(Hue.mix(Color.WHITE, Color.ORANGE, e.ifract()));
 			Draw.spikes(e.x, e.y, 5+e.ifract()*40f, 10, 8);

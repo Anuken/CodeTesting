@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
 
-import io.anuke.ucore.core.DrawContext;
+import io.anuke.ucore.core.Core;
 
 public class Layers{
 	private static final int MAX_LAYERS = 100;
@@ -26,8 +26,8 @@ public class Layers{
 	}
 
 	public static void render(){
-		OrthographicCamera camera = DrawContext.camera;
-		Batch batch = DrawContext.batch;
+		OrthographicCamera camera = Core.camera;
+		Batch batch = Core.batch;
 		
 		for(int l = 0; l < toplayer; l++){
 			for(TextureLayer layer : layers[l]){

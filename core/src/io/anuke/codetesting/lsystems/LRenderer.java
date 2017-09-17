@@ -11,15 +11,12 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 
 import io.anuke.gif.GifRecorder;
-import io.anuke.ucore.core.Draw;
-import io.anuke.ucore.core.Graphics;
-import io.anuke.ucore.core.Inputs;
-import io.anuke.ucore.modules.RendererModule;
+import io.anuke.ucore.core.*;
+import io.anuke.ucore.modules.ControlModule;
 import io.anuke.ucore.scene.utils.Cursors;
 import io.anuke.ucore.util.Mathf;
-import io.anuke.ucore.util.Timers;
 
-public class LRenderer extends RendererModule{
+public class LRenderer extends ControlModule{
 	private GifRecorder recorder = new GifRecorder(batch);
 	
 	final private Color start = Color.PURPLE;//Color.valueOf("37682c");
@@ -48,7 +45,7 @@ public class LRenderer extends RendererModule{
 	private float x, y;
 	
 	public LRenderer(){
-		cameraScale = 1;
+		Core.cameraScale = 1;
 		
 		//setPixelation();
 	}

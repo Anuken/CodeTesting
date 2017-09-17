@@ -1,8 +1,8 @@
 package io.anuke.codetesting.exampleuni;
 
-import io.anuke.ucore.modules.Core;
+import io.anuke.ucore.modules.ModuleCore;
 
-public class UniCore extends Core{
+public class UniCore extends ModuleCore{
 	
 	public void init(){
 		add(Vars.control = new UniControl());

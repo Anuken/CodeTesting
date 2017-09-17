@@ -6,5 +6,6 @@ public class Prototypes{
 	public static final Prototype
 	
 	player = new TestPlayer(),
-	enemy = new TestEnemy();
+	enemy = new TestEnemy(),
+	overenemy = new TestEnemyOverride();
 }

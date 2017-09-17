@@ -6,7 +6,7 @@ import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Gdx;
 
 import io.anuke.codetesting.exampleuni.GameState.State;
-import io.anuke.ucore.core.DrawContext;
+import io.anuke.ucore.core.Core;
 import io.anuke.ucore.function.VisibilityProvider;
 import io.anuke.ucore.modules.SceneModule;
 import io.anuke.ucore.scene.builders.*;
@@ -24,7 +24,7 @@ public class UniUI extends SceneModule{
 	
 	@Override
 	public void init(){
-		DrawContext.font.setUseIntegerPositions(true);
+		Core.font.setUseIntegerPositions(true);
 		
 		paused = new Dialog("Paused", "dialog");
 		

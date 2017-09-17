@@ -2,10 +2,11 @@ package io.anuke.codetesting.layervoxel;
 
 import com.badlogic.gdx.Input.Keys;
 
+import io.anuke.ucore.core.Core;
 import io.anuke.ucore.core.Inputs;
-import io.anuke.ucore.modules.RendererModule;
+import io.anuke.ucore.modules.ControlModule;
 
-public class LayerControl extends RendererModule{
+public class LayerControl extends ControlModule{
 	VoxelPacker packer = new VoxelPacker();
 	
 	public void init(){
@@ -14,7 +15,7 @@ public class LayerControl extends RendererModule{
 		
 		packer.newObject("tree1").add();
 		
-		cameraScale = 3;
+		Core.cameraScale = 3;
 		pixelate();
 	}
 	

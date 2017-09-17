@@ -8,9 +8,9 @@ import io.anuke.ucore.core.KeyBinds;
 import io.anuke.ucore.core.Settings;
 import io.anuke.ucore.entities.Entities;
 import io.anuke.ucore.graphics.Atlas;
-import io.anuke.ucore.modules.RendererModule;
+import io.anuke.ucore.modules.ControlModule;
 
-public class UniControl extends RendererModule{
+public class UniControl extends ControlModule{
 	
 	public UniControl(){
 		atlas = new Atlas("test.pack");

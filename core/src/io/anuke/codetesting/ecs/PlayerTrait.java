@@ -4,10 +4,10 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.math.Vector2;
 
 import io.anuke.ucore.core.Inputs;
+import io.anuke.ucore.core.Timers;
 import io.anuke.ucore.ecs.Spark;
 import io.anuke.ucore.ecs.Trait;
-import io.anuke.ucore.ecs.extend.PosTrait;
-import io.anuke.ucore.util.Mathf;
+import io.anuke.ucore.ecs.extend.traits.PosTrait;
 
 public class PlayerTrait extends Trait{
 	
@@ -16,7 +16,7 @@ public class PlayerTrait extends Trait{
 		PosTrait pos = spark.pos();
 		Vector2 vector = new Vector2();
 		
-		float speed = 4f*Mathf.delta();
+		float speed = 4f*Timers.delta();
 		
 		if(Inputs.keyDown(Keys.W)){
 			vector.y += speed;
@@ -37,11 +37,6 @@ public class PlayerTrait extends Trait{
 		vector.limit(speed);
 		
 		pos.translate(vector);
-	}
-	
-	@Override
-	public Trait copy(){
-		return new PlayerTrait();
 	}
 
 }

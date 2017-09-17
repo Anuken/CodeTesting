@@ -6,13 +6,14 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 
 import io.anuke.ucore.core.Draw;
+import io.anuke.ucore.core.Timers;
 import io.anuke.ucore.modules.SceneModule;
 import io.anuke.ucore.scene.builders.*;
 import io.anuke.ucore.scene.ui.TextField;
 import io.anuke.ucore.scene.ui.TextField.TextFieldStyle;
 import io.anuke.ucore.scene.ui.layout.Table;
+import io.anuke.ucore.scene.utils.Elements;
 import io.anuke.ucore.util.Strings;
-import io.anuke.ucore.util.Timers;
 
 public class LUI extends SceneModule{
 	Table ruletable;
@@ -173,7 +174,7 @@ public class LUI extends SceneModule{
 		HashMap<Character, String> rules = rend.rules();
 		
 		for(Character c : rules.keySet()){
-			TextField field = ruletable.newField(c+"", s->{
+			TextField field = Elements.newField(c+"", s->{
 				rules.put(s.toUpperCase().toCharArray()[0], rules.get(c));
 				rend.generate();
 			});
