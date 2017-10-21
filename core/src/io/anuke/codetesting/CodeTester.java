@@ -1,12 +1,12 @@
 package io.anuke.codetesting;
 
-import io.anuke.codetesting.raytest.RayTest;
+import io.anuke.codetesting.cui.CuiTest;
 import io.anuke.ucore.modules.ModuleCore;
 
-public class CodeTester extends ModuleCore<CodeTester>{
+public class CodeTester extends ModuleCore{
 	
 	@Override
 	public void init(){
-		addModule(new RayTest());
+		module(new CuiTest());
 	}
 }

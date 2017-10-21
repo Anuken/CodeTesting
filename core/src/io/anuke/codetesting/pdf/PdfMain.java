@@ -8,13 +8,196 @@ import java.util.Arrays;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 
+import io.anuke.ucore.UCore;
+
 public class PdfMain{
 	//BAD!!!!!
 	static String[] badWords = {"he", "for", "you", "I"};
 	
 	public static void main(String[] args) throws Exception{
-		System.out.println(splitMax(new int[]{0, -5, 2, 4, 5, 5}));
-		System.out.println(getMax(new int[]{3, 5, 3, 3, 3, 1}));
+		//System.out.println(splitMax(new int[]{0, -5, 2, 4, 5, 5}));
+		//System.out.println(getMax(new int[]{3, 5, 3, 3, 3, 1}));
+		
+		/*
+		int[] a = new int[10];
+		int[] b = new int[10];
+		
+		for(int i : new int[]{90, 32, 42, 30, 20, 22}){
+			if(!cuckooInsert(a, b, i)){
+				UCore.log("\nWe have a loop-- INSERT FAILED!\n");
+			}
+			
+			UCore.log("Table 1 result: " + Arrays.toString(a));
+			UCore.log("Table 2 result: " + Arrays.toString(b));
+			UCore.log("");
+		}*/
+		
+		//[24, 18, 21, 6, 9, 2, 21, 4, 20, 25, 9, 19, 22, 24, 25, 4, 20, 20, 5, 10, 13, 15, 6, 17, 15]
+		//[(24, 18, 21, 6, 9), (2, 21, 4, 20, 25), (9, 19, 22, 24, 25), (4, 20, 20, 5, 10), (13, 15, 6, 17, 15)]
+		//[18, 20, 22, 10, 15]
+		//->18
+		
+		//int pivot = getPivotIndex(new int[]{24, 18, 21, 6, 9, 2, 21, 4, 20, 25, 9, 19, 22, 24, 25, 4, 20, 20, 5, 10, 13, 15, 6, 17, 15},
+		//		18);
+		
+		//[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24]
+		
+		//[2, 19, 24, 7, 8, 22, 13, 14, 17, 15, 23, 4, 1, 20, 0, 9, 11, 10, 16, 21, 5, 18, 3, 12, 6], 
+		//-> [(2, 19, 24, 7, 8), (22, 13, 14, 17, 15), (23, 4, 1, 20, 0), (9, 11, 10, 16, 21), (5, 18, 3, 12, 6)], 
+		//-> [8, 15, 4, 11, 6]
+		//-> 8
+		
+		//UCore.log(pivot);
+		
+		//if(false)
+		/*
+		for(int i = 0; i < 100000; i ++){
+			int[] array = null;
+			int[] copy = null;
+			IntArray ar = new IntArray();
+			
+			
+			for(int j = 0; j < 25; j ++){
+				ar.add(j);
+			}
+			
+			ar.shuffle();
+			array = ar.toArray();
+			copy = ar.toArray();
+			
+			
+			int index = findMedianofMedians(array);
+			int pivot = getPivotIndex(array, index);
+			
+			if(pivot <= 8){
+				
+				UCore.log(pivot, array[index], Arrays.toString(copy), "\n", Arrays.toString(array));
+				break;
+			}
+		}
+		*/
+	}
+	
+	static int partition(int[] array, int blackPivot, int from, int to){
+		return 0;
+	}
+	
+	static int getPivotIndex(int[] array, int number){
+		Arrays.sort(array);
+		
+		for(int i = 0; i < array.length; i ++){
+			if(array[i] == number)
+				return i;
+		}
+		
+		return -1;
+	}
+	
+	static int getIndex(int[] array){
+		int median = findMedianofMedians(array);
+		int less = 0, bigger = 0;
+		for(int i = 0; i < array.length; i ++){
+			if(i < median)
+				less ++;
+			if(i > median)
+				bigger ++;
+		}
+		return Math.min(less, bigger);
+	}
+	
+	static int findMedian(int[] copy){
+		Arrays.sort(copy);
+		return copy[2];
+	}
+	
+	static int findMedianofMedians(int[] array){
+		int[] out = new int[5];
+		
+		for(int i = 0; i < 5; i ++){
+			int[] copy = new int[5];
+			System.arraycopy(array, i*5, copy, 0, 5);
+			
+			int median = findMedian(copy);
+			out[i] = median;
+		}
+		
+		return findMedian(out);
+	}
+	
+	static void checkPairs(int[] black, int[] white){
+		//for every black bottle, check every white bottle, and see if they're a pair
+		for(int blackBottle : black){
+			for(int whiteBottle : white){
+				if(blackBottle == whiteBottle){
+					//pair the bottles somehow
+					//pairBottles(blackBottle, whiteBottle);
+				}
+			}
+		}
+	}
+	
+	static void checkPairsQuick(int[] black, int[] white){
+		
+	}
+	
+	static boolean checkIndex(int[] a, int low, int high){
+		int mid = (high + low)/2;
+		
+		//the index has been found
+		if(a[mid] == mid){
+			return true;
+		//so it doesn't recurse forever
+		}else if(low >= high){
+			return false;
+		}else if(mid < a[mid]){
+			//mid is greater than a[mid], so we should check lower, since all the numbers higher are greater than a[mid]
+			return checkIndex(a, low, mid);
+		}else{
+			//else, mid must be < a[mid], so check higher
+			return checkIndex(a, mid+1, high);
+		}
+	}
+	
+	static int firstDigit(int x) {
+		if (x == 0) return 0;
+		x = Math.abs(x);
+		return (int) Math.floor(x / Math.pow(10, Math.floor(Math.log10(x))));
+	}
+	
+	static int lastDigit(int i){
+		return i % 10;
+	}
+	
+	static boolean cuckooInsert(int[] a, int[] b, int value){
+		//int hashA = lastDigit(value);
+		//int hashB = firstDigit(value);
+		UCore.log("Inserting value " + value);
+		
+		int currentValue = value;
+		boolean isa = true;
+		
+		while(true){
+			
+			int[] currentTable = isa ? a : b;
+			int currentHash = isa ? lastDigit(currentValue) : firstDigit(currentValue);
+			UCore.log("(Hashing " + currentValue + " to " +  currentHash + ")");
+			
+			if(currentTable[currentHash] == 0){
+				currentTable[currentHash] = currentValue;
+				break;
+			}else if(currentTable[currentHash] == value){
+				return false;
+			}else{
+				int kicked = currentTable[currentHash];
+				UCore.log("Kicking out " + kicked);
+				currentTable[currentHash] = currentValue;
+				
+				currentValue = kicked;
+				isa = !isa;
+			}
+		}
+		
+		return true;
 	}
 	
 	//returns the maximum difference between the two subarrays

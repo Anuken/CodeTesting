@@ -10,10 +10,10 @@ import com.badlogic.gdx.utils.Array;
 import io.anuke.ucore.core.*;
 import io.anuke.ucore.graphics.Drawv;
 import io.anuke.ucore.graphics.Hue;
-import io.anuke.ucore.modules.ControlModule;
+import io.anuke.ucore.modules.RendererModule;
 import io.anuke.ucore.util.*;
 
-public class RayTest2 extends ControlModule{
+public class RayTest2 extends RendererModule{
 	Array<Rectangle> rects = new Array<>();
 	Array<Light> lights = new Array<>();
 	Vector2[] points = { new Vector2(), new Vector2(), new Vector2(), new Vector2() };
@@ -43,7 +43,7 @@ public class RayTest2 extends ControlModule{
 			Gdx.app.exit();
 		}
 
-		camera.position.set(0, 0, 0);
+		Core.camera.position.set(0, 0, 0);
 		lights.first().set(Graphics.mouseWorld().x, Graphics.mouseWorld().y);
 
 		drawDefault();
@@ -81,14 +81,14 @@ public class RayTest2 extends ControlModule{
 
 		Drawv.end();
 
-		Draw.begin();
+		Graphics.begin();
 		for(Light light : lights){
 			for(Raycast cast : light.raycasts){
 				Draw.color(Color.RED);
 				Draw.line(light.x, light.y, light.x + cast.hitx, light.y + cast.hity);
 			}
 		}
-		Draw.end();
+		Graphics.end();
 	}
 
 	@Override

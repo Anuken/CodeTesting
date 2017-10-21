@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.utils.ObjectMap;
 
-import io.anuke.ucore.graphics.PixmapUtils;
+import io.anuke.ucore.graphics.Pixmaps;
 
 public class SimpleAtlasUnpacker{
 	
@@ -24,7 +24,7 @@ public class SimpleAtlasUnpacker{
 		
 		for(AtlasRegion region : atlas.getRegions()){
 			Pixmap pixmap = pixmaps.get(region.getTexture());
-			Pixmap output = PixmapUtils.crop(pixmap, region.getRegionX(), region.getRegionY(), region.getRegionWidth(), region.getRegionHeight());
+			Pixmap output = Pixmaps.crop(pixmap, region.getRegionX(), region.getRegionY(), region.getRegionWidth(), region.getRegionHeight());
 			PixmapIO.writePNG(directory.child(region.name), output);
 			output.dispose();
 		}

@@ -7,17 +7,17 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 
 import io.anuke.gif.GifRecorder;
 import io.anuke.ucore.core.*;
-import io.anuke.ucore.modules.ControlModule;
+import io.anuke.ucore.modules.RendererModule;
 import io.anuke.ucore.util.Mathf;
 
-public class FluidControl extends ControlModule{
+public class FluidControl extends RendererModule{
 	int size = 160;
 	
 	Color light = Color.valueOf("88acde");
 	Color dark = Color.valueOf("3c407b");
 	float drawsize = 1f;
 	
-	GifRecorder recorder = new GifRecorder(batch);
+	GifRecorder recorder = new GifRecorder(Core.batch);
 	
 	FluidProvider prov = new GridFluidProvider(size, size);
 	Fluidsim sim = new Fluidsim(prov);
@@ -90,6 +90,6 @@ public class FluidControl extends ControlModule{
 	
 	public void resize(){
 		setCamera(size*drawsize/2f, size*drawsize/2f);
-		camera.update();
+		Core.camera.update();
 	}
 }

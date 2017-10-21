@@ -7,10 +7,9 @@ import com.badlogic.gdx.graphics.Pixmap.Blending;
 import com.badlogic.gdx.graphics.Pixmap.Filter;
 import com.badlogic.gdx.graphics.PixmapIO;
 
-import io.anuke.codetesting.CodeTester;
 import io.anuke.ucore.modules.Module;
 
-public class Drawer extends Module<CodeTester>{
+public class Drawer extends Module{
 	String[] children = {"drawable-hdpi", "drawable-mdpi", "drawable-xhdpi", "drawable-xxhdpi", "drawable-xxxhdpi"};
 	int[] sizes = {72, 48, 96, 144};
 	String filename = "ic_launcher.png";

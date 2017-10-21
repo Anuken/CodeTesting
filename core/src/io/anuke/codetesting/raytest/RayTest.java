@@ -13,19 +13,19 @@ import io.anuke.ucore.graphics.Atlas;
 import io.anuke.ucore.graphics.Hue;
 import io.anuke.ucore.lights.PointLight;
 import io.anuke.ucore.lights.RayHandler;
-import io.anuke.ucore.modules.ControlModule;
+import io.anuke.ucore.modules.RendererModule;
 import io.anuke.ucore.util.Mathf;
 
-public class RayTest extends ControlModule{
+public class RayTest extends RendererModule{
 	RayHandler rays;
 	Rectangle rect;
-	GifRecorder recorder = new GifRecorder(batch);
+	GifRecorder recorder = new GifRecorder(Core.batch);
 	
 	public RayTest(){
 		
 		Core.cameraScale = 4;
 		
-		atlas = new Atlas("codetesting.pack");
+		Core.atlas = new Atlas("codetesting.pack");
 		Core.font = new BitmapFont(Gdx.files.internal("fonts/font.fnt"));
 		
 		clearColor = Color.WHITE;
@@ -62,7 +62,7 @@ public class RayTest extends ControlModule{
 		
 		drawDefault();
 		
-		rays.setCombinedMatrix(camera);
+		rays.setCombinedMatrix(Core.camera);
 		rays.updateAndRender();
 		
 		recorder.update();

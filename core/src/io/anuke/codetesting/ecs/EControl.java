@@ -5,14 +5,15 @@ import com.badlogic.gdx.graphics.Color;
 
 import io.anuke.ucore.core.Draw;
 import io.anuke.ucore.core.Effects;
+import io.anuke.ucore.core.Graphics;
 import io.anuke.ucore.ecs.Basis;
 import io.anuke.ucore.ecs.Spark;
 import io.anuke.ucore.ecs.extend.processors.CollisionProcessor;
 import io.anuke.ucore.ecs.extend.processors.DrawProcessor;
 import io.anuke.ucore.entities.Entities;
-import io.anuke.ucore.modules.ControlModule;
+import io.anuke.ucore.modules.RendererModule;
 
-public class EControl extends ControlModule{
+public class EControl extends RendererModule{
 	Basis basis = new Basis();
 	Spark player;
 	
@@ -42,10 +43,9 @@ public class EControl extends ControlModule{
 	public void update(){
 		Entities.update();
 		clearScreen();
-		batch.setProjectionMatrix(camera.combined);
-		batch.begin();
+		Graphics.beginCam();
 		Entities.draw();
 		basis.update();
-		batch.end();
+		Graphics.end();
 	}
 }

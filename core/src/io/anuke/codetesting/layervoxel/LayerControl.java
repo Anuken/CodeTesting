@@ -4,9 +4,9 @@ import com.badlogic.gdx.Input.Keys;
 
 import io.anuke.ucore.core.Core;
 import io.anuke.ucore.core.Inputs;
-import io.anuke.ucore.modules.ControlModule;
+import io.anuke.ucore.modules.RendererModule;
 
-public class LayerControl extends ControlModule{
+public class LayerControl extends RendererModule{
 	VoxelPacker packer = new VoxelPacker();
 	
 	public void init(){

@@ -1,11 +1,11 @@
 package io.anuke.codetesting.io;
 
-import io.anuke.ucore.graphics.PixmapUtils;
-
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.PixmapIO;
+
+import io.anuke.ucore.graphics.Pixmaps;
 
 public class TextureSplitter{
 	private FileHandle file;
@@ -29,8 +29,8 @@ public class TextureSplitter{
 						clip.drawPixel(x - gx*size, y - gy*size, pixmap.getPixel(x, y));
 					}
 				}
-				Pixmap scaled = PixmapUtils.scale(clip, scale);
-				Pixmap zoomed = PixmapUtils.zoom(scaled, zoom);
+				Pixmap scaled = Pixmaps.scale(clip, scale);
+				Pixmap zoomed = Pixmaps.zoom(scaled, zoom);
 				
 				PixmapIO.writePNG(folder.child("patch-" + gx + "," +gy + ".png"), zoomed);
 				

@@ -1,6 +1,22 @@
 {
-	"test": {
-		"a": "b"
-		
+	"button": {
+		"background": "white",
+		"pad": 20,
+		"border-thickness": 4,
+		"border-color": "royal",
+		"color": "black",
+		"transition": 30
+	},
+	"button:over": {
+		"color": "red",
+		"border-thickness": 8,
+		"border-color": "orange",
+		"transition": 30
+	},
+	"button:down": {
+		"color": "purple",
+		"border-thickness": 10,
+		"border-color": "green",
+		"transition": 10
 	}
 }

@@ -13,5 +13,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/GDXAABB"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/LSystems-core"/>
 	<classpathentry kind="lib" path="lib/pdfbox-2.0.7.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/ProjectHome-core"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
