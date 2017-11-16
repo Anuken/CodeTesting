@@ -215,12 +215,12 @@ public class LSystemRooms{
 			for(int y = 0; y < tiles[0].length; y++){
 
 				//moss
-				if(sim.octaveNoise2d(3, 0.8, 1 / 20.0, x, y) > 0.23 && tiles[x][y].floor != Blocks.air){
+				if(sim.octaveNoise2D(3, 0.8, 1 / 20.0, x, y) > 0.23 && tiles[x][y].floor != Blocks.air){
 					tiles[x][y].decal = Blocks.thickmoss;
 				}
 
 				//candles
-				if(sim.octaveNoise2d(4, 0.9, 1 / 25.0, x, y) > 0.54 && tiles[x][y].wall == Blocks.air && tiles[x][y].floor != Blocks.air){
+				if(sim.octaveNoise2D(4, 0.9, 1 / 25.0, x, y) > 0.54 && tiles[x][y].wall == Blocks.air && tiles[x][y].floor != Blocks.air){
 					tiles[x][y].wall = Blocks.candles;
 				}
 

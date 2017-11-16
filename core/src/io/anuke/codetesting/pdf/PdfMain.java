@@ -76,6 +76,45 @@ public class PdfMain{
 			}
 		}
 		*/
+		
+		//four
+		//1111
+		//22
+		//112
+		//211
+		//121
+		//31
+		//13
+		
+		//three
+		//21
+		//12
+		//111
+		//3
+		
+		int n = 3;
+		int[] memo = new int[n];
+		Arrays.fill(memo, -1);
+		
+		UCore.log(combinations(0, n, memo));
+	}
+	
+	public static int combinations(int i, int n, int[] memo){
+		if(i > n){ //out of range, no combinations
+			return 0;
+		}else if (i >= n - 1){ //one step left, so this is one combination
+			return 1;
+		}else if(memo[i] != -1){ // it's in memo
+			return memo[i];
+		}else{ //calculate it
+			//get combinations of next three steps, possibly
+			int comb = combinations(i + 1, n, memo) +
+			combinations(i + 2, n, memo) +
+			combinations(i + 3, n, memo);
+			
+			memo[i] = comb;
+			return comb;
+		}
 	}
 	
 	static int partition(int[] array, int blackPivot, int from, int to){
