@@ -14,7 +14,7 @@ public class PdfMain{
 	//BAD!!!!!
 	static String[] badWords = {"he", "for", "you", "I"};
 	
-	public static void main(String[] args) throws Exception{
+	public static void man(String[] args) throws Exception{
 		//System.out.println(splitMax(new int[]{0, -5, 2, 4, 5, 5}));
 		//System.out.println(getMax(new int[]{3, 5, 3, 3, 3, 1}));
 		
@@ -318,7 +318,7 @@ public class PdfMain{
 		return Integer.MAX_VALUE;
 	}
 	
-	public static void mai(String[] args) throws Exception{
+	public static void main(String[] args) throws Exception{
 		String path = "/home/anuke/Downloads/iliad.pdf";
 		
 		PDDocument doc = PDDocument.load(new File(path));
